@@ -269,6 +269,7 @@ async function addMythicPlusBoost(boost, guild) {
         dps1Nickname = await utils.getNickname(u3, guild);
         dps2Nickname = await utils.getNickname(u4, guild);
     }
+    console.log(tankNickname, healerNickname, dps1Nickname, dps2Nickname);
     const amountKeys = boost.keys.length;
 
     return new Promise((resolve, reject) => {

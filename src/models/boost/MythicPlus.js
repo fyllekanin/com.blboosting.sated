@@ -240,7 +240,7 @@ ${emojis.timestamp}: ${this.date}
     }
 
     validateUniqueSign(userToValidate) {
-        return [this.tank, this.healer, this.dps1, this.dps2].some(booster => userToValidate == booster);
+        return [this.tank, this.healer, this.dps1, this.dps2].every(booster => userToValidate.id !== booster.id);
     }
     throttleEdit(message, embedType) {
         clearTimeout(this.timeout);

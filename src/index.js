@@ -1,11 +1,11 @@
 const { Client, Intents, Collection } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
+require('dotenv').config();
 const { setup } = require('./services/spreadsheet');
 const fs = require('fs');
 const roles = require('./JSON/server-info/roles.json');
 const channels = require('./JSON/server-info/channels.json');
-require('dotenv').config();
 
 const intents = new Intents(32767)
 const client = new Client({

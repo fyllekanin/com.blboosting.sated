@@ -577,7 +577,7 @@ const self = module.exports = {
 
         const rolesToPing = await msgBoost.getRolesToPing();
 
-        const boostEmbed = await msgBoost.channel.send({ content: rolesToPing, embeds: [msgBoost.createEmbed()] }).catch(err => { console.log(err) });
+        const boostEmbed = await msgBoost.channel.send({ content: 'temp message', embeds: [msgBoost.createEmbed()] }).catch(err => { console.log(err) });
 
         await message.react('✅');
 
