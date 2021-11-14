@@ -178,12 +178,6 @@ module.exports = async (client, message, channel, emoji, user) => {
                 await utils.wrongRole(user, message, emoji);
                 break;
             }
-            // if (!boostMsg.startable && !await utils.isManagerOrAbove(user)) {
-            // 	await utils.wrongRole(user, message, emoji);
-            // 	break;
-            // }
-
-            // boostMsg.timeout = null;
 
             await message.reactions.removeAll();
 
@@ -200,7 +194,7 @@ module.exports = async (client, message, channel, emoji, user) => {
             boostMsg.voiceCode = `https://discord.gg/${voice.code}`;
             boostMsg.voiceChannel = voiceChannel;
 
-            await Sheet.addMplusCollections(boostMsg, message.guild)
+            await Sheet.addMythicPlusCollections(boostMsg, message.guild)
                 .catch(err => {
                     message.channel.send({ content: `Something went wrong trying to add collections for boost \`${boostMsg.boostId}\` to sheet, please contact Philip.` });
                     console.log(`Failed to add collections for boost ${boostMsg.boostId} to sheet: ${err}`)
@@ -216,11 +210,11 @@ module.exports = async (client, message, channel, emoji, user) => {
                     boostMsg.dps2,
                 ];
 
-                boostMsg.sheetRow = await Sheet.mPlusForCollectors(boostMsg, message.guild)
+                boostMsg.sheetRow = await Sheet.addMythicPlusBoost(boostMsg, message.guild)
                     .catch(async err => {
                         console.log(err);
-                        message.channel.send({ content: `Something went wrong trying to add boost: \`${boostMsg.messageId}\` to sheet, please contact Philip`, ephemeral: true });
-                    })
+                        message.channel.send({ content: `Something went wrong trying to add boost: \`${boostMsg.boostId}\` to sheet, please contact Philip`, ephemeral: true });
+                    });
 
                 noTeamArr.forEach(usr => {
                     if (usr) {
@@ -245,14 +239,8 @@ please check your dm's for further information.` })
                 boostMsg.currentColor = inProgressColor;
                 boostMsg.collected = true;
 
-                boostMsg.sheetRow = await Sheet.mPlusForCollectors(boostMsg, message.guild);
+                boostMsg.sheetRow = await Sheet.addMythicPlusBoost(boostMsg, message.guild);
 
-                const teamArr = [
-                    utils.getUserMember(message.guild, teamBoosters[0]),
-                    utils.getUserMember(message.guild, teamBoosters[1]),
-                    utils.getUserMember(message.guild, teamBoosters[2]),
-                    utils.getUserMember(message.guild, teamBoosters[3]),
-                ];
                 channel.send({
                     content:
                         `Boost locked,
@@ -261,10 +249,13 @@ ${utils.getUserMember(message.guild, teamBoosters[1])},
 ${utils.getUserMember(message.guild, teamBoosters[2])},
 ${utils.getUserMember(message.guild, teamBoosters[3])},
 please check your dm's for further information.` })
+                    .catch(err => console.log(err));
             }
 
-            await message.react(emojis.keyComplete);
-            await message.react(emojis.keyDeplete);
+            await message.react(emojis.keyComplete)
+                .catch(err => console.log(err));;
+            await message.react(emojis.keyDeplete)
+                .catch(err => console.log(err));;
 
             break;
         case emojis.cancelBoost:
@@ -311,7 +302,7 @@ please check your dm's for further information.` })
                 embeds.boostLoggingEmbed(client, `${user} \`marked\` boost \`${boostMsg.boostId}\` as \`deplete\``)
             }
 
-            await Sheet.addMplusToNewSheet(boostMsg, message.guild);
+            await Sheet.updateMythicPlusBoost(boostMsg, message.guild);
 
             !boostMsg.isTeamClaimed
                 ? await message.edit({ embeds: [boostMsg.createEmbed()] })

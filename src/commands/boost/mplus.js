@@ -556,6 +556,12 @@ const self = module.exports = {
         }
 
         // Balance remove if paid with balance
+        if (parsedData.paidBalance) {
+            msgBoost.payments.push({
+                amount: paidBalance,
+                realm: 'Balance',
+            })
+        }
 
         // Advertiser balance remove if discount given
         if (parsedData.discount) {
@@ -577,13 +583,13 @@ const self = module.exports = {
         message.react('✅');
 
         msgBoost.boostMessage = boostEmbed;
-        msgBoost.messageId = boostEmbed.id;
+        msgBoost.boostId = boostEmbed.id;
 
         await boostEmbed.edit({ embeds: [msgBoost.createEmbed().setColor(creatingColor)] });
 
         boostHashMap.set(boostEmbed.id, msgBoost);
 
-        embeds.boostLoggingEmbed(client, `${message.author} \`created\` a boost with the ID \`${msgBoost.messageId}\``)
+        embeds.boostLoggingEmbed(client, `${message.author} \`created\` a boost with the ID \`${msgBoost.boostId}\``)
 
         boostEmbed.pin()
 
@@ -658,8 +664,8 @@ const self = module.exports = {
                     'inline': true,
                 },
                 {
-                    'name': 'Realm',
-                    'value': `${msgBoost.goldOn}`,
+                    'name': 'Realm(s)',
+                    'value': `${msgBoost.payments.map(payment => payment.realm).join(',\n')}`,
                     'inline': true,
                 },
                 {
@@ -673,7 +679,7 @@ const self = module.exports = {
                 },
                 {
                     'name': 'Link',
-                    'value': `https://discord.com/channels/693420859930443786/${msgBoost.boostMessage.channel.id}/${msgBoost.messageId}`,
+                    'value': `https://discord.com/channels/693420859930443786/${msgBoost.boostMessage.channel.id}/${msgBoost.boostId}`,
                     'inline': true,
                 },
                 {

@@ -45,7 +45,7 @@ for (const file of slashCommandFiles) {
 
 const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 
-const clientId = client.id;
+const clientId = client.user.id;
 const guildId = roles['guild'];
 (async () => {
     try {
@@ -132,7 +132,7 @@ client.on('interactionCreate', async interaction => {
 
 const mythicPlusSignups = require('./events/reaction-add/mplusSignup');
 client.on('messageReactionAdd', async (messageReaction, user) => {
-    if (user.bot) return;
+    if (user.bot && message.author.id !== client.user.id) return;
 
     const message = messageReaction.message;
     const channel = message.channel;
@@ -144,8 +144,9 @@ client.on('messageReactionAdd', async (messageReaction, user) => {
             emoji = messageReaction.emoji;
         }
     }
-    switch (message.channel.id) {
-        case channels['system-create-boost']:
+
+    switch (message.channel.parentId) {
+        case channels['On-Going Boosts']:
             await mythicPlusSignups(client, message, channel, emoji, user);
             break;
         default:
@@ -155,7 +156,7 @@ client.on('messageReactionAdd', async (messageReaction, user) => {
 
 const mythicPlusWithdraw = require('./events/reaction-remove/mplusWithdraw');
 client.on('messageReactionRemove', async (messageReaction, user) => {
-    if (user.bot) return;
+    if (user.bot && message.author.id !== client.user.id) return;
 
     const message = messageReaction.message;
     const channel = message.channel;
@@ -165,8 +166,8 @@ client.on('messageReactionRemove', async (messageReaction, user) => {
         emoji = messageReaction.emoji.name;
     }
 
-    switch (message.channel.id) {
-        case channels['system-create-boost']:
+    switch (message.channel.parentId) {
+        case channels['On-Going Boosts']:
             await mythicPlusWithdraw(client, message, channel, emoji, user);
             break;
         default:

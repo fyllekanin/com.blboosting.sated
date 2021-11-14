@@ -1,9 +1,9 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const utils = require('./utils');
 const numeral = require('numeral');
-const emotes = require('../JSON/emojis.json');
-const channels = require('../JSON/server-info/channels.json');
-const Sheet = require('../services/spreadsheet');
+const emotes = require('../../JSON/emojis.json');
+const channels = require('../../JSON/server-info/channels.json');
+const Sheet = require('../../services/spreadsheet');
 
 const self = module.exports = {
     greetingPhrase: () => {
@@ -72,36 +72,10 @@ Good luck! <:BLSalute:880535565752217611>`)
             .addField('Char to whisper', `\`/w ${boostMsg.charToWhisper} inv\``, true)
             .addField('Boost ID', `[${boostMsg.boostId}](${utils.linkBuilder(boostMsg)})`, true)
             .addField('Voice Channel', `[Join Voice](${boostMsg.voiceCode})`, true)
-            .addField('Service', `<:keystone:${emotes.keystone}> ${boostMsg.keyLvl}`, true)
+            // .addField('Service', `<:keystone:${emotes.keystone}> ${boostMsg.keyLvl}`, true)
             .addField('Your Cut', `<:gold:701099811029385226>${numeral(boostMsg.boosterPot).format('0,0')}`, true)
 
             .setFooter('Bloodlust Boosting', 'https://cdn.discordapp.com/attachments/769522185978511400/882434615107813397/Keys.png')
-            .setColor('#ffe100')
-
-        user.send({ embeds: [embed] })
-    },
-
-    torghastPickedEmbed: (boostMsg, user) => {
-        const greetingPhrase = self.greetingPhrase()
-
-        const embed = new MessageEmbed()
-            .setTitle('Torghast Boost')
-            .setDescription(`${greetingPhrase} ${user},
-
-the boost you recently signed for is ready!
-When the run is completed, make sure you let ${boostMsg.advertiser} know in order for the run to be processed.
-
-Below you will find some details regarding your run.
-
-Good luck! <:BLSalute:880535565752217611>`)
-
-            .addField('Char to whisper', `\`/w ${boostMsg.charToWhisper} inv\``, true)
-            .addField('Boost ID', `[${boostMsg.boostId}](${utils.linkBuilder(boostMsg)})`, true)
-            .addField('\u200B', `\u200B`, true)
-            .addField('Service', `${boostMsg.service}`, true)
-            .addField('Your Cut', `<:gold:701099811029385226>${numeral(boostMsg.boosterPot).format('0,0')}`, true)
-
-            .setFooter('Bloodlust Boosting', 'https://cdn.discordapp.com/attachments/769522185978511400/882434617494368286/Misc.png')
             .setColor('#ffe100')
 
         user.send({ embeds: [embed] })
@@ -149,7 +123,7 @@ ${advertiserIcon} ${boostMsg.advertiser}`;
         completeEmbed.addField('Timed/Untimed', `${boostMsg.TimedUntimed}`, true);
         completeEmbed.addField('Armor Stack', `${boostMsg.armorStackName}`, true);
         completeEmbed.addField('Source', `${boostMsg.source}`, true);
-        completeEmbed.addField('Realm Paid', `${boostMsg.goldOn}`, true);
+        completeEmbed.addField('Realm Paid', `${boostMsg.payments.map(payment => payment.realm).join(',\n')}`, true);
         completeEmbed.addField('Total Pot', `<:gold:701099811029385226>${numeral(boostMsg.totalPot).format('0,0')}`, true);
         completeEmbed.addField('Booster Cut', `${boosterCut}`, true);
         if (boostMsg.note) {
@@ -157,40 +131,6 @@ ${advertiserIcon} ${boostMsg.advertiser}`;
         }
         completeEmbed.setFooter(`Boost ID: ${boostMsg.boostMessage.id}`);
         completeEmbed.setColor(boostMsg.inTime ? '#00c940' : '#FF0000');
-
-        return completeEmbed;
-    },
-
-    torghastAttendance: (boostMsg) => {
-        const completeEmbed = new MessageEmbed();
-
-        let advertiserIcon = '<:advertiser:846532093126508564>';
-        let boosterCut = `<:gold:701099811029385226>${numeral(boostMsg.boosterPot).format('0,0')}`;
-        if (boostMsg.failed) {
-            advertiserIcon = '<:madvertiser:861924367326904370>';
-            boosterCut = 'Failed';
-        }
-
-        let description = `<:BLTake:${emotes.BLTake}> ${boostMsg.booster}
-
-${advertiserIcon} ${boostMsg.advertiser}`;
-
-        if (boostMsg.isTrial) {
-            description += `\n💰 ${boostMsg.collector}`;
-        }
-
-        completeEmbed.setTitle('Torghast Attendance');
-        completeEmbed.setDescription(`${description}`);
-        completeEmbed.addField('Service', `<:BLB_Misc:701099765475180584> ${boostMsg.service}`, true);
-        completeEmbed.addField('Source', `${boostMsg.source}`, true);
-        completeEmbed.addField('Realm Paid', `${boostMsg.goldOn}`, true);
-        completeEmbed.addField('Total Pot', `<:gold:701099811029385226>${numeral(boostMsg.totalPot).format('0,0')}`, true);
-        completeEmbed.addField('Booster Cut', `${boosterCut}`, true);
-        if (boostMsg.note) {
-            completeEmbed.addField('Note', `${boostMsg.note}`);
-        }
-        completeEmbed.setFooter(`Boost ID: ${boostMsg.boostMessage.id}`);
-        completeEmbed.setColor(!boostMsg.failed ? '#00c940' : '#FF0000');
 
         return completeEmbed;
     },
@@ -219,47 +159,13 @@ Attendance for run \`${boostMsg.boostId}\` was recently submitted by ${boostMsg.
             .addField('State', `${state}`, isInline)
             .addField('Attendance Post', `[Summary](https://discord.com/channels/${attendanceMessage.guild.id}/${channels['attendance']}/${attendanceMessage.id})`, true)
             .setColor(color)
-            .setFooter('Bloodlust Boosting', 'https://cdn.discordapp.com/attachments/709508445338075195/839814565264621578/LogoNoGlow_static_transparent_2.png')
+            .setFooter('Bloodlust Boosting', 'https://cdn.discordapp.com/attachments/769522185978511400/882434615107813397/Keys.png')
         if (boostMsg.inTime) {
             embed.addField('Gold Earned', `<:gold:701099811029385226>${numeral(boostMsg.boosterPot).format('0,0')}`, true)
-            embed.addField('New Balance', `<:gold:701099811029385226>${numeral(await Sheet.fetchBalance(userNickname)).format('0,0')}`, true)
+            embed.addField('New Balance', `<:gold:701099811029385226>${numeral(await Sheet.getBalance(userNickname)).format('0,0')}`, true)
         }
 
         user.send({ embeds: [embed] })
     },
-
-    torghastAttendanceNotification: async (boostMsg, user, attendanceMessage) => {
-        const greetingPhrase = self.greetingPhrase()
-        let state = 'Failed';
-        let color = '#FF0000';
-        let isInline = true;
-        let userNickname;
-        let description = `${greetingPhrase} ${user}!
-        
-Attendance for Torghast run \`${boostMsg.boostId}\` was recently submitted by ${boostMsg.advertiser}.`;
-
-        if (!boostMsg.failed) {
-            state = 'Completed';
-            color = '#00c940';
-            description += `\n\nThank you for boosting with us!`;
-            isInline = false;
-            userNickname = await utils.getNickname(user, attendanceMessage.guild)
-        }
-
-        const embed = new MessageEmbed()
-            .setTitle('Torghast Attendance')
-            .setDescription(`${description}`)
-            .addField('State', `${state}`, isInline)
-            .addField('Attendance Post', `[Summary](https://discord.com/channels/${attendanceMessage.guild.id}/${channels['attendance']}/${attendanceMessage.id})`, true)
-            .setColor(color)
-            .setFooter('Bloodlust Boosting', 'https://cdn.discordapp.com/attachments/709508445338075195/839814565264621578/LogoNoGlow_static_transparent_2.png');
-
-        if (!boostMsg.failed) {
-            embed.addField('Gold Earned', `<:gold:701099811029385226>${numeral(boostMsg.boosterPot).format('0,0')}`, true)
-            embed.addField('New Balance', `<:gold:701099811029385226>${numeral(await Sheet.fetchBalance(userNickname)).format('0,0')}`, true)
-        }
-
-        user.send({ embeds: [embed] })
-    }
 };
 

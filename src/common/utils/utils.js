@@ -284,7 +284,7 @@ const self = module.exports = {
         return armorStackRoleAux;
     },
     linkBuiler: (boostMsg) => {
-        return `https://discord.com/channels/693420859930443786/${boostMsg.channel.id}/${boostMsg.messageId}`
+        return `https://discord.com/channels/693420859930443786/${boostMsg.channel.id}/${boostMsg.boostId}`
     },
     getUserTeamName(message, userId) {
         const user = message.guild.members.cache.find((u) => u.id === userId);

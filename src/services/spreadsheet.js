@@ -350,7 +350,7 @@ async function addMythicPlusCollections(boost, guild) {
     const empty = [];
     for (let i = 0; i < boost.payments.length; i++) {
         date.push(boost.date);
-        boostId.push(boost.messageId);
+        boostId.push(boost.boostId);
         const collectorNickname = await utils.getNickname(boost.payments[i].collectorId, guild);
         collectors.push(collectorNickname.split('-')?.[0]);
         empty.push('');

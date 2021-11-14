@@ -9,7 +9,7 @@ const numeral = require('numeral');
 class MythicPlusBoost {
 
     constructor() {
-        this.messageId = '';
+        this.boostId = '';
 
         // Users
         this.tank = '';
@@ -157,7 +157,7 @@ class MythicPlusBoost {
             'color': `${this.currentColor}`,
             'footer': {
                 'text': `${emotes.repeat}: ${this.amountKeys.toString()}
-${emotes.id}: ${this.messageId}
+${emotes.id}: ${this.boostId}
 ${emotes.timestamp}: ${this.date}
 `,
             },
@@ -168,6 +168,11 @@ ${emotes.timestamp}: ${this.date}
                     'inline': true,
                 },
                 {
+                    'name': '\u200B',
+                    'value': `\u200B`,
+                    'inline': true,
+                },
+                {
                     'name': 'Armor Stack',
                     'value': `${this.armorStack.join(',\n')}`,
                     'inline': true,
@@ -175,7 +180,7 @@ ${emotes.timestamp}: ${this.date}
                 {
                     'name': '\u200B',
                     'value': `\u200B`,
-                    'inline': true,
+                    'inline': false,
                 },
                 {
                     'name': 'Keystone Level',
@@ -189,17 +194,17 @@ ${emotes.timestamp}: ${this.date}
                 },
                 {
                     'name': 'Timed',
-                    'value': `${this.keys.map(key => key.timed).join(',\n')}`,
+                    'value': `${this.keys.map(key => key.timed ? 'Yes' : 'No').join(',\n')}`,
                     'inline': true,
                 },
                 {
                     'name': 'Booster pot',
-                    'value': `<:gold:845378897893523517>${numeral(this.boosterPot).format('0,0')}`,
+                    'value': `<:gold:845378897893523517>${numeral(this.boosterPot.toString()).format('0,0')}`,
                     'inline': true,
                 },
                 {
                     'name': 'Total pot',
-                    'value': `<:gold:845378897893523517>${numeral(this.totalPot).format('0,0')}`,
+                    'value': `<:gold:845378897893523517>${numeral(this.totalPot.toString()).format('0,0')}`,
                     'inline': true,
                 },
                 {
@@ -208,8 +213,8 @@ ${emotes.timestamp}: ${this.date}
                     'inline': true,
                 },
                 {
-                    'name': 'Server Payment',
-                    'value': `${this.goldOn}`,
+                    'name': 'Server Payment(s)',
+                    'value': `${this.payments.length > 4 ? this.payments.map(payment => payment.realm).slice(0, 4).join(',\n') + `,\n...` : this.payments.map(payment => payment.realm).join(',\n')}`,
                     'inline': true,
                 },
                 {
@@ -250,7 +255,7 @@ ${emotes.timestamp}: ${this.date}
             'color': `${this.currentColor}`,
             'footer': {
                 'text': `${emotes.repeat}: ${this.amountKeys.toString()}
-${emotes.id}: ${this.messageId}
+${emotes.id}: ${this.boostId}
 ${emotes.timestamp}: ${this.date}
 `,
             },
@@ -332,7 +337,7 @@ ${emotes.timestamp}: ${this.date}
             'color': `${this.currentColor}`,
             'footer': {
                 'text': `${emotes.repeat}: ${this.amountKeys.toString()}
-${emotes.id}: ${this.messageId}
+${emotes.id}: ${this.boostId}
 ${emotes.timestamp}: ${this.date}
 `,
             },
