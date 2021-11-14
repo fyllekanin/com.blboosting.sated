@@ -368,7 +368,6 @@ const self = module.exports = {
                 },
                 "required": ["amount", "realm", "faction", "collectorId"]
             },
-            "minItems": 1,
         }
 
         const stackEnum = {

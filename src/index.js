@@ -96,7 +96,7 @@ client.on('ready', async () => {
 });
 
 client.on('messageCreate', async message => {
-    if (message.type === "CHANNEL_PINNED_MESSAGE") await message.delete();
+    // if (message.type === "CHANNEL_PINNED_MESSAGE") await message.delete();
 
     if (message.author.bot && message.author.id !== '905449848424251402') return;
 

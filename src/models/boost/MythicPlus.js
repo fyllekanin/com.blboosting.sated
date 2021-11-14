@@ -84,6 +84,8 @@ class MythicPlusBoost {
 
         this.sheetRow = '';
         this.inTime = '';
+
+        this.timeout = null;
     }
 
     cancelBoost() {

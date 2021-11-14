@@ -106,7 +106,7 @@ module.exports = async (client, message, channel, emoji, user) => {
             }
             break;
         case emojis.keystone:
-            if (!boostMsg.keystoneArray.includes(user)) return;
+            if (!boostMsg.keyholderArray.includes(user)) return;
 
             boostMsg.keyholderArray.splice(boostMsg.keyholderArray.indexOf(user), 1);
             embeds.boostLoggingEmbed(client, `${user} \`unsigned\` from boost \`${boostMsg.boostId}\` as a \`keyholder\``);
