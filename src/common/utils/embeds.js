@@ -72,7 +72,7 @@ Good luck! <:BLSalute:880535565752217611>`)
             .addField('Char to whisper', `\`/w ${boostMsg.charToWhisper} inv\``, true)
             .addField('Boost ID', `[${boostMsg.boostId}](${utils.linkBuilder(boostMsg)})`, true)
             .addField('Voice Channel', `[Join Voice](${boostMsg.voiceCode})`, true)
-            .addField('Service', `<:keystone:${emotes.keystoneEmote}> ${boostMsg.keyLvl}`, true)
+            .addField('Service', `<:keystone:${emotes.keystone}> ${boostMsg.keyLvl}`, true)
             .addField('Your Cut', `<:gold:701099811029385226>${numeral(boostMsg.boosterPot).format('0,0')}`, true)
 
             .setFooter('Bloodlust Boosting', 'https://cdn.discordapp.com/attachments/769522185978511400/882434615107813397/Keys.png')

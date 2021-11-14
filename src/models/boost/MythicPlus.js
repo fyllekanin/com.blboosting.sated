@@ -110,7 +110,7 @@ class MythicPlusBoost {
         boosterString += `\n<:dps:${emotes.dps}> ${this.dps2}`;
 
         if (!this.keys.map(key => key.dungeon.toUpperCase()).includes('ANY')) {
-            boosterString += `\n\n<:keystone:${emotes.keystoneEmote}> ${this.keystoneUser}`;
+            boosterString += `\n\n<:keystone:${emotes.keystone}> ${this.keystoneUser}`;
         }
 
         const embed = (this.isTrial ? this.getTrialEmbed(boosterString) : this.getNormalEmbed(boosterString));

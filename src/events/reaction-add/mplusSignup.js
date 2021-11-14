@@ -10,6 +10,7 @@ const voicePerms = require('../../permissions/mplusVoice');
 const { MessageEmbed } = require('discord.js');
 const numeral = require('numeral');
 const thresholds = require('../../../thresholds.json');
+const teamClaimSignup = require('./teamClaim');
 
 const inProgressColor = 'ffe100';
 const completeColor = '00c940';
@@ -131,7 +132,7 @@ module.exports = async (client, message, channel, emoji, user) => {
                 }
             }
             break;
-        case emojis.keystoneEmote:
+        case emojis.keystone:
             // Add check for stack role && tank if mail or cloth
             if (!boostMsg.keyholderArray.includes(user)) {
                 boostMsg.keyholderArray.push(user);
@@ -368,12 +369,12 @@ please check your dm's for further information.` })
 
             await utils.updateMplusChannelPerms(message, boostMsg);
 
-            embeds.boostLoggingEmbed(client, `${user} \`unlocked\` boost \`${boostMsg.boostId}\` for \`${boostMsg.getAllowedRoleEnum(boostMsg.currentStack)} Key Booster\``)
+            embeds.boostLoggingEmbed(client, `${user} \`unlocked\` boost \`${boostMsg.boostId}\` for \`${boostMsg.getAllowedRoleEnum(boostMsg.currentStack)} Key Booster\``);
 
             await utils.wrongRole(user, message, emoji)
             break;
         case emojis.teamTake:
-            await utils.wrongRole(user, message, emoji);
+            await teamClaimSignup(client, message, channel, emoji, user);
             break;
         default:
             break;
@@ -387,7 +388,6 @@ please check your dm's for further information.` })
 };
 
 function fillBoostAfterKeyholder(boostMsg) {
-
     if (!boostMsg.tank && boostMsg.tankArray.length) {
         for (const tank of boostMsg.tankArray) {
             if (![boostMsg.tank, boostMsg.healer, boostMsg.dps1, boostMsg.dps2].some(slot => slot === tank)) {
@@ -431,17 +431,21 @@ function getTankRoleBasedOnKeyLevel(boostMsg) {
     let AUX_KeyLevel = boostMsg.currentStack
 
     if (boostMsg.timed) {
-        if (AUX_KeyLevel >= thresholds.Timed_HighKeyBooster) {
+        if (AUX_KeyLevel > thresholds.Timed_HighKeyBooster) {
+            roleId = roles['Elite Keys Tank'];
+        } else if (AUX_KeyLevel > thresholds.Timed_MidKeyBooster) {
             roleId = roles['High Keys Tank'];
-        } else if (AUX_KeyLevel < thresholds.Timed_HighKeyBooster && AUX_KeyLevel >= thresholds.Timed_MidKeyBooster) {
+        } else if (AUX_KeyLevel > thresholds.Timed_LowKeyBooster) {
             roleId = roles['Mid Keys Tank'];
         } else {
             roleId = roles['Low Keys Tank'];
         }
     } else {
-        if (AUX_KeyLevel >= thresholds.Untimed_HighKeyBooster) {
+        if (AUX_KeyLevel > thresholds.Untimed_HighKeyBooster) {
+            roleId = roles['Elite Keys Tank'];
+        } else if (AUX_KeyLevel > thresholds.Untimed_MidKeyBooster) {
             roleId = roles['High Keys Tank'];
-        } else if (AUX_KeyLevel < thresholds.Untimed_HighKeyBooster && AUX_KeyLevel >= thresholds.Untimed_MidKeyBooster) {
+        } else if (AUX_KeyLevel > thresholds.Untimed_LowKeyBooster) {
             roleId = roles['Mid Keys Tank'];
         } else {
             roleId = roles['Low Keys Tank'];
@@ -457,17 +461,21 @@ function getHealerRoleBasedOnKeyLevel(boostMsg) {
     let AUX_KeyLevel = boostMsg.currentStack
 
     if (boostMsg.timed) {
-        if (AUX_KeyLevel >= thresholds.Timed_HighKeyBooster) {
+        if (AUX_KeyLevel > thresholds.Timed_HighKeyBooster) {
+            roleId = roles['Elite Keys Healer'];
+        } else if (AUX_KeyLevel > thresholds.Timed_MidKeyBooster) {
             roleId = roles['High Keys Healer'];
-        } else if (AUX_KeyLevel < thresholds.Timed_HighKeyBooster && AUX_KeyLevel >= thresholds.Timed_MidKeyBooster) {
+        } else if (AUX_KeyLevel > thresholds.Timed_LowKeyBooster) {
             roleId = roles['Mid Keys Healer'];
         } else {
             roleId = roles['Low Keys Healer'];
         }
     } else {
-        if (AUX_KeyLevel >= thresholds.Untimed_HighKeyBooster) {
+        if (AUX_KeyLevel > thresholds.Untimed_HighKeyBooster) {
+            roleId = roles['Elite Keys Healer'];
+        } else if (AUX_KeyLevel > thresholds.Untimed_MidKeyBooster) {
             roleId = roles['High Keys Healer'];
-        } else if (AUX_KeyLevel < thresholds.Untimed_HighKeyBooster && AUX_KeyLevel >= thresholds.Untimed_MidKeyBooster) {
+        } else if (AUX_KeyLevel > thresholds.Untimed_LowKeyBooster) {
             roleId = roles['Mid Keys Healer'];
         } else {
             roleId = roles['Low Keys Healer'];
@@ -483,17 +491,21 @@ function getDpsRoleBasedOnKeyLevel(boostMsg) {
     let AUX_KeyLevel = boostMsg.currentStack
 
     if (boostMsg.timed) {
-        if (AUX_KeyLevel >= thresholds.Timed_HighKeyBooster) {
+        if (AUX_KeyLevel > thresholds.Timed_HighKeyBooster) {
+            roleId = roles['Elite Keys DPS'];
+        } else if (AUX_KeyLevel > thresholds.Timed_MidKeyBooster) {
             roleId = roles['High Keys DPS'];
-        } else if (AUX_KeyLevel < thresholds.Timed_HighKeyBooster && AUX_KeyLevel >= thresholds.Timed_MidKeyBooster) {
+        } else if (AUX_KeyLevel > thresholds.Timed_LowKeyBooster) {
             roleId = roles['Mid Keys DPS'];
         } else {
             roleId = roles['Low Keys DPS'];
         }
     } else {
-        if (AUX_KeyLevel >= thresholds.Untimed_HighKeyBooster) {
+        if (AUX_KeyLevel > thresholds.Untimed_HighKeyBooster) {
+            roleId = roles['Elite Keys DPS'];
+        } else if (AUX_KeyLevel > thresholds.Untimed_MidKeyBooster) {
             roleId = roles['High Keys DPS'];
-        } else if (AUX_KeyLevel < thresholds.Untimed_HighKeyBooster && AUX_KeyLevel >= thresholds.Untimed_MidKeyBooster) {
+        } else if (AUX_KeyLevel > thresholds.Untimed_LowKeyBooster) {
             roleId = roles['Mid Keys DPS'];
         } else {
             roleId = roles['Low Keys DPS'];

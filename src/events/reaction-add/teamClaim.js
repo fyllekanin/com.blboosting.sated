@@ -2,11 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const schedule = require('node-schedule');
 const { MessageEmbed } = require('discord.js');
-
 const utils = require('../../common/utils/utils');
 
-const MAX_RUN_PER_DAY = 4;
-const RESET_HOUR = 6;
+const { MAX_RUN_PER_DAY, RESET_HOUR } = require('../../common/constants/boost.constants');
 const teamClaimCooldownFilePath = path.resolve(__dirname, '../../JSON/TeamsCooldown/teamclaim.json');
 
 const boostMap = require('../../models/maps/boosts');
@@ -29,7 +27,7 @@ module.exports = async (client, message, channel, emoji, user) => {
 
     // check eligibility
     if (canTeamClaimBoost(teamName)) {
-        emoji.users.remove(user);
+        await utils.wrongRole(user, message, emoji);
         notifyFailedSignupTeamClaimUser(emoji.message, user);
         return boostData;
     }
@@ -115,7 +113,7 @@ const resetTeamToCooldown = () => {
 // ====================================================
 // launch the reset each morning at 6 am
 // eslint-disable-next-line no-inline-comments
-const job = schedule.scheduleJob(`0 ${RESET_HOUR} * * *`, () => { // 6 hours GMT+2 everyday
+schedule.scheduleJob(`0 ${RESET_HOUR} * * *`, () => { // 6 hours GMT+2 everyday
     console.log('Reseting teamClaim cooldown');
     resetTeamToCooldown();
 });

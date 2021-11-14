@@ -2,124 +2,138 @@ const emojis = require('../../JSON/emojis.json');
 const utils = require('../../common/utils/utils');
 const embeds = require('../../utils/embeds')
 const boostMap = require('../../models/maps/boosts');
+const teamClaimWithdraw = require('./teamClaim');
 
 module.exports = async (client, message, channel, emoji, user) => {
-
     const boostMsg = boostMap.get(message.id);
-    if (!boostMsg || boostMsg.collected) return
+    if (!boostMsg || boostMsg.collected) return;
 
-    if (emoji === emojis.tankEmote && boostMsg.tankArray.indexOf(user) !== -1) {
-        boostMsg.tankArray.splice(boostMsg.tankArray.indexOf(user), 1);
-        embeds.boostLoggingEmbed(client, `${user} \`unsigned\` from boost \`${boostMsg.boostId}\` as a \`tank\``)
+    switch (emoji) {
+        case emojis.tank:
+            if (!boostMsg.tankArray.includes(user)) return;
 
-        if (boostMsg.tank === user) {
-            boostMsg.tank = '';
+            boostMsg.tankArray.splice(boostMsg.tankArray.indexOf(user), 1)
+            embeds.boostLoggingEmbed(client, `${user} \`unsigned\` from boost \`${boostMsg.boostId}\` as a \`tank\``);
 
-            for (tanks of boostMsg.tankArray) {
-                if (boostMsg.validateUniqueSign(tanks)) {
-                    boostMsg.tank = tanks;
-                    break;
-                }
-            }
-
-            if (boostMsg.keystoneUser === user) {
-                boostMsg.keystoneUser = '';
-                if (pickAnotherKeyholder(boostMsg) !== user) {
-                    await utils.wrongRole(user, message, 'keystone')
-                } else if (pickAnotherKeyholder(boostMsg)) {
-                    fillBoostAfterKeyholder(boostMsg)
-                }
-            }
-        }
-    }
-
-    if (emoji === emojis.healerEmote && boostMsg.healerArray.indexOf(user) !== -1) {
-        boostMsg.healerArray.splice(boostMsg.healerArray.indexOf(user), 1);
-        embeds.boostLoggingEmbed(client, `${user} \`unsigned\` from boost \`${boostMsg.boostId}\` as a \`healer\``)
-        if (boostMsg.healer === user) {
-            boostMsg.healer = '';
-
-            for (healers of boostMsg.healerArray) {
-                if (boostMsg.validateUniqueSign(healers)) {
-                    boostMsg.healer = healers;
-                    break;
-                }
-            }
-
-            if (boostMsg.keystoneUser === user) {
-                boostMsg.keystoneUser = '';
-                if (pickAnotherKeyholder(boostMsg) !== user) {
-                    await utils.wrongRole(user, message, 'keystone')
-                } else if (pickAnotherKeyholder(boostMsg)) {
-                    fillBoostAfterKeyholder(boostMsg)
-                }
-            }
-        }
-    }
-
-    if (emoji === emojis.dpsEmote && boostMsg.dpsArray.indexOf(user) !== -1) {
-        boostMsg.dpsArray.splice(boostMsg.dpsArray.indexOf(user), 1);
-        embeds.boostLoggingEmbed(client, `${user} \`unsigned\` from boost \`${boostMsg.boostId}\` as a \`dps\``)
-        if (boostMsg.dps1 === user) {
-            boostMsg.dps1 = '';
-
-            for (dpsers of boostMsg.dpsArray) {
-                if (dpsers !== boostMsg.dps2 && boostMsg.validateUniqueSign(dpsers)) {
-                    boostMsg.dps1 = dpsers;
-                    break;
-                }
-            }
-
-            if (boostMsg.keystoneUser === user) {
-                boostMsg.keystoneUser = '';
-                if (pickAnotherKeyholder(boostMsg) !== user) {
-                    await utils.wrongRole(user, message, 'keystone')
-                } else if (pickAnotherKeyholder(boostMsg)) {
-                    fillBoostAfterKeyholder(boostMsg)
-                }
-            }
-        } else if (boostMsg.dps2 === user) {
-            boostMsg.dps2 = '';
-
-            for (dpsers of boostMsg.dpsArray) {
-                if (dpsers !== boostMsg.dps1 && boostMsg.validateUniqueSign(dpsers)) {
-                    boostMsg.dps2 = dpsers;
-                    break;
-                }
-            }
-
-            if (boostMsg.keystoneUser === user) {
-                boostMsg.keystoneUser = '';
-                if (pickAnotherKeyholder(boostMsg) !== user) {
-                    await utils.wrongRole(user, message, 'keystone')
-                } else if (pickAnotherKeyholder(boostMsg)) {
-                    fillBoostAfterKeyholder(boostMsg)
-                }
-            }
-        }
-    }
-
-    if (emoji === emojis.keystoneEmote && boostMsg.keyholderArray.indexOf(user) !== -1) {
-        boostMsg.keyholderArray.splice(boostMsg.keyholderArray.indexOf(user), 1);
-        embeds.boostLoggingEmbed(client, `${user} \`unsigned\` from boost \`${boostMsg.boostId}\` as a \`keyholder\``)
-        if (boostMsg.keystoneUser === user) {
-            boostMsg.keystoneUser = '';
             if (boostMsg.tank === user) {
                 boostMsg.tank = '';
-            } else if (boostMsg.healer === user) {
-                boostMsg.healer = '';
-            } else if (boostMsg.dps1 === user || boostMsg.dps2 === user) {
-                if (boostMsg.dps1 === user) {
-                    boostMsg.dps1 = '';
-                } else {
-                    boostMsg.dps2 = '';
+
+                for (tanks of boostMsg.tankArray) {
+                    if (boostMsg.validateUniqueSign(tanks)) {
+                        boostMsg.tank = tanks;
+                        break;
+                    }
+                }
+
+                if (boostMsg.keystoneUser === user) {
+                    boostMsg.keystoneUser = '';
+                    if (pickAnotherKeyholder(boostMsg) !== user) {
+                        await utils.wrongRole(user, message, 'keystone')
+                    } else if (pickAnotherKeyholder(boostMsg)) {
+                        fillBoostAfterKeyholder(boostMsg)
+                    }
                 }
             }
-            if (pickAnotherKeyholder(boostMsg)) {
-                fillBoostAfterKeyholder(boostMsg)
+            break;
+        case emojis.healer:
+            if (!boostMsg.healerArray.includes(user)) return;
+
+            boostMsg.healerArray.splice(boostMsg.healerArray.indexOf(user), 1);
+            embeds.boostLoggingEmbed(client, `${user} \`unsigned\` from boost \`${boostMsg.boostId}\` as a \`healer\``);
+
+            if (boostMsg.healer === user) {
+                boostMsg.healer = '';
+
+                for (healers of boostMsg.healerArray) {
+                    if (boostMsg.validateUniqueSign(healers)) {
+                        boostMsg.healer = healers;
+                        break;
+                    }
+                }
+
+                if (boostMsg.keystoneUser === user) {
+                    boostMsg.keystoneUser = '';
+                    if (pickAnotherKeyholder(boostMsg) !== user) {
+                        await utils.wrongRole(user, message, 'keystone')
+                    } else if (pickAnotherKeyholder(boostMsg)) {
+                        fillBoostAfterKeyholder(boostMsg)
+                    }
+                }
             }
-        }
+            break;
+        case emojis.dps:
+            if (!boostMsg.dpsArray.includes(user)) return;
+
+            boostMsg.dpsArray.splice(boostMsg.dpsArray.indexOf(user), 1);
+            embeds.boostLoggingEmbed(client, `${user} \`unsigned\` from boost \`${boostMsg.boostId}\` as a \`dps\``);
+
+            if (boostMsg.dps1 === user) {
+                boostMsg.dps1 = '';
+
+                for (dpsers of boostMsg.dpsArray) {
+                    if (dpsers !== boostMsg.dps2 && boostMsg.validateUniqueSign(dpsers)) {
+                        boostMsg.dps1 = dpsers;
+                        break;
+                    }
+                }
+
+                if (boostMsg.keystoneUser === user) {
+                    boostMsg.keystoneUser = '';
+                    if (pickAnotherKeyholder(boostMsg) !== user) {
+                        await utils.wrongRole(user, message, 'keystone')
+                    } else if (pickAnotherKeyholder(boostMsg)) {
+                        fillBoostAfterKeyholder(boostMsg)
+                    }
+                }
+            } else if (boostMsg.dps2 === user) {
+                boostMsg.dps2 = '';
+
+                for (dpsers of boostMsg.dpsArray) {
+                    if (dpsers !== boostMsg.dps1 && boostMsg.validateUniqueSign(dpsers)) {
+                        boostMsg.dps2 = dpsers;
+                        break;
+                    }
+                }
+
+                if (boostMsg.keystoneUser === user) {
+                    boostMsg.keystoneUser = '';
+                    if (pickAnotherKeyholder(boostMsg) !== user) {
+                        await utils.wrongRole(user, message, 'keystone')
+                    } else if (pickAnotherKeyholder(boostMsg)) {
+                        fillBoostAfterKeyholder(boostMsg)
+                    }
+                }
+            }
+            break;
+        case emojis.keystone:
+            if (!boostMsg.keystoneArray.includes(user)) return;
+
+            boostMsg.keyholderArray.splice(boostMsg.keyholderArray.indexOf(user), 1);
+            embeds.boostLoggingEmbed(client, `${user} \`unsigned\` from boost \`${boostMsg.boostId}\` as a \`keyholder\``);
+
+            if (boostMsg.keystoneUser === user) {
+                boostMsg.keystoneUser = '';
+                if (boostMsg.tank === user) {
+                    boostMsg.tank = '';
+                } else if (boostMsg.healer === user) {
+                    boostMsg.healer = '';
+                } else if (boostMsg.dps1 === user || boostMsg.dps2 === user) {
+                    if (boostMsg.dps1 === user) {
+                        boostMsg.dps1 = '';
+                    } else {
+                        boostMsg.dps2 = '';
+                    }
+                }
+                if (pickAnotherKeyholder(boostMsg)) {
+                    fillBoostAfterKeyholder(boostMsg)
+                }
+            }
+            break;
+        case emojis.teamTake:
+            await teamClaimWithdraw(client, message, channel, emoji, user);
+            break;
     }
+
     !boostMsg.isTeamClaimed
         ? boostMsg.throttleEdit(message, 'normal')
         : boostMsg.throttleEdit(message, 'team');

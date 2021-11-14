@@ -622,7 +622,7 @@ const self = module.exports = {
         // }
 
         if (msgBoost.keys.filter(key => key.dungeon !== 'Any')?.length === 1) {
-            await boostEmbed.react(emojis.keystoneEmote);
+            await boostEmbed.react(emojis.keystone);
             await boostEmbed.react(emojis.moneyBag);
             if (msgBoost.currentStack >= thresholds.Timed_MidKeyBooster || msgBoost.currentStack >= thresholds.Untimed_MidKeyBooster) {
                 await boostEmbed.react(emojis.changeChannel);
