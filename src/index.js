@@ -1,9 +1,10 @@
 const { Client, Intents, Collection } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-// const { setup } = require('./spreadsheet');
+const { setup } = require('./spreadsheet');
 const fs = require('fs');
 const roles = require('./JSON/server-info/roles.json');
+const channels = require('./JSON/server-info/channels.json');
 require('dotenv').config();
 
 const intents = new Intents(32767)
@@ -69,33 +70,33 @@ function registerCommand(path) {
 
 client.login(process.env.TOKEN).catch(console.error);
 
+(() => {
+    setup();
+})();
+
 client.on('ready', async () => {
 
-    // const guild = client.guilds.cache.get(roles['guild']);
+    const guild = client.guilds.cache.get(roles['guild']);
 
-    // const guildCommands = await guild.commands.fetch();
+    const guildCommands = await guild.commands.fetch();
 
-    // let slashcommands = {};
-    // guildCommands.forEach(command => {
-    //     slashcommands[command.name] = command.id;
-    // })
+    let slashcommands = {};
+    guildCommands.forEach(command => {
+        slashcommands[command.name] = command.id;
+    })
 
-    // let data = JSON.stringify(slashcommands, null, 2);
-    // fs.writeFileSync('slashcommands.json', data, (err) => {
-    //     if (err) throw err;
-    //     console.log('Data written to slashcommands file');
-    // });
+    let data = JSON.stringify(slashcommands, null, 2);
+    fs.writeFileSync('./JSON/slashcommands.json', data, (err) => {
+        if (err) throw err;
+        console.log('Data written to slashcommands file');
+    });
 
-    // const fullPermissions = require('./utils/slashCommandsPermissions');
+    const fullPermissions = require('./permissions/slashCommands');
 
-    // await guild?.commands.permissions.set({ fullPermissions });
+    await guild?.commands.permissions.set({ fullPermissions });
 
     console.log(`Logged in as ${client.user.tag}!`);
 });
-
-// (() => {
-//     setup();
-// })();
 
 client.on('messageCreate', async message => {
     if (message.type === "CHANNEL_PINNED_MESSAGE") await message.delete();
@@ -118,50 +119,59 @@ client.on('messageCreate', async message => {
 
 });
 
+const boostCommands = require('./commands-slash-handle/boostCommands');
 client.on('interactionCreate', async interaction => {
     if (interaction.isCommand()) {
         switch (interaction.commandName) {
-            case 'leveling':
-                await interaction.reply({ content: 'yay', ephemeral: true });
+            case 'boost':
+                await boostCommands(client, interaction);
                 break;
         }
     }
 });
 
+const mythicPlusSignups = require('./events/reaction-add/mplusSignup');
 client.on('messageReactionAdd', async (messageReaction, user) => {
-    if (!user.bot) {
-        const message = messageReaction.message;
-        const channel = message.channel;
-        let emoji = messageReaction.emoji.id;
+    if (user.bot) return;
+
+    const message = messageReaction.message;
+    const channel = message.channel;
+    user = message.guild.members.cache.get(user.id);
+    let emoji = messageReaction.emoji.id;
+    if (!emoji) {
+        emoji = messageReaction.emoji.name;
         if (!emoji) {
-            emoji = messageReaction.emoji.name;
-            if (!emoji) {
-                emoji = messageReaction.emoji;
-            }
-        }
-        switch (message.channel.id) {
-            default:
-                break;
+            emoji = messageReaction.emoji;
         }
     }
-
+    switch (message.channel.id) {
+        case channels['system-create-boost']:
+            await mythicPlusSignups(client, message, channel, emoji, user);
+            break;
+        default:
+            break;
+    }
 });
 
+const mythicPlusWithdraw = require('./events/reaction-remove/mplusWithdraw');
 client.on('messageReactionRemove', async (messageReaction, user) => {
-    if (!user.bot) {
-        const message = messageReaction.message;
-        const channel = message.channel;
-        let emoji = messageReaction.emoji.id;
-        if (emoji === null) {
-            emoji = messageReaction.emoji.name;
-        }
+    if (user.bot) return;
 
-        switch (message.channel.id) {
-            default:
-                break;
-        }
+    const message = messageReaction.message;
+    const channel = message.channel;
+    user = message.guild.members.cache.get(user.id);
+    let emoji = messageReaction.emoji.id;
+    if (emoji === null) {
+        emoji = messageReaction.emoji.name;
     }
 
+    switch (message.channel.id) {
+        case channels['system-create-boost']:
+            await mythicPlusWithdraw(client, message, channel, emoji, user);
+            break;
+        default:
+            break;
+    }
 });
 
 client.on('raw', async (packet) => {
