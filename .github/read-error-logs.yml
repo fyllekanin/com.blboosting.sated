@@ -1,0 +1,16 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Read error logs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+
+      - name: Read
+        run: |
+          cat /home/ubuntu/sated-v2/production/err.log

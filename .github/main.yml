@@ -1,0 +1,42 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy Sated
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Check if current production exists
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "/home/ubuntu/sated-v2/production/index.js"
+
+      - name: Stop current sated if existing
+        if: steps.check_files.outputs.files_exists == 'true'
+        working-directory: /home/ubuntu/sated-v2/production
+        run: pm2 delete ecosystem.config.js
+
+      - name: Remove files
+        run: rm -Rf /home/ubuntu/sated-v2/production/*
+
+      - name: Move files
+        run: |
+          mv dist/* /home/ubuntu/sated-v2/production/
+          mv ecosystem.config.js /home/ubuntu/sated-v2/production/
+
+      - name: Start sated
+        working-directory: /home/ubuntu/sated-v2/production
+        run: pm2 start ecosystem.config.js

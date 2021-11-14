@@ -1,7 +1,7 @@
 const { Client, Intents, Collection } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-const { setup } = require('./spreadsheet');
+const { setup } = require('./services/spreadsheet');
 const fs = require('fs');
 const roles = require('./JSON/server-info/roles.json');
 const channels = require('./JSON/server-info/channels.json');
@@ -43,13 +43,18 @@ for (const file of slashCommandFiles) {
     }
 }
 
-const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
+function registerCommand(path) {
+    const command = require(`./commands/${path}`);
+    console.log(`registered command: ${command.name}`);
+    client.commands.set(command.name, command);
+}
 
-const clientId = client.user.id;
-const guildId = roles['guild'];
-(async () => {
+client.login(process.env.TOKEN).then(async () => {
     try {
         console.log('Started refreshing application (/) commands.');
+        const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
+        const clientId = client.user.id;
+        const guildId = roles['guild'];
 
         await rest.put(
             Routes.applicationGuildCommands(clientId, guildId),
@@ -60,15 +65,7 @@ const guildId = roles['guild'];
     } catch (error) {
         console.error(error);
     }
-})();
-
-function registerCommand(path) {
-    const command = require(`./commands/${path}`);
-    console.log(`registered command: ${command.name}`);
-    client.commands.set(command.name, command);
-}
-
-client.login(process.env.TOKEN).catch(console.error);
+}).catch(console.error);
 
 (() => {
     setup();
@@ -76,7 +73,7 @@ client.login(process.env.TOKEN).catch(console.error);
 
 client.on('ready', async () => {
 
-    const guild = client.guilds.cache.get(roles['guild']);
+    const guild = await client.guilds.cache.get(roles['guild']);
 
     const guildCommands = await guild.commands.fetch();
 

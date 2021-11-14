@@ -1,7 +1,6 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const utils = require('./utils');
 const numeral = require('numeral');
-const emotes = require('../../JSON/emojis.json');
 const channels = require('../../JSON/server-info/channels.json');
 const Sheet = require('../../services/spreadsheet');
 
