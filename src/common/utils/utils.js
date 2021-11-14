@@ -198,7 +198,7 @@ const self = module.exports = {
         return userNickName;
     },
     updateMplusChannelPerms: async (message, boost) => {
-        if (message.channel.id === channels['testing-1']) return;
+        if (message.channel.id === channels['bot-spam']) return;
 
         const allowedEnum = boost.getAllowedRoleEnum(boost.currentStack);
 
@@ -363,7 +363,7 @@ If you are removed from the boost, your credit will be added back automatically.
         const channel = message.channel;
         const guild = message.guild;
 
-        if (channel.id === channels['testing-1']) {
+        if (channel.id === channels['bot-spam']) {
             boost.channel = channel;
             return;
         }
@@ -386,7 +386,7 @@ If you are removed from the boost, your credit will be added back automatically.
             : channelName = `1x-${boost.keys[0].dungeon}-${boost.keys[0].level}-${boost.timed ? 'timed' : 'untimed'}`;
 
         const boostChannel = await guild.channels.create(channelName, {
-            parent: channel.parentID,
+            parent: channels['On-Going Boosts'],
             type: 'text',
             permissionOverwrites: [
                 {
@@ -395,22 +395,22 @@ If you are removed from the boost, your credit will be added back automatically.
                 },
                 {
                     // Director
-                    id: '846100792343527474',
+                    id: roles['Director'],
                     allow: ['VIEW_CHANNEL'],
                 },
                 {
                     // Admin
-                    id: '846100756633616414',
+                    id: roles['Senior Management'],
                     allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'MANAGE_GUILD', 'ADD_REACTIONS'],
                 },
                 {
                     // Staff
-                    id: '845751878707970058',
+                    id: roles['Management'],
                     allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'MANAGE_MESSAGES', 'MANAGE_GUILD', 'ADD_REACTIONS'],
                 },
                 {
                     // Advertiser
-                    id: boost.advertiser.user.id,
+                    id: boost.advertiser.id,
                     allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES'],
                     deny: ['ADD_REACTIONS', 'MANAGE_MESSAGES'],
                 },

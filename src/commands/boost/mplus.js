@@ -401,7 +401,7 @@ const self = module.exports = {
 
         const msgBoost = new MythicPlus();
 
-        const data = message.content.replace('!boost ', '');
+        const data = message.content.replace('!mplus ', '');
         const parsedData = JSON.parse(data);
 
         v.addSchema(mythicPlusBoostSchema, '/MythicPlusBoost');
@@ -670,7 +670,7 @@ const self = module.exports = {
                 },
                 {
                     'name': 'Amount',
-                    'value': `<:gold:845378897893523517>${numeral(msgBoost.totalPot).format('0,0')}`,
+                    'value': `<:gold:701099811029385226>${numeral(msgBoost.totalPot).format('0,0')}`,
                     'inline': true,
                 },
                 {

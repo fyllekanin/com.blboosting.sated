@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const emotes = require('../../JSON/emojis.json');
+const emojis = require('../../JSON/emojis.json');
 const roles = require('../../JSON/server-info/roles.json');
 const utils = require('../../common/utils/utils');
 const thresholds = require('../../JSON/thresholds.json');
@@ -88,7 +88,7 @@ class MythicPlusBoost {
 
     cancelBoost() {
         const generatedEmbed = new MessageEmbed();
-        generatedEmbed.setDescription('Boost Cancel');
+        generatedEmbed.setDescription('Boost Canceled');
 
         return generatedEmbed;
     }
@@ -100,16 +100,16 @@ class MythicPlusBoost {
     }
 
     createEmbed() {
-        let boosterString = `<:tank:${emotes.tank}> ${this.tank}`;
+        let boosterString = `<:TANK:${emojis.tank}> ${this.tank}`;
 
-        boosterString += `\n<:healer:${emotes.healer}> ${this.healer}`;
+        boosterString += `\n<:HEALER:${emojis.healer}> ${this.healer}`;
 
-        boosterString += `\n<:dps:${emotes.dps}> ${this.dps1}`;
+        boosterString += `\n<:dps:${emojis.dps}> ${this.dps1}`;
 
-        boosterString += `\n<:dps:${emotes.dps}> ${this.dps2}`;
+        boosterString += `\n<:dps:${emojis.dps}> ${this.dps2}`;
 
         if (!this.keys.map(key => key.dungeon.toUpperCase()).includes('ANY')) {
-            boosterString += `\n\n<:keystone:${emotes.keystone}> ${this.keystoneUser}`;
+            boosterString += `\n\n<:keystone:${emojis.keystone}> ${this.keystoneUser}`;
         }
 
         const embed = (this.isTrial ? this.getTrialEmbed(boosterString) : this.getNormalEmbed(boosterString));
@@ -120,7 +120,7 @@ class MythicPlusBoost {
             embedMsg.addField('Voice Channel', `[Join Voice](${this.voiceCode})`, true);
         }
 
-        if (this.note !== '') {
+        if (this.note) {
             embedMsg.addField('Notes', `${this.note}`);
         }
         if (this.onTheWay) {
@@ -155,9 +155,9 @@ class MythicPlusBoost {
             'title': 'Mythic Dungeon Boost',
             'color': `${this.currentColor}`,
             'footer': {
-                'text': `${emotes.repeat}: ${this.amountKeys.toString()}
-${emotes.id}: ${this.boostId}
-${emotes.timestamp}: ${this.date}
+                'text': `${emojis.repeat}: ${this.amountKeys.toString()}
+${emojis.id}: ${this.boostId}
+${emojis.timestamp}: ${this.date}
 `,
             },
             'fields': [
@@ -198,12 +198,12 @@ ${emotes.timestamp}: ${this.date}
                 },
                 {
                     'name': 'Booster pot',
-                    'value': `<:gold:845378897893523517>${numeral(this.boosterPot.toString()).format('0,0')}`,
+                    'value': `<:gold:701099811029385226>${numeral(this.boosterPot.toString()).format('0,0')}`,
                     'inline': true,
                 },
                 {
                     'name': 'Total pot',
-                    'value': `<:gold:845378897893523517>${numeral(this.totalPot.toString()).format('0,0')}`,
+                    'value': `<:gold:701099811029385226>${numeral(this.totalPot.toString()).format('0,0')}`,
                     'inline': true,
                 },
                 {
@@ -226,10 +226,10 @@ ${emotes.timestamp}: ${this.date}
         const embedMsg = new MessageEmbed(embed);
 
         if (this.collected && this.voiceCode) {
-            embedMsg.addField('Voice Channel', `[Join Voice](${this.voiceCode})`, true)
+            embedMsg.addField('Voice Channel', `[Join Voice](${this.voiceCode})`, true);
         }
 
-        if (this.note !== '') {
+        if (this.note) {
             embedMsg.addField('Notes', `${this.note}`);
         }
 
@@ -253,9 +253,9 @@ ${emotes.timestamp}: ${this.date}
             'title': 'Mythic Dungeon Boost',
             'color': `${this.currentColor}`,
             'footer': {
-                'text': `${emotes.repeat}: ${this.amountKeys.toString()}
-${emotes.id}: ${this.boostId}
-${emotes.timestamp}: ${this.date}
+                'text': `${emojis.repeat}: ${this.amountKeys.toString()}
+${emojis.id}: ${this.boostId}
+${emojis.timestamp}: ${this.date}
 `,
             },
             'fields': [
@@ -296,12 +296,12 @@ ${emotes.timestamp}: ${this.date}
                 },
                 {
                     'name': 'Booster pot',
-                    'value': `<:gold:845378897893523517>${numeral(this.boosterPot.toString()).format('0,0')}`,
+                    'value': `<:gold:701099811029385226>${numeral(this.boosterPot.toString()).format('0,0')}`,
                     'inline': true,
                 },
                 {
                     'name': 'Total pot',
-                    'value': `<:gold:845378897893523517>${numeral(this.totalPot.toString()).format('0,0')}`,
+                    'value': `<:gold:701099811029385226>${numeral(this.totalPot.toString()).format('0,0')}`,
                     'inline': true,
                 },
                 {
@@ -335,9 +335,9 @@ ${emotes.timestamp}: ${this.date}
             'title': 'Mythic Dungeon Boost',
             'color': `${this.currentColor}`,
             'footer': {
-                'text': `${emotes.repeat}: ${this.amountKeys.toString()}
-${emotes.id}: ${this.boostId}
-${emotes.timestamp}: ${this.date}
+                'text': `${emojis.repeat}: ${this.amountKeys.toString()}
+${emojis.id}: ${this.boostId}
+${emojis.timestamp}: ${this.date}
 `,
             },
             'fields': [
@@ -378,12 +378,12 @@ ${emotes.timestamp}: ${this.date}
                 },
                 {
                     'name': 'Booster pot',
-                    'value': `<:gold:845378897893523517>${numeral(this.boosterPot.toString()).format('0,0')}`,
+                    'value': `<:gold:701099811029385226>${numeral(this.boosterPot.toString()).format('0,0')}`,
                     'inline': true,
                 },
                 {
                     'name': 'Total pot',
-                    'value': `<:gold:845378897893523517>${numeral(this.totalPot.toString()).format('0,0')}`,
+                    'value': `<:gold:701099811029385226>${numeral(this.totalPot.toString()).format('0,0')}`,
                     'inline': true,
                 },
                 {

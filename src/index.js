@@ -100,9 +100,9 @@ client.on('messageCreate', async message => {
 
     if (message.author.bot && message.author.id !== '905449848424251402') return;
 
-    if (!content.startsWith(process.env.PREFIX)) return;
+    if (!message.content.startsWith(process.env.PREFIX)) return;
 
-    const cleanContent = content.slice(process.env.PREFIX.length).trim().split(/ +/g);
+    const cleanContent = message.content.slice(process.env.PREFIX.length).trim().split(/ +/g);
     const cmd = cleanContent[0];
     const args = cleanContent.slice(1);
 
@@ -129,9 +129,8 @@ client.on('interactionCreate', async interaction => {
 
 const mythicPlusSignups = require('./events/reaction-add/mplusSignup');
 client.on('messageReactionAdd', async (messageReaction, user) => {
-    if (user.bot && message.author.id !== client.user.id) return;
-
     const message = messageReaction.message;
+    if (user.bot && message.author.id !== client.user.id) return;
     const channel = message.channel;
     user = message.guild.members.cache.get(user.id);
     let emoji = messageReaction.emoji.id;
@@ -153,9 +152,8 @@ client.on('messageReactionAdd', async (messageReaction, user) => {
 
 const mythicPlusWithdraw = require('./events/reaction-remove/mplusWithdraw');
 client.on('messageReactionRemove', async (messageReaction, user) => {
-    if (user.bot && message.author.id !== client.user.id) return;
-
     const message = messageReaction.message;
+    if (user.bot && message.author.id !== client.user.id) return;
     const channel = message.channel;
     user = message.guild.members.cache.get(user.id);
     let emoji = messageReaction.emoji.id;
