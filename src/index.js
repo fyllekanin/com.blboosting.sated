@@ -130,7 +130,7 @@ client.on('interactionCreate', async interaction => {
 const mythicPlusSignups = require('./events/reaction-add/mplusSignup');
 client.on('messageReactionAdd', async (messageReaction, user) => {
     const message = messageReaction.message;
-    if (user.bot && message.author.id !== client.user.id) return;
+    if (user.bot && message.author.id === client.user.id) return;
     const channel = message.channel;
     user = message.guild.members.cache.get(user.id);
     let emoji = messageReaction.emoji.id;

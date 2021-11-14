@@ -557,7 +557,7 @@ const self = module.exports = {
         // Balance remove if paid with balance
         if (parsedData.paidBalance) {
             msgBoost.payments.push({
-                amount: paidBalance,
+                amount: parsedData.paidBalance,
                 realm: 'Balance',
             })
         }
@@ -579,7 +579,7 @@ const self = module.exports = {
 
         const boostEmbed = await msgBoost.channel.send({ content: rolesToPing, embeds: [msgBoost.createEmbed()] }).catch(err => { console.log(err) });
 
-        message.react('✅');
+        await message.react('✅');
 
         msgBoost.boostMessage = boostEmbed;
         msgBoost.boostId = boostEmbed.id;

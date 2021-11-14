@@ -25,7 +25,7 @@ module.exports = async (client, message, channel, emoji, user) => {
                     message.edit({ embeds: [new MessageEmbed(collectorEmbed)] });
 
                     boostMsg.boostMessage.edit({ embeds: [boostMsg.createEmbed()] })
-                    message.reactions.removeAll();
+                    await message.reactions.removeAll();
                 } else {
                     await utils.wrongRole(user, message, emoji)
                 }

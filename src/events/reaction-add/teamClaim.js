@@ -5,7 +5,7 @@ const { MessageEmbed } = require('discord.js');
 const utils = require('../../common/utils/utils');
 
 const { MAX_RUN_PER_DAY, RESET_HOUR } = require('../../common/constants/boost.constants');
-const teamClaimCooldownFilePath = path.resolve(__dirname, '../../JSON/TeamsCooldown/teamclaim.json');
+const teamClaimCooldownFilePath = path.resolve(__dirname, '../../JSON/teams-cooldown/teamclaim.json');
 
 const boostMap = require('../../models/maps/boosts');
 

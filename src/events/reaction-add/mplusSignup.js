@@ -40,7 +40,7 @@ module.exports = async (client, message, channel, emoji, user) => {
     const memberRoles = user.roles.cache.map(roles => roles.name);
 
     switch (emoji) {
-        case emojis.tankEmote:
+        case emojis.tank:
             if (!boostMsg.isTankEligable(memberRoles, booster.hasTankRole, armorStacks, classStacks)) {
                 await utils.wrongRole(user, message, emoji);
                 break;
@@ -67,7 +67,7 @@ module.exports = async (client, message, channel, emoji, user) => {
                 }
             }
             break;
-        case emojis.healerEmote:
+        case emojis.healer:
             if (!boostMsg.isHealerEligable(memberRoles, booster.hasHealerRole, armorStacks, classStacks)) {
                 await utils.wrongRole(user, message, emoji);
                 break;
@@ -94,7 +94,7 @@ module.exports = async (client, message, channel, emoji, user) => {
                 }
             }
             break;
-        case emojis.dpsEmote:
+        case emojis.dps:
             if (!boostMsg.isDPSEligable(memberRoles, booster.hasDpsRole, armorStacks, classStacks)) {
                 await utils.wrongRole(user, message, emoji);
                 break;
@@ -164,7 +164,7 @@ module.exports = async (client, message, channel, emoji, user) => {
                 fillBoostAfterKeyholder(boostMsg);
             }
             break;
-        case emojis.goldCollectedAndStart:
+        case emojis.moneyBag:
             if ([boostMsg.tank, boostMsg.healer, boostMsg.dps1, boostMsg.dps2].some(role => role === '') && !boostMsg.isTeamClaimed) {
                 await utils.wrongRole(user, message, emoji);
                 break;
@@ -223,10 +223,10 @@ module.exports = async (client, message, channel, emoji, user) => {
                 channel.send({
                     content:
                         `Boost locked,
-<:TANK:${emojis.tankEmote}> ${boostMsg.tank},
-<:HEALER:${emojis.healerEmote}> ${boostMsg.healer},
-<:dps:${emojis.dpsEmote}> ${boostMsg.dps1},
-<:dps:${emojis.dpsEmote}> ${boostMsg.dps2},
+<:TANK:${emojis.tank}> ${boostMsg.tank},
+<:HEALER:${emojis.healer}> ${boostMsg.healer},
+<:dps:${emojis.dps}> ${boostMsg.dps1},
+<:dps:${emojis.dps}> ${boostMsg.dps2},
 please check your dm's for further information.` })
 
                 embeds.boostLoggingEmbed(client, `${user} \`started\` boost \`${boostMsg.boostId}\``)
