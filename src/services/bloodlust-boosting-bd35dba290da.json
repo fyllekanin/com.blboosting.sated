@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "bloodlust-boosting",
+  "private_key_id": "bd35dba290da33c720c1805ad1786d7994763526",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDps2rzcj6zCz+r\nreJprpfEE9WaTCXIL93gFahIMc35v5kl1NUAcLnqimBOfPd0TTmbGVodRYai39ja\n57Et6TTyvc6C98lCaChsX46//rg0WS9W4qavR48laxN0tDHEq+Uv9IT6FxFTVh+S\nuqD5FFkBDXwWKJadsfaRTIHaGkT22RFaBToXGOmQsYDy+xPyCL2XoMgDKxrnhyTK\nx32sK516+mHJ+DAoID6C3z50TGfovyVvRxEcGlll+LmFBm/gGK5+HiRad3uDTkxK\nXgsIJIecOLDUJrGGdoKaiexM0teHkjVX7H/+rcZwseGIRPi9HnOagImv0cZ8uto7\nUQ/XBRv9AgMBAAECggEANOsjtKyR9gj+Cen98uBODWBQZfgINiRgoXVF/dMJSRxR\nmXdwJAFil/FtjVhO0E8MVEqRVT+BFTCK8ka0oCjGjJDeSlnBgQAE50VcFa2gGHp5\ndbss81PI3jg415xWCKrD4vADjH3ctnox/A+2k7A/1zUue/YE5QB/TLd+T9zS8PIX\nXqcwbOBTTMp7Wz1/0IbUWWCouobic6bdE5njep+j1Fc4Erk+4qfJnd202Eg79ELz\nAiePR9Q/jQh5jlz35Emz8A4xlSqsqNwaSap5fs5LvpEs/UV0heLTBimkMtXNWuUB\nt3rjfBlAAiVCDbxAhX26tD8WRfkMYoeqyBS4F/GMIQKBgQD8vVNdbrLz+aoWPb/q\nenal4ii6ATjipiUS13iDcjktNB6xVN4VcrEK7/uo97Ho4C2L7iPx0YhvIBgVDbcU\nYUg1wb5l2mVv4jvylzTGuJkK7CF02zbLBXq4OUXMMxczZ13v1FT5orT+7JyI3AhG\n8gRy8tbkhsKEbffgAzT7gSqj4wKBgQDstzd3kVajQB+0BzEI7o4Bn9qN4jYrpzVY\nA7++ZGYdIP35+xUbvtd1uAYtMHmT7sfZLMWHokfRIkWMeSEn3BQXIry7RKecnKRx\nnP+I4JeWaTWIuu42oJkZ2qFgVXRtU10KpXY24risi9vdGzj/mSx97gO4His7gnpu\n1oxpriYGnwKBgE35Lw4FSAqDPRlNhbcWfyJgasYv+FfcgFWWymRrSf6LNOjq0PV3\nA+3m6hJQEMBS4VppZweE6H24PhXIvHH6LWgAVPhhb6gb+Pi3851XeEfpX80IkJgE\nIb9SVBlSrda7Dj0emfTGYObBIu4KTDdvFTZNe0TX2o02zCF9e8wYJoqXAoGAekV5\nRS2xjsnEln1QesieWYB0p+09BfdsunXVSUca59ju1302PgqpyIixyA3N/vfMCwXx\nUkokxoXpXtICqlAnoHu0+RZRbbgLyRPLeqxoIK1flazY9yalbpFb4iLB7OaunJ0z\nHs6ljZsAiolRO9WnAbU7/pK2yhpvm2j/RmdKBQkCgYEAnH7UpobDzwgxf7wounTf\nJahTrTH86rzN+elWxwtEwsTF7jNUbXVxGJ+x/SwWGRXhcQGJ+HarU/LTbR4qUgnu\nfPh3IFsfMxB16MSn3ywgejPkcreCtyAtRrxHKBiJrgBCnF54vS/V8+Luk90SM1Oq\n0MGMQAsk/5tmrXKreGIr2kw=\n-----END PRIVATE KEY-----\n",
+  "client_email": "bloodlust-boosting-sated@bloodlust-boosting.iam.gserviceaccount.com",
+  "client_id": "101835971511013297732",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/bloodlust-boosting-sated%40bloodlust-boosting.iam.gserviceaccount.com"
+}
