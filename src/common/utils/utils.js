@@ -2,11 +2,11 @@ const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 const teamClaimSemaphore = require('semaphore')(1);
-const teamClaimCooldownFilePath = path.resolve(__dirname, '../JSON/teams-cooldown/teamclaim.json');
+const teamClaimCooldownFilePath = path.resolve(__dirname, '../../JSON/teams-cooldown/teamclaim.json');
 
-const roles = require('../JSON/server-info/roles.json');
-const channels = require('../JSON/server-info/channels.json');
-const thresholds = require('../JSON/thresholds.json');
+const roles = require('../../JSON/server-info/roles.json');
+const channels = require('../../JSON/server-info/channels.json');
+const thresholds = require('../../JSON/thresholds.json');
 
 const MAX_RUN_PER_DAY = 4;
 const RESET_HOUR = 6;

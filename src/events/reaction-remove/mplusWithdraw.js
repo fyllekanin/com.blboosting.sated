@@ -1,6 +1,6 @@
 const emojis = require('../../JSON/emojis.json');
 const utils = require('../../common/utils/utils');
-const embeds = require('../../utils/embeds')
+const embeds = require('../../common/utils/embeds')
 const boostMap = require('../../models/maps/boosts');
 const teamClaimWithdraw = require('./teamClaim');
 

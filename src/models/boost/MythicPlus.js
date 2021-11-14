@@ -2,8 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const emotes = require('../../JSON/emojis.json');
 const roles = require('../../JSON/server-info/roles.json');
 const utils = require('../../common/utils/utils');
-const boostMap = require('../maps/boosts');
-const thresholds = require('../../thresholds.json');
+const thresholds = require('../../JSON/thresholds.json');
 const numeral = require('numeral');
 
 class MythicPlusBoost {

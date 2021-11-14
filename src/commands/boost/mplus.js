@@ -1,6 +1,6 @@
 const MythicPlus = require('../../models/boost/MythicPlus');
-const boostHashMap = require('../../models/maps/boostMap');
-const collectorHashMap = require('../../models/maps/collectorHashMap');
+const boostHashMap = require('../../models/maps/boosts');
+const collectorHashMap = require('../../models/maps/collections');
 
 const Validator = require('jsonschema').Validator;
 const v = new Validator();
@@ -10,8 +10,8 @@ const sources = require('../../JSON/sources.json');
 const roles = require('../../JSON/server-info/roles.json');
 const channels = require('../../JSON/server-info/channels.json');
 const emojis = require('../../JSON/emojis.json');
-const utils = require('../../common/common/utils/utils');
-const embeds = require('../../utils/embeds')
+const utils = require('../../common/utils/utils');
+const embeds = require('../../common/utils/embeds')
 const { MessageEmbed } = require('discord.js');
 const numeral = require('numeral');
 const thresholds = require('../../JSON/thresholds.json');
