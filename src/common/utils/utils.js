@@ -129,6 +129,7 @@ const self = module.exports = {
             'Recruitment | ',
             'PVP | ',
             'Marketing | ',
+            'IH Support | ',
             'Raid Support | ',
             'Adv Support | ',
             'Support | '

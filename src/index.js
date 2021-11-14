@@ -1,7 +1,7 @@
 const { Client, Intents, Collection } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-const { setup } = require('./spreadsheet');
+const { setup } = require('./services/spreadsheet');
 const fs = require('fs');
 const roles = require('./JSON/server-info/roles.json');
 const channels = require('./JSON/server-info/channels.json');
