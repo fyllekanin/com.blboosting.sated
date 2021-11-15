@@ -53,7 +53,7 @@ module.exports = async (client, message, channel, emoji, user) => {
             boostMsg.tankArray.push(user);
             embeds.boostLoggingEmbed(client, `${user} \`signed\` to boost \`${boostMsg.boostId}\` as a \`tank\``)
 
-            if (boostMsg.keys.filter(key => key.dungeon.toUpperCase() !== 'ANY')?.length > 1 || boostMsg.keys.find(key => key.dungeon.toUpperCase() === 'ANY') || boostMsg.keystoneUser !== '') {
+            if ((boostMsg.keys.filter(key => key.dungeon.toUpperCase() !== 'ANY')?.length > 1 || boostMsg.keys.find(key => key.dungeon.toUpperCase() === 'ANY')) && boostMsg.keystoneUser !== '') {
                 if (boostMsg.tank === '') {
                     if (boostMsg.validateUniqueSign(user)) {
                         boostMsg.tank = user;
@@ -80,7 +80,7 @@ module.exports = async (client, message, channel, emoji, user) => {
             boostMsg.healerArray.push(user);
             embeds.boostLoggingEmbed(client, `${user} \`signed\` to boost \`${boostMsg.boostId}\` as a \`healer\``)
 
-            if (boostMsg.keys.filter(key => key.dungeon.toUpperCase() !== 'ANY')?.length > 1 || boostMsg.keys.find(key => key.dungeon.toUpperCase() === 'ANY') || boostMsg.keystoneUser !== '') {
+            if ((boostMsg.keys.filter(key => key.dungeon.toUpperCase() !== 'ANY')?.length > 1 || boostMsg.keys.find(key => key.dungeon.toUpperCase() === 'ANY')) && boostMsg.keystoneUser !== '') {
                 if (boostMsg.healer === '') {
                     if (boostMsg.validateUniqueSign(user)) {
                         boostMsg.healer = user;
@@ -109,7 +109,7 @@ module.exports = async (client, message, channel, emoji, user) => {
             embeds.boostLoggingEmbed(client, `${user} \`signed\` to boost \`${boostMsg.boostId}\` as a \`dps\``)
 
             // If the key is random or the keyholder already picked and waiting for more, check availability
-            if (boostMsg.keys.filter(key => key.dungeon.toUpperCase() !== 'ANY')?.length > 1 || boostMsg.keys.find(key => key.dungeon.toUpperCase() === 'ANY') || boostMsg.keystoneUser !== '') {
+            if ((boostMsg.keys.filter(key => key.dungeon.toUpperCase() !== 'ANY')?.length > 1 || boostMsg.keys.find(key => key.dungeon.toUpperCase() === 'ANY')) && boostMsg.keystoneUser !== '') {
                 if (boostMsg.dps1 === '' || boostMsg.dps2 === '') {
                     if (boostMsg.validateUniqueSign(user)) {
                         if (boostMsg.dps1 === '') {
