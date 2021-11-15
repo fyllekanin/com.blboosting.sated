@@ -447,6 +447,14 @@ const self = module.exports = {
         if (discount) {
             msgBoost.discount = parsedData.discount;
         }
+        
+        // Balance remove if paid with balance
+        if (parsedData.paidBalance) {
+            msgBoost.payments.push({
+                amount: parsedData.paidBalance,
+                realm: 'Balance',
+            })
+        }
 
         // Total pot
         msgBoost.totalPot = msgBoost.payments.reduce((prev, curr) => prev + curr.amount, 0);
@@ -552,14 +560,6 @@ const self = module.exports = {
         // Trial advertiser
         if (await utils.isTrialAdvertiser(msgBoost.advertiser)) {
             msgBoost.isTrial = true;
-        }
-
-        // Balance remove if paid with balance
-        if (parsedData.paidBalance) {
-            msgBoost.payments.push({
-                amount: parsedData.paidBalance,
-                realm: 'Balance',
-            })
         }
 
         // Advertiser balance remove if discount given
