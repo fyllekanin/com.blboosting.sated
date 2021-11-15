@@ -24,7 +24,13 @@ jobs:
         run: |
           mkdir release
           mv dist/* release/
+          mv package.json release/
+          mv package-lock.json release/
           mv ecosystem.config.js release/
+          
+      - name: Install release package
+        working-directory: release
+        run: npm ci --only=prod
           
       - name: Merge develop -> main
         uses: devmasx/merge-branch@master
