@@ -1,0 +1,71 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Which tag to deploy"
+        required: true
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+     - name: Download release asset
+       uses: dsaltares/fetch-gh-release-asset@master
+       with:
+         version: tags/${{ github.event.inputs.tag }}
+         file: release.tar.gz
+         target: release.tar.gz
+         token: ${{ secrets.GITHUB_TOKEN }}
+         
+     - name: Extract release and remove .env if existing
+       run: |
+         tar xvzf release.tar.gz
+         rm -Rf release/.env
+       
+     - name: Write .env file
+       run: |
+          echo "${{secrets.PROD_TOKEN}}" >> release/.env
+          echo "${{secrets.PROD_PREFIX}}" >> release/.env
+          echo "${{secrets.PROD_DATA_SHEET_ID}}" >> release/.env
+          echo "${{secrets.PROD_BOOKING_SHEET_ID}}" >> release/.env
+          
+     - name: Stop current server and delte
+       uses: appleboy/ssh-action@master
+       with:
+         host: ${{ secrets.REMOTE_HOST }}
+         username: ${{ secrets.REMOTE_USER }}
+         key: ${{ secrets.PROD_WEB_SERVER_KEY }}
+         script: |
+           cd sated
+           pm2 delete ecosystem.config.js
+           rm -Rf ./*
+      
+     - name: Deploy to Server
+       uses: easingthemes/ssh-deploy@main
+       env:
+         SSH_PRIVATE_KEY: ${{ secrets.PROD_WEB_SERVER_KEY }}
+         ARGS: "-rltgoDzvO --delete"
+         SOURCE: "release/"
+         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+         REMOTE_USER: ${{ secrets.REMOTE_USER }}
+         TARGET: "sated/"
+       
+     - name: Start new server
+       uses: appleboy/ssh-action@master
+       with:
+         host: ${{ secrets.REMOTE_HOST }}
+         username: ${{ secrets.REMOTE_USER }}
+         key: ${{ secrets.PROD_WEB_SERVER_KEY }}
+         script: |
+           cd sated
+           pm2 start ecosystem.config.js
+           
+     - name: Discord notification
+       env:
+         DISCORD_WEBHOOK: ${{ secrets.RELEASE_DEPLOY_DISCORD_WEBHOOK }}
+       uses: Ilshidur/action-discord@master
+       with:
+         args: 'Sated v${{github.event.inputs.tag}} have been successfully deployed'
