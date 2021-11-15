@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Which version to be created"
+        required: true
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install
+        working-directory: front-end
+        run: npm ci
+
+      - name: Build 
+        run: npm run build:prod
+
+      - name: Install back-end
+        working-directory: back-end
+        run: npm install
+
+      - name: Build back-end
+        working-directory: back-end
+        run: npm run build
+
+      - name: Create release folder
+        run: |
+          mkdir release
+          mv dist/* release/
+          mv ecosystem.config.js release/
+          
+      - name: Merge develop -> main
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: develop
+          target_branch: main
+          github_token: ${{ github.token }}
+          
+      - name: Create file
+        run: tar -zcvf release.tar.gz release
+          
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          commit: main
+          tag: ${{github.event.inputs.version}}
+          artifacts: release.tar.gz
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.RELEASE_DEPLOY_DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: 'Sated release v${{github.event.inputs.version}} have been successful'
