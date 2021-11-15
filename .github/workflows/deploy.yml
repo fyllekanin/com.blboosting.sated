@@ -37,7 +37,7 @@ jobs:
        with:
          host: ${{ secrets.REMOTE_HOST }}
          username: ${{ secrets.REMOTE_USER }}
-         key: ${{ secrets.PROD_WEB_SERVER_KEY }}
+         key: ${{ secrets.PROD_BOT_SERVER_KEY }}
          script: |
            cd sated
            pm2 delete ecosystem.config.js
@@ -46,7 +46,7 @@ jobs:
      - name: Deploy to Server
        uses: easingthemes/ssh-deploy@main
        env:
-         SSH_PRIVATE_KEY: ${{ secrets.PROD_WEB_SERVER_KEY }}
+         SSH_PRIVATE_KEY: ${{ secrets.PROD_BOT_SERVER_KEY }}
          ARGS: "-rltgoDzvO --delete"
          SOURCE: "release/"
          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
@@ -58,7 +58,7 @@ jobs:
        with:
          host: ${{ secrets.REMOTE_HOST }}
          username: ${{ secrets.REMOTE_USER }}
-         key: ${{ secrets.PROD_WEB_SERVER_KEY }}
+         key: ${{ secrets.PROD_BOT_SERVER_KEY }}
          script: |
            cd sated
            pm2 start ecosystem.config.js
