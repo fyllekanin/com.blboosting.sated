@@ -26,7 +26,7 @@ module.exports = async (client, message, channel, emoji, user) => {
     const teamName = teamNameOriginal.replace(/ /g, '');
 
     // check eligibility
-    if (canTeamClaimBoost(teamName)) {
+    if (!canTeamClaimBoost(teamName)) {
         await utils.wrongRole(user, message, emoji);
         notifyFailedSignupTeamClaimUser(emoji.message, user);
         return boostData;
@@ -94,10 +94,10 @@ function notifyFailedSignupTeamClaimUser(message, user) {
             
             Your team can not boost through the \`TeamClaim\` option anymore today. 
             
-            You can use this feature ${MAX_RUN_PER_DAY} times per day and the cool down resets at ${RESET_HOUR}am GMT 0.`)
+            You can use this feature ${MAX_RUN_PER_DAY.toString()} times per day and the cool down resets at ${RESET_HOUR.toString()}am GMT 0.`)
         .setColor('#DD0044')
-        .addField('Boost done', MAX_RUN_PER_DAY, true)
-        .addField('Remaining', 0, true);
+        .addField('Boost done', MAX_RUN_PER_DAY.toString(), true)
+        .addField('Remaining', '0', true);
     user.send({ embeds: [embedMessage] })
         .catch(console.error);
 }

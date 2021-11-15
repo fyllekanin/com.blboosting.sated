@@ -193,13 +193,13 @@ async function updateMythicPlusBoost(boost, guild) {
                         `${boost.boostId}`,
                         `${boost.date}`,
                         `${amountKeys}`, // amount
-                        `${boost.dungeon}`, // keystone
-                        `${boost.TimedUntimed}`, // Timed untimed
+                        `${boost.keys.map(key => key.dungeon).join(',')}`, // keystones
+                        `${boost.timed ? 'Timed' : 'Untimed'}`, // Timed untimed
                         `${boost.source}`,
                         `${deplete}`,//Deplete
                         `[H]`,
                         ``,
-                        `${boost.armorStackName}`,//armorStack
+                        `${boost.armorStackName.join(',')}`,//armorStack
                         `${boost.totalPot}`,
                         '',
                         '',
@@ -208,10 +208,10 @@ async function updateMythicPlusBoost(boost, guild) {
                         '',
                         '',
                         `${complete}`,//Complete
-                        '',//Hidden columns
-                        '',//Hidden columns
-                        '',//Hidden columns
-                        '',//Hidden columns
+                        '', //Hidden columns
+                        '', //Hidden columns
+                        '', //Hidden columns
+                        '', //Hidden columns
                         `${tankN_S[0]}`,
                         `${tankN_S[1]}`,
                         '',
@@ -292,13 +292,13 @@ async function addMythicPlusBoost(boost, guild) {
                         `${boost.boostId}`,
                         `${boost.date}`,
                         `${amountKeys}`, // amount
-                        `${boost.dungeon}`, // keystone
-                        `${boost.TimedUntimed}`, // Timed untimed
+                        `${boost.keys.map(key => key.dungeon).join(',')}`, // keystone
+                        `${boost.timed ? 'Timed' : 'Untimed'}`, // Timed untimed
                         `${boost.source}`,
                         '',//Deplete
                         `[H]`,
                         ``,
-                        `${boost.armorStackName}`,//armorStack
+                        `${boost.armorStackName.join(',')}`,//armorStack
                         `${boost.totalPot}`,
                         '',
                         '',
@@ -352,7 +352,8 @@ async function addMythicPlusCollections(boost, guild) {
     for (let i = 0; i < boost.payments.length; i++) {
         date.push(boost.date);
         boostId.push(boost.boostId);
-        const collectorNickname = await utils.getNickname(boost.payments[i].collectorId, guild);
+        const collector = guild.members.cache.get(boost.payments[i].collectorId);
+        const collectorNickname = await utils.getNickname(collector, guild);
         collectors.push(collectorNickname.split('-')?.[0]);
         empty.push('');
     }
