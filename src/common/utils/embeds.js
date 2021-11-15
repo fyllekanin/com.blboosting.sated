@@ -117,8 +117,8 @@ ${advertiserIcon} ${boostMsg.advertiser}`;
 
         completeEmbed.setTitle('Mythic Plus Attendance');
         completeEmbed.setDescription(`${description}`);
-        completeEmbed.addField('Key Level', `<:keystone:701099765475180584> ${boostMsg.keyLvl}`, true);
-        completeEmbed.addField('Dungeon', `${boostMsg.key.map(key => key.dungeon).join(',\n')}`, true);
+        completeEmbed.addField('Key Level', `<:keystone:701099765475180584> ${boostMsg.keyLvl.join(',\n')}`, true);
+        completeEmbed.addField('Dungeon', `${boostMsg.keys.map(key => key.dungeon).join(',\n')}`, true);
         completeEmbed.addField('Timed/Untimed', `${boostMsg.timed}`, true);
         completeEmbed.addField('Armor Stack', `${boostMsg.armorStackName}`, true);
         completeEmbed.addField('Source', `${boostMsg.source}`, true);
