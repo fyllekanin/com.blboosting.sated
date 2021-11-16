@@ -8,7 +8,7 @@ const bookingSheet = process.env.BOOKING_SHEET_ID;
 let auth;
 function setup() {
     auth = new google.auth.GoogleAuth({
-        keyFile: __dirname + '/bloodlust-boosting-bd35dba290da.json',
+        keyFile: __dirname + '/../JSON//bloodlust-boosting-bd35dba290da.json',
         scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
 }
