@@ -350,6 +350,7 @@ async function addMythicPlusCollections(boost, guild) {
     const collectors = [];
     const empty = [];
     for (let i = 0; i < boost.payments.length; i++) {
+        if (boost.payments[i].realm === 'Balance') continue;
         date.push(boost.date);
         boostId.push(boost.boostId);
         const collector = guild.members.cache.get(boost.payments[i].collectorId);
