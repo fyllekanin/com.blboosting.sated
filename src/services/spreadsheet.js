@@ -20,19 +20,9 @@ async function addBalance(userToAdd, amount, guild, note) {
         const sheets = google.sheets({ version: 'v4', auth });
 
         const userToAddN_S = userToAddNickname.split('-');
-
-        const ts = Date.now();
-
-        const date_ob = new Date(ts);
-
-        const date = date_ob.getDate();
-        const month = date_ob.getMonth() + 1;
-        const year = date_ob.getFullYear()
-        const hours = date_ob.getHours();
-        const minutes = date_ob.getMinutes();
-        const seconds = date_ob.getSeconds();
-
-        const dateDay = `${date}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+        const dateDay = new Date().toLocaleString('en-GB', {
+            timeZone: 'Europe/London'
+        }).replace(',', '');
 
         sheets.spreadsheets.values.append({
             spreadsheetId: dataSheet,
