@@ -1,0 +1,20 @@
+name: Read Error and Out Log
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Read log
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.PROD_BOT_SERVER_KEY }}
+          script: |
+            cd sated
+            cat err.log
+            cat out.log
