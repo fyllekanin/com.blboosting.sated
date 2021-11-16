@@ -359,6 +359,8 @@ async function addMythicPlusCollections(boost, guild) {
         empty.push('');
     }
 
+    if (collectors.length === 0) return;
+
     const amounts = boost.payments.map(collection => collection.amount);
     const realms = boost.payments.map(collection => collection.realm.concat(collection.faction === 'HORDE' ? ' [H]' : ' [A]'));
 
