@@ -8,7 +8,7 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Read log
+      - name: Read err log
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.REMOTE_HOST }}
@@ -17,4 +17,13 @@ jobs:
           script: |
             cd sated
             cat err.log
+            
+      - name: Read out log
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.PROD_BOT_SERVER_KEY }}
+          script: |
+            cd sated
             cat out.log
