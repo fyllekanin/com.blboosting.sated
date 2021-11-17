@@ -201,8 +201,9 @@ const self = module.exports = {
         if (message.channel.id === channels['bot-spam']) return;
 
         const allowedEnum = boost.getAllowedRoleEnum(boost.currentStack);
+        const oneLower = boost.getOneRoleLower(allowedEnum);
 
-        await message.channel.permissionOverwrites.edit(roles[`${allowedEnum} Key Booster`], {
+        await message.channel.permissionOverwrites.edit(roles[`${oneLower} Key Booster`], {
             VIEW_CHANNEL: true,
             READ_MESSAGE_HISTORY: true,
             SEND_MESSAGES: false,
@@ -212,9 +213,9 @@ const self = module.exports = {
             ADD_REACTIONS: false
         });
 
-        boost.currentStack = thresholds[`${boost.timed ? 'Timed' : 'Untimed'}_${allowedEnum}KeyBooster`];
+        boost.currentStack = thresholds[`${boost.timed ? 'Timed' : 'Untimed'}_${oneLower}KeyBooster`];
 
-        return message.channel.send({ content: `Channel unlocked for ${allowedEnum} Key Booster` });
+        return message.channel.send({ content: `Channel unlocked for ${oneLower} Key Booster` });
     },
     armorStackRole: async (armorStack, boost) => {
         let armorStackRoleAux = [];
