@@ -26,7 +26,7 @@ async function addBalance(userToAdd, amount, guild, note) {
 
         sheets.spreadsheets.values.append({
             spreadsheetId: dataSheet,
-            range: 'ManualAttendance!B5', // Or where you need the data to go
+            range: 'ManualAttendance!B2', // Or where you need the data to go
             valueInputOption: 'USER_ENTERED',
             insertDataOption: 'INSERT_ROWS',
             resource: {

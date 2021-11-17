@@ -413,19 +413,20 @@ ${emojis.timestamp}: ${this.date}
                 this.tankArray.push(this.advertiser);
                 if (this.tank) return;
                 this.tank = this.advertiser;
-                return;
+                break;
             case 'Healer':
                 this.healerArray.push(this.advertiser);
                 if (this.healer) return;
                 this.healer = this.advertiser;
-                return;
+                break;
             case 'DPS':
                 this.dpsArray.push(this.advertiser);
                 if (!this.dps1) {
                     this.dps1 = this.advertiser
                 } else if (!this.dps2) {
                     this.dps2 = this.advertiser
-                } else return
+                }
+                break;
             default:
                 throw new Error('Role not defined');
         }
