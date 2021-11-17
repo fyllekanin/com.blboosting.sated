@@ -550,6 +550,18 @@ ${emojis.timestamp}: ${this.date}
                 break;
         }
     }
+    getOneRoleLower(role) {
+        switch(role) {
+            case 'Elite':
+                return 'High';
+            case 'High':
+                return 'Mid';
+            case 'Mid':
+                return 'Low';
+            default:
+                return 'Low';
+        }
+    }
     async getRolesToPing() {
         const armorStackTags = [];
         const roleRank = this.getAllowedRoleEnum(this.getHighestKeylevel());
