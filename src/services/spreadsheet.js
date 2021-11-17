@@ -359,7 +359,7 @@ async function addMythicPlusCollections(boost, guild) {
 
         sheets.spreadsheets.values.append({
             spreadsheetId: bookingSheet,
-            range: 'AUTO COLLECT!B8:H', // Or where you need the data to go
+            range: 'AUTO COLLECT!B8:B', // Or where you need the data to go
             valueInputOption: 'USER_ENTERED',
             insertDataOption: 'INSERT_ROWS',
             resource: {
