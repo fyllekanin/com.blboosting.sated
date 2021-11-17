@@ -202,7 +202,7 @@ const self = module.exports = {
 
         const allowedEnum = boost.getAllowedRoleEnum(boost.currentStack);
 
-        message.channel.updateOverwrite(roles[`${allowedEnum} Key Booster`], {
+        await message.channel.permissionOverwrites.edit(roles[`${allowedEnum} Key Booster`], {
             VIEW_CHANNEL: true,
             READ_MESSAGE_HISTORY: true,
             SEND_MESSAGES: false,
@@ -314,7 +314,7 @@ const self = module.exports = {
             const value = teamClaimCooldown[teamName];
             fs.writeFileSync(teamClaimCooldownFilePath, JSON.stringify(teamClaimCooldown));
 
-            boosterIds.forEach((boosterId) => {
+            (boosterIds || []).forEach((boosterId) => {
                 // const user = findGuildMember(message, boosterId);
                 const user = message.guild.member(boosterId);
                 if (!user) return;
