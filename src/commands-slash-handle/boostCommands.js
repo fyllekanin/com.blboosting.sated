@@ -6,7 +6,7 @@ const embeds = require('../common/utils/embeds');
 module.exports = async (client, interaction) => {
     if (!await utils.isAdvertiserOrAbove(interaction.member)) return interaction.reply({ content: `Unauthorized`, ephemeral: true })
 
-    interaction.deferReply({ ephemeral: true })
+    await interaction.deferReply({ ephemeral: true });
 
     const options = interaction.options._hoistedOptions;
 
