@@ -551,7 +551,7 @@ ${emojis.timestamp}: ${this.date}
         }
     }
     getOneRoleLower(role) {
-        switch(role) {
+        switch (role) {
             case 'Elite':
                 return 'High';
             case 'High':
@@ -642,16 +642,20 @@ ${emojis.timestamp}: ${this.date}
             : this.keys.reduce(findKey, null).level;
     }
     getDate() {
-        const now = new Date(Date.now());
+        return new Date().toLocaleString('en-GB', {
+            timeZone: 'Europe/London',
+        }).replace(',', '');
 
-        const date = now.getDate();
-        const month = now.getMonth() + 1;
-        const year = now.getFullYear();
-        const hours = now.getHours() + 1;
-        const minutes = now.getMinutes();
-        const seconds = now.getSeconds();
+        // const now = new Date(Date.now());
 
-        return `${date}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+        // const date = now.getDate();
+        // const month = now.getMonth() + 1;
+        // const year = now.getFullYear();
+        // const hours = now.getHours() + 1;
+        // const minutes = now.getMinutes();
+        // const seconds = now.getSeconds();
+
+        // return `${date}/${month}/${year} ${hours}:${minutes}:${seconds}`;
     }
     isTankEligable(memberRoles, hasTankRole, armorStacks, classStacks) {
         const tankableClasses = ['Monk', 'Druid', 'Demon Hunter', 'Paladin', 'Warrior', 'Death Knight'];
