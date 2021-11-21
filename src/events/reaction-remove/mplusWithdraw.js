@@ -8,6 +8,8 @@ module.exports = async (client, message, channel, emoji, user) => {
     const boostMsg = boostMap.get(message.id);
     if (!boostMsg || boostMsg.collected) return;
 
+    user = message.guild.members.cache.get(user.id);
+
     switch (emoji) {
         case emojis.tank:
             if (!boostMsg.tankArray.includes(user)) return;

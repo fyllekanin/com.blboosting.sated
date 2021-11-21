@@ -257,7 +257,20 @@ please check your dm's for further information.` })
                 boostMsg.currentColor = inProgressColor;
                 boostMsg.collected = true;
 
-                boostMsg.sheetRow = await Sheet.addMythicPlusBoost(boostMsg, message.guild);
+                boostMsg.sheetRow = await Sheet.addMythicPlusBoost(boostMsg, message.guild)
+                    .catch(async err => {
+                        message.channel.send({ content: `Something went wrong trying to add boost: \`${boostMsg.boostId}\` to sheet.` });
+                        message.guild.members.cache.get('743211997910270053')
+                            .send({
+                                embeds: [
+                                    new MessageEmbed()
+                                        .setTitle('Error')
+                                        .setColor('#ff0000')
+                                        .setDescription(`Something went wrong trying to add boost: \`${boostMsg.boostId}\` to sheet.\n\n${err}`)
+                                ]
+                            });
+                        console.log(err);
+                    });
 
                 channel.send({
                     content:
