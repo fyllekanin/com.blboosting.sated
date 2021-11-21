@@ -497,8 +497,8 @@ ${emojis.timestamp}: ${this.date}
                 throw new Error('Role not defined');
         }
         if (key.dungeon.toLowerCase() !== 'any' && !this.keystoneUser) {
-            this.keystoneUser = guild.members.cache.get(key.booster.boosterId);
-            this.keyholderArray.push(guild.members.cache.get(key.booster.boosterId));
+            this.keystoneUser = booster;
+            this.keyholderArray.push(booster);
         }
     }
     /**
