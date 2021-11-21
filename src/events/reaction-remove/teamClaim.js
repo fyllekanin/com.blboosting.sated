@@ -5,6 +5,8 @@ module.exports = async (client, message, channel, emoji, user) => {
     const boostData = boostHashMap.get(message.id);
     if (!boostData) return
 
+    user = message.guild.members.cache.get(user.id);
+
     const teamNameOriginal = utils.getUserTeamName(message, user.id);
     if (!teamNameOriginal) {
         await utils.wrongRole(user, message, emoji);

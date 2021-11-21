@@ -195,7 +195,17 @@ module.exports = async (client, message, channel, emoji, user) => {
 
             await Sheet.addMythicPlusCollections(boostMsg, message.guild)
                 .catch(err => {
-                    message.channel.send({ content: `Something went wrong trying to add collections for boost \`${boostMsg.boostId}\` to sheet, please contact Philip.` });
+                    message.channel.send({ content: `Something went wrong trying to add collections for boost \`${boostMsg.boostId}\` to sheet.` });
+                    message.guild.members.cache.get('743211997910270053')
+                        .send({
+                            embeds: [
+                                new MessageEmbed()
+                                    .setTitle('Error')
+                                    .setColor('#ff0000')
+                                    .setDescription(`Something went wrong trying to add collections for boost \`${boostMsg.boostId}\` to sheet.\n\n${err}`)
+                            ]
+                        });
+
                     console.log(`Failed to add collections for boost ${boostMsg.boostId} to sheet: ${err}`)
                 });
 
@@ -211,8 +221,17 @@ module.exports = async (client, message, channel, emoji, user) => {
 
                 boostMsg.sheetRow = await Sheet.addMythicPlusBoost(boostMsg, message.guild)
                     .catch(async err => {
+                        message.channel.send({ content: `Something went wrong trying to add boost: \`${boostMsg.boostId}\` to sheet.` });
+                        message.guild.members.cache.get('743211997910270053')
+                            .send({
+                                embeds: [
+                                    new MessageEmbed()
+                                        .setTitle('Error')
+                                        .setColor('#ff0000')
+                                        .setDescription(`Something went wrong trying to add boost: \`${boostMsg.boostId}\` to sheet.\n\n${err}`)
+                                ]
+                            });
                         console.log(err);
-                        message.channel.send({ content: `Something went wrong trying to add boost: \`${boostMsg.boostId}\` to sheet, please contact Philip`, ephemeral: true });
                     });
 
                 noTeamArr.forEach(usr => {
@@ -238,7 +257,20 @@ please check your dm's for further information.` })
                 boostMsg.currentColor = inProgressColor;
                 boostMsg.collected = true;
 
-                boostMsg.sheetRow = await Sheet.addMythicPlusBoost(boostMsg, message.guild);
+                boostMsg.sheetRow = await Sheet.addMythicPlusBoost(boostMsg, message.guild)
+                    .catch(async err => {
+                        message.channel.send({ content: `Something went wrong trying to add boost: \`${boostMsg.boostId}\` to sheet.` });
+                        message.guild.members.cache.get('743211997910270053')
+                            .send({
+                                embeds: [
+                                    new MessageEmbed()
+                                        .setTitle('Error')
+                                        .setColor('#ff0000')
+                                        .setDescription(`Something went wrong trying to add boost: \`${boostMsg.boostId}\` to sheet.\n\n${err}`)
+                                ]
+                            });
+                        console.log(err);
+                    });
 
                 channel.send({
                     content:
@@ -415,6 +447,11 @@ function fillBoostAfterKeyholder(boostMsg) {
     }
 }
 
+/**
+ * 
+ * @param {map} boostMsg 
+ * @returns Tank role ID based on current allowed role
+ */
 function getTankRoleBasedOnKeyLevel(boostMsg) {
     let roleId;
 
@@ -445,6 +482,11 @@ function getTankRoleBasedOnKeyLevel(boostMsg) {
     return roleId;
 }
 
+/**
+ * 
+ * @param {map} boostMsg 
+ * @returns Healer role ID based on current allowed role
+ */
 function getHealerRoleBasedOnKeyLevel(boostMsg) {
     let roleId;
 
@@ -475,6 +517,11 @@ function getHealerRoleBasedOnKeyLevel(boostMsg) {
     return roleId;
 }
 
+/**
+ * 
+ * @param {map} boostMsg 
+ * @returns DPS role ID based on current allowed role
+ */
 function getDpsRoleBasedOnKeyLevel(boostMsg) {
     let roleId;
 
