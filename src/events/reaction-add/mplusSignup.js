@@ -415,6 +415,11 @@ function fillBoostAfterKeyholder(boostMsg) {
     }
 }
 
+/**
+ * 
+ * @param {map} boostMsg 
+ * @returns Tank role ID based on current allowed role
+ */
 function getTankRoleBasedOnKeyLevel(boostMsg) {
     let roleId;
 
@@ -445,6 +450,11 @@ function getTankRoleBasedOnKeyLevel(boostMsg) {
     return roleId;
 }
 
+/**
+ * 
+ * @param {map} boostMsg 
+ * @returns Healer role ID based on current allowed role
+ */
 function getHealerRoleBasedOnKeyLevel(boostMsg) {
     let roleId;
 
@@ -475,6 +485,11 @@ function getHealerRoleBasedOnKeyLevel(boostMsg) {
     return roleId;
 }
 
+/**
+ * 
+ * @param {map} boostMsg 
+ * @returns DPS role ID based on current allowed role
+ */
 function getDpsRoleBasedOnKeyLevel(boostMsg) {
     let roleId;
 
