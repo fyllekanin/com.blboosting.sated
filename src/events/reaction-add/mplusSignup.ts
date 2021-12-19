@@ -1,6 +1,6 @@
-import Emojis from '../../constants/emojis.enum';
-import Roles from '../../constants/roles.enum';
-import Channels from '../../constants/channels.enum';
+import Emojis from '../../common/constants/emojis.enum';
+import { Roles } from '../../common/constants/guildroles.constants';
+import Channels from '../../common/constants/channels.enum';
 // const utils = require('../../common/utils/utils');
 import * as utils from '../../common/utils/utils';
 // const embeds = require('../../common/utils/embeds');
@@ -10,7 +10,8 @@ import * as boostMap from '../../models/maps/boosts';
 // const Sheet = require('../../services/spreadsheet');
 import * as Sheet from '../../services/spreadsheet';
 // const voicePerms = require('../../permissions/mplusVoice');
-import * as voicePerms from '../../permissions/mplusVoice';
+// import * as voicePerms from '../../permissions/mplusVoice';
+import SetVoicePermissions from '../../permissions/mplus.permissions';
 import {
   Client,
   Emoji,
@@ -21,15 +22,14 @@ import {
   MessageEmbed,
   User,
   Role,
+  TextChannel,
+  Snowflake,
 } from 'discord.js';
 // const thresholds = require('../../JSON/thresholds.json');
 import * as thresholds from '../../JSON/thresholds.json';
 // const teamClaimSignup = require('./teamClaim');
 import * as teamClaimSignup from './teamClaim';
-import MythicPlusBoost from '../../models/boost/MythicPlus';
-
-const inProgressColor = 'ffe100';
-const completeColor = '00c940';
+import MythicPlusBoost from '../../models/boost/MythicPlusBoost';
 
 module.exports = async (
   client: Client,
@@ -100,11 +100,11 @@ module.exports = async (
         break;
       }
 
-      if (boostMsg.tankArray.includes(user)) {
+      if (boostMsg.tankQueue.includes(user)) {
         break;
       }
 
-      boostMsg.tankArray.push(user);
+      boostMsg.tankQueue.push(user);
       embeds.boostLoggingEmbed(
         client,
         `${user} \`signed\` to boost \`${boostMsg.boostId}\` as a \`tank\``
@@ -114,16 +114,16 @@ module.exports = async (
         (boostMsg.keys.filter((key) => key.dungeon.toUpperCase() !== 'ANY')
           ?.length > 1 ||
           boostMsg.keys.find((key) => key.dungeon.toUpperCase() === 'ANY')) &&
-        boostMsg.keystoneUser !== ''
+        boostMsg.keyholder
       ) {
-        if (boostMsg.tank === '') {
+        if (!boostMsg.tank) {
           if (boostMsg.validateUniqueSign(user)) {
             boostMsg.tank = user;
           }
         }
-      } else if (boostMsg.keyholderArray.includes(user)) {
+      } else if (boostMsg.keyholderQueue.includes(user)) {
         if (!boostMsg.tank) {
-          boostMsg.keystoneUser = user;
+          boostMsg.keyholder = user;
           boostMsg.tank = user;
           fillBoostAfterKeyholder(boostMsg);
         }
@@ -142,11 +142,11 @@ module.exports = async (
         break;
       }
 
-      if (boostMsg.healerArray.includes(user)) {
+      if (boostMsg.healerQueue.includes(user)) {
         break;
       }
 
-      boostMsg.healerArray.push(user);
+      boostMsg.healerQueue.push(user);
       embeds.boostLoggingEmbed(
         client,
         `${user} \`signed\` to boost \`${boostMsg.boostId}\` as a \`healer\``
@@ -156,19 +156,19 @@ module.exports = async (
         (boostMsg.keys.filter((key) => key.dungeon.toUpperCase() !== 'ANY')
           ?.length > 1 ||
           boostMsg.keys.find((key) => key.dungeon.toUpperCase() === 'ANY')) &&
-        boostMsg.keystoneUser !== ''
+        boostMsg.keyholder
       ) {
-        if (boostMsg.healer === '') {
+        if (!boostMsg.healer) {
           if (boostMsg.validateUniqueSign(user)) {
             boostMsg.healer = user;
           }
         }
       } else if (
-        boostMsg.keyholderArray.includes(user) &&
+        boostMsg.keyholderQueue.includes(user) &&
         boostMsg.keys.length === 1
       ) {
         if (!boostMsg.healer) {
-          boostMsg.keystoneUser = user;
+          boostMsg.keyholder = user;
           boostMsg.healer = user;
           fillBoostAfterKeyholder(boostMsg);
         }
@@ -188,11 +188,11 @@ module.exports = async (
       }
 
       // If user already in queue, break out of the switch
-      if (boostMsg.dpsArray.includes(user)) {
+      if (boostMsg.dpsQueue.includes(user)) {
         break;
       }
 
-      boostMsg.dpsArray.push(user);
+      boostMsg.dpsQueue.push(user);
       embeds.boostLoggingEmbed(
         client,
         `${user} \`signed\` to boost \`${boostMsg.boostId}\` as a \`dps\``
@@ -203,11 +203,11 @@ module.exports = async (
         (boostMsg.keys.filter((key) => key.dungeon.toUpperCase() !== 'ANY')
           ?.length > 1 ||
           boostMsg.keys.find((key) => key.dungeon.toUpperCase() === 'ANY')) &&
-        boostMsg.keystoneUser !== ''
+        boostMsg.keyholder
       ) {
-        if (boostMsg.dps1 === '' || boostMsg.dps2 === '') {
+        if (!boostMsg.dps1 || !boostMsg.dps2) {
           if (boostMsg.validateUniqueSign(user)) {
-            if (boostMsg.dps1 === '') {
+            if (!boostMsg.dps1) {
               boostMsg.dps1 = user;
             } else {
               boostMsg.dps2 = user;
@@ -215,12 +215,12 @@ module.exports = async (
           }
         }
         // If no keyholder and user already in keyholder queue, pick them and fill boost
-      } else if (boostMsg.keyholderArray.includes(user)) {
-        if (boostMsg.dps1 === '') {
-          boostMsg.keystoneUser = user;
+      } else if (boostMsg.keyholderQueue.includes(user)) {
+        if (!boostMsg.dps1) {
+          boostMsg.keyholder = user;
           boostMsg.dps1 = user;
           fillBoostAfterKeyholder(boostMsg);
-        } else if (boostMsg.dps2 === '') {
+        } else if (!boostMsg.dps2) {
           boostMsg.dps2 = user;
           fillBoostAfterKeyholder(boostMsg);
         }
@@ -228,51 +228,51 @@ module.exports = async (
       break;
     case Emojis.keystone:
       // Add check for stack role && tank if mail or cloth
-      if (!boostMsg.keyholderArray.includes(user)) {
-        boostMsg.keyholderArray.push(user);
+      if (!boostMsg.keyholderQueue.includes(user)) {
+        boostMsg.keyholderQueue.push(user);
         embeds.boostLoggingEmbed(
           client,
           `${user} \`signed\` to boost \`${boostMsg.boostId}\` as a \`keyholder\``
         );
       }
-      if (boostMsg.keystoneUser !== '') break;
+      if (boostMsg.keyholder) break;
 
       if (boostMsg.validateUniqueSign(user)) {
-        if (boostMsg.tankArray.includes(user)) {
+        if (boostMsg.tankQueue.includes(user)) {
           boostMsg.tank = user;
-          boostMsg.keystoneUser = user;
-        } else if (boostMsg.healerArray.includes(user)) {
+          boostMsg.keyholder = user;
+        } else if (boostMsg.healerQueue.includes(user)) {
           boostMsg.healer = user;
-          boostMsg.keystoneUser = user;
-        } else if (boostMsg.dpsArray.includes(user)) {
-          if (boostMsg.dps1 === '') {
+          boostMsg.keyholder = user;
+        } else if (boostMsg.dpsQueue.includes(user)) {
+          if (!boostMsg.dps1) {
             boostMsg.dps1 = user;
-            boostMsg.keystoneUser = user;
-          } else if (boostMsg.dps2 === '') {
+            boostMsg.keyholder = user;
+          } else if (!boostMsg.dps2) {
             boostMsg.dps2 = user;
-            boostMsg.keystoneUser = user;
+            boostMsg.keyholder = user;
           } else {
             boostMsg.dps2 = user;
-            boostMsg.keystoneUser = user;
+            boostMsg.keyholder = user;
           }
         }
       }
 
-      if (boostMsg.keystoneUser !== '') {
+      if (boostMsg.keyholder) {
         fillBoostAfterKeyholder(boostMsg);
       }
       break;
     case Emojis.moneyBag:
       if (
         [boostMsg.tank, boostMsg.healer, boostMsg.dps1, boostMsg.dps2].some(
-          (role) => role === ''
+          (role) => !role
         ) &&
         !boostMsg.isTeamClaimed
       ) {
         await utils.wrongRole(user, message, emoji);
         break;
       }
-      if (boostMsg.isTrial && boostMsg.collector === '') {
+      if (boostMsg.isTrial && !boostMsg.collector) {
         await utils.wrongRole(user, message, emoji);
         break;
       }
@@ -292,7 +292,7 @@ module.exports = async (
           parent: Channels['On-Going Boosts'],
           type: 'GUILD_VOICE',
           bitrate: 384000,
-          permissionOverwrites: voicePerms(boostMsg, message.guild),
+          permissionOverwrites: SetVoicePermissions(boostMsg, message.guild),
         }
       );
 
@@ -327,7 +327,7 @@ module.exports = async (
       );
 
       if (!boostMsg.isTeamClaimed) {
-        boostMsg.currentColor = inProgressColor;
+        boostMsg.currentColor = boostMsg.inProgressColor;
         boostMsg.collected = true;
         const noTeamArr = [
           boostMsg.tank,
@@ -377,9 +377,9 @@ please check your dm's for further information.`,
       } else {
         const teamName = boostMsg.teamName;
         const teamBoosters = boostMsg.teamClaim[teamName];
-        utils.addTeamToCooldown(boostMsg, message, teamName, teamBoosters);
+        utils.addTeamToCooldown(message, teamName, teamBoosters);
 
-        boostMsg.currentColor = inProgressColor;
+        boostMsg.currentColor = boostMsg.inProgressColor;
         boostMsg.collected = true;
 
         boostMsg.sheetRow = await Sheet.addMythicPlusBoost(
@@ -427,10 +427,10 @@ please check your dm's for further information.`,
         break;
       }
 
-      boostMsg.cancel = true;
+      boostMsg.cancelled = true;
 
       if (message.channel.id === Channels['bot-spam']) {
-        boostMsg.currentColor = 'ff0000';
+        boostMsg.currentColor = boostMsg.redColor;
         await message.reactions.removeAll();
         await message.edit({ embeds: [boostMsg.cancelBoost()] });
         boostMap.delete(message.id);
@@ -462,7 +462,7 @@ please check your dm's for further information.`,
         break;
       }
 
-      boostMsg.currentColor = completeColor;
+      boostMsg.currentColor = boostMsg.completeColor;
       boostMsg.completed = true;
 
       if (emoji === Emojis.keyComplete) {
@@ -481,25 +481,25 @@ please check your dm's for further information.`,
 
       await Sheet.updateMythicPlusBoost(boostMsg, message.guild);
 
-      !boostMsg.isTeamClaimed
-        ? await message.edit({ embeds: [boostMsg.createEmbed()] })
-        : await message.edit({ embeds: [boostMsg.createTeamEmbed(message)] });
+      await message
+        .edit({ embeds: [boostMsg.createEmbed()] })
+        .catch((err) => console.log(err));
 
       await message.reactions.removeAll();
 
-      let tankNickname, healerNickname, dps1Nickname, dps2Nickname;
-      if (!boostMsg.isTeamClaimed) {
-        tankNickname = boostMsg.tank;
-        healerNickname = boostMsg.healer;
-        dps1Nickname = boostMsg.dps1;
-        dps2Nickname = boostMsg.dps2;
-      } else {
-        const teamClaimed = boostMsg.teamClaim[boostMsg.teamName];
-        tankNickname = utils.getUserMember(message.guild, teamClaimed[0]);
-        healerNickname = utils.getUserMember(message.guild, teamClaimed[1]);
-        dps1Nickname = utils.getUserMember(message.guild, teamClaimed[2]);
-        dps2Nickname = utils.getUserMember(message.guild, teamClaimed[3]);
-      }
+      const teamClaimed = boostMsg.teamClaim[boostMsg.teamName];
+      const tankNickname = boostMsg.isTeamClaimed
+        ? utils.getUserMember(message.guild, teamClaimed[0])
+        : boostMsg.tank;
+      const healerNickname = boostMsg.isTeamClaimed
+        ? utils.getUserMember(message.guild, teamClaimed[1])
+        : boostMsg.healer;
+      const dps1Nickname = boostMsg.isTeamClaimed
+        ? utils.getUserMember(message.guild, teamClaimed[2])
+        : boostMsg.dps1;
+      const dps2Nickname = boostMsg.isTeamClaimed
+        ? utils.getUserMember(message.guild, teamClaimed[3])
+        : boostMsg.dps2;
 
       const completeEmbed = embeds.mythicPlusAttendance(
         boostMsg,
@@ -513,12 +513,14 @@ please check your dm's for further information.`,
         dps2Nickname,
       ];
 
-      const attendanceMessage = await client.channels.cache
-        .get(Channels['attendance'])
-        .send({
-          content: `Boost ID: ${boostMsg.boostMessage.id}`,
-          embeds: [completeEmbed],
-        });
+      const attendanceChannel = client.channels.cache.get(
+        Channels['attendance']
+      ) as TextChannel;
+
+      const attendanceMessage: Message = await attendanceChannel.send({
+        content: `Boost ID: ${boostMsg.message.id}`,
+        embeds: [completeEmbed],
+      });
 
       setTimeout(async () => {
         userArr.forEach(async (booster) => {
@@ -559,7 +561,7 @@ please check your dm's for further information.`,
         `${user} \`unlocked\` boost \`${
           boostMsg.boostId
         }\` for \`${boostMsg.getAllowedRoleEnum(
-          boostMsg.currentStack
+          boostMsg.lowestSignableRoleThreshold
         )} Key Booster\``
       );
 
@@ -573,15 +575,13 @@ please check your dm's for further information.`,
   }
 
   if (!boostMsg.completed) {
-    !boostMsg.isTeamClaimed
-      ? boostMsg.throttleEdit(message, 'normal')
-      : boostMsg.throttleEdit(message, 'team');
+    boostMsg.throttleEdit();
   }
 };
 
 function fillBoostAfterKeyholder(boostMsg: MythicPlusBoost): void {
-  if (!boostMsg.tank && boostMsg.tankArray.length) {
-    for (const tank of boostMsg.tankArray) {
+  if (!boostMsg.tank && boostMsg.tankQueue.length) {
+    for (const tank of boostMsg.tankQueue) {
       if (
         ![boostMsg.tank, boostMsg.healer, boostMsg.dps1, boostMsg.dps2].some(
           (slot) => slot === tank
@@ -593,8 +593,8 @@ function fillBoostAfterKeyholder(boostMsg: MythicPlusBoost): void {
     }
   }
 
-  if (!boostMsg.healer && boostMsg.healerArray.length) {
-    for (const healer of boostMsg.healerArray) {
+  if (!boostMsg.healer && boostMsg.healerQueue.length) {
+    for (const healer of boostMsg.healerQueue) {
       if (
         ![boostMsg.tank, boostMsg.healer, boostMsg.dps1, boostMsg.dps2].some(
           (slot) => slot === healer
@@ -606,8 +606,8 @@ function fillBoostAfterKeyholder(boostMsg: MythicPlusBoost): void {
     }
   }
 
-  if (!boostMsg.dps1 && boostMsg.dpsArray.length) {
-    for (const dps1 of boostMsg.dpsArray) {
+  if (!boostMsg.dps1 && boostMsg.dpsQueue.length) {
+    for (const dps1 of boostMsg.dpsQueue) {
       if (
         ![boostMsg.tank, boostMsg.healer, boostMsg.dps1, boostMsg.dps2].some(
           (slot) => slot === dps1
@@ -619,8 +619,8 @@ function fillBoostAfterKeyholder(boostMsg: MythicPlusBoost): void {
     }
   }
 
-  if (!boostMsg.dps2 && boostMsg.dpsArray.length) {
-    for (const dps2 of boostMsg.dpsArray) {
+  if (!boostMsg.dps2 && boostMsg.dpsQueue.length) {
+    for (const dps2 of boostMsg.dpsQueue) {
       if (
         ![boostMsg.tank, boostMsg.healer, boostMsg.dps1, boostMsg.dps2].some(
           (slot) => slot === dps2
@@ -638,9 +638,9 @@ function fillBoostAfterKeyholder(boostMsg: MythicPlusBoost): void {
  * @param {MythicPlusBoost} boostMsg
  * @returns Tank role ID based on current allowed role
  */
-function getTankRoleBasedOnKeyLevel(boostMsg: MythicPlusBoost): Role['id'] {
+function getTankRoleBasedOnKeyLevel(boostMsg: MythicPlusBoost): Snowflake {
   const isTimed = boostMsg.timed ? 'Timed' : 'Untimed';
-  const AUX_KeyLevel = boostMsg.currentStack;
+  const AUX_KeyLevel = boostMsg.lowestSignableRoleThreshold;
 
   if (AUX_KeyLevel > thresholds[`${isTimed}_HighKeyBooster`]) {
     return Roles['Elite Keys Tank'];
@@ -658,9 +658,9 @@ function getTankRoleBasedOnKeyLevel(boostMsg: MythicPlusBoost): Role['id'] {
  * @param {MythicPlusBoost} boostMsg
  * @returns Healer role ID based on current allowed role
  */
-function getHealerRoleBasedOnKeyLevel(boostMsg: MythicPlusBoost): Role['id'] {
+function getHealerRoleBasedOnKeyLevel(boostMsg: MythicPlusBoost): Snowflake {
   const isTimed = boostMsg.timed ? 'Timed' : 'Untimed';
-  const AUX_KeyLevel = boostMsg.currentStack;
+  const AUX_KeyLevel = boostMsg.lowestSignableRoleThreshold;
 
   if (AUX_KeyLevel > thresholds[`${isTimed}_HighKeyBooster`]) {
     return Roles['Elite Keys Healer'];
@@ -678,9 +678,9 @@ function getHealerRoleBasedOnKeyLevel(boostMsg: MythicPlusBoost): Role['id'] {
  * @param {MythicPlusBoost} boostMsg
  * @returns DPS role ID based on current allowed role
  */
-function getDpsRoleBasedOnKeyLevel(boostMsg: MythicPlusBoost): Role['id'] {
+function getDpsRoleBasedOnKeyLevel(boostMsg: MythicPlusBoost): Snowflake {
   const isTimed = boostMsg.timed ? 'Timed' : 'Untimed';
-  const AUX_KeyLevel = boostMsg.currentStack;
+  const AUX_KeyLevel = boostMsg.lowestSignableRoleThreshold;
 
   if (AUX_KeyLevel > thresholds[`${isTimed}_HighKeyBooster`]) {
     return Roles['Elite Keys DPS'];

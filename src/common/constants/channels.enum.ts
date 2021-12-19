@@ -1,4 +1,4 @@
-enum Channels {
+export enum Channels {
   'logs-adv-apps' = '860630769671995442',
   'casino-balance' = '757301442515304559',
   'Archived Channels' = '749970642622742548',
@@ -347,5 +347,3 @@ enum Channels {
   'raid-roster' = '725826918267486208',
   'deducts' = '709825792342753310',
 }
-
-export default Channels;
