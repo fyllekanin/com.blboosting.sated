@@ -1,4 +1,5 @@
 export const Roles = {
+  Everyone: '693420859930443786',
   Priest: '701104413615456387',
   'Elite Leader': '859199683154411550',
   Mounts: '749973761855324231',

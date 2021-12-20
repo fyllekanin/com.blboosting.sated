@@ -1,3 +1,4 @@
+import { Guilds } from './common/constants/guilds';
 import { ICommand } from './interface/command.interface';
 import { Client, Intents, Collection } from 'discord.js';
 import { REST } from '@discordjs/rest';
@@ -6,6 +7,7 @@ import { setup } from './services/spreadsheet';
 import * as fs from 'fs';
 import { Roles } from './common/constants/guildroles.constants';
 import { Channels } from './common/constants/channels.enum';
+import fullPermissions from './permissions/slashCommands';
 require('dotenv').config();
 
 const intents = new Intents(Number(process.env.INTENTS));
@@ -13,7 +15,7 @@ const client = new Client({
   intents,
   restTimeOffset: 0,
 });
-client.commands = new Collection();
+const clientCommands = new Collection();
 
 const commandFiles = fs.readdirSync('./commands');
 
@@ -47,25 +49,29 @@ for (const file of slashCommandFiles) {
 function registerCommand(path: string) {
   const command = require(`./commands/${path}`);
   console.log(`registered command: ${command.name}`);
-  client.commands.set(command.name, command);
+  clientCommands.set(command.name, command);
 }
 
 client
   .login(process.env.TOKEN)
   .then(async () => {
-    try {
-      console.log('Started refreshing application (/) commands.');
-      const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
-      const clientId = client.user.id;
-      const guildId = roles['guild'];
+    const guilds = Array.from(Object.entries(Guilds));
+    for (const [guildName, guildId] of guilds) {
+      try {
+        console.log(
+          `Started refreshing application (/) commands for ${guildName}.`
+        );
+        const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
+        const clientId = client.user.id;
 
-      await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
-        body: commands,
-      });
+        await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+          body: commands,
+        });
 
-      console.log('Successfully reloaded application (/) commands.');
-    } catch (error) {
-      console.error(error);
+        console.log('Successfully reloaded application (/) commands.');
+      } catch (error) {
+        console.error(error);
+      }
     }
   })
   .catch(console.error);
@@ -74,26 +80,31 @@ client
   setup();
 })();
 
+const loadGuildCommands = async () => {
+  const guilds = Array.from(Object.entries(Guilds));
+  for (const [guildName, guildId] of guilds) {
+    console.log(`Saving slashcommands and permissions for ${guildName}`);
+
+    const guild = client.guilds.cache.get(guildId);
+
+    const guildCommands = await guild.commands.fetch();
+
+    const slashcommands: { [key: string]: string } = {};
+    guildCommands.forEach((command) => {
+      slashcommands[command.name] = command.id;
+    });
+
+    const data = JSON.stringify(slashcommands, null, 2);
+    fs.writeFile('./JSON/slashcommands.json', data, (err: any) => {
+      if (err) throw err;
+      console.log('Data written to slashcommands file');
+    });
+
+    await guild?.commands.permissions.set({ fullPermissions });
+  }
+};
+
 client.on('ready', async () => {
-  const guild = await client.guilds.cache.get(roles['guild']);
-
-  const guildCommands = await guild.commands.fetch();
-
-  let slashcommands: { [key: string]: string } = {};
-  guildCommands.forEach((command) => {
-    slashcommands[command.name] = command.id;
-  });
-
-  let data = JSON.stringify(slashcommands, null, 2);
-  fs.writeFileSync('./JSON/slashcommands.json', data, (err: any) => {
-    if (err) throw err;
-    console.log('Data written to slashcommands file');
-  });
-
-  const fullPermissions = require('./permissions/slashCommands');
-
-  await guild?.commands.permissions.set({ fullPermissions });
-
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
@@ -113,12 +124,13 @@ client.on('messageCreate', async (message) => {
 
   if (cmd.length === 0) return;
 
-  const command =
-    client.commands.get(cmd) ||
-    client.commands.find((a: ICommand) => a.aliases && a.aliases.includes(cmd));
+  const command = (clientCommands.get(cmd) ||
+    clientCommands.find(
+      (a: ICommand) => a.aliases && a.aliases.includes(cmd)
+    )) as ICommand;
 
   if (command) {
-    command.run(client, message, args);
+    command.run({ client: client, message: message, args: args });
   }
 });
 
