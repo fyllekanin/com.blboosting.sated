@@ -1,4 +1,4 @@
-enum Emojis {
+export enum Emojis {
   'tank' = '701099862426648596',
   'healer' = '701099960086691870',
   'dps' = '701099906961768599',
@@ -19,4 +19,4 @@ enum Emojis {
   'timestamp' = '🕒',
 }
 
-export default Emojis;
+//export default Emojis;

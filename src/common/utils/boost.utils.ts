@@ -22,7 +22,7 @@ const teamClaimCooldownFilePath = path.resolve(
 );
 
 import { Roles } from '../constants/guildroles.constants';
-import Channels from '../constants/channels.enum';
+import { Channels } from '../constants/channels.enum';
 import { thresholds } from '../../JSON/thresholds';
 import BaseBoost from '../../models/boost/BaseBoost';
 import MythicPlusBoost from '../../models/boost/MythicPlusBoost';
@@ -165,7 +165,7 @@ export const self = {
     );
     const oneLower = boost.getOneRoleLower(allowedEnum);
     const channel = message.channel as TextChannel;
-
+    
     await channel.permissionOverwrites.edit(Roles[`${oneLower} Key Booster`], {
       VIEW_CHANNEL: true,
       READ_MESSAGE_HISTORY: true,

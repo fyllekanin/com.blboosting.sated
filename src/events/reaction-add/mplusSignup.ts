@@ -1,6 +1,6 @@
-import Emojis from '../../common/constants/emojis.enum';
+import {Emojis} from '../../common/constants/emojis.enum';
 import { Roles } from '../../common/constants/guildroles.constants';
-import Channels from '../../common/constants/channels.enum';
+import { Channels } from '../../common/constants/channels.enum';
 // const utils = require('../../common/utils/utils');
 import * as utils from '../../common/utils/utils';
 // const embeds = require('../../common/utils/embeds');
@@ -25,10 +25,8 @@ import {
   TextChannel,
   Snowflake,
 } from 'discord.js';
-// const thresholds = require('../../JSON/thresholds.json');
-import * as thresholds from '../../JSON/thresholds.json';
-// const teamClaimSignup = require('./teamClaim');
-import * as teamClaimSignup from './teamClaim';
+import { thresholds } from '../../JSON/thresholds';
+import { TeamClaim } from './teamClaim';
 import MythicPlusBoost from '../../models/boost/MythicPlusBoost';
 
 module.exports = async (
@@ -568,7 +566,9 @@ please check your dm's for further information.`,
       await utils.wrongRole(user, message, emoji);
       break;
     case Emojis.teamTake:
-      await teamClaimSignup(client, message, channel, emoji, user);
+      let claimObject = new TeamClaim();
+      //unassignable type for emojis, going to have to think about how we want to handle this
+      await claimObject.Claim(client, message, channel, emoji, user);
       break;
     default:
       break;

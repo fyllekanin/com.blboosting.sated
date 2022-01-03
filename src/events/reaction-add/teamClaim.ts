@@ -24,112 +24,110 @@ const teamClaimCooldownFilePath = path.resolve(
   '../../JSON/teams-cooldown/teamclaim.json'
 );
 
-module.exports = async (
-  client: Client,
-  message: Message,
-  channel: GuildTextBasedChannel,
-  emoji: GuildEmoji,
-  user: GuildMember
-) => {
-  const boostData: MythicPlusBoost = boost.get(message.id);
-  if (!boostData) return;
+export class TeamClaim {
 
-  user = message.guild.members.cache.get(user.id);
+  public async Claim(client: Client,
+    message: Message,
+    channel: GuildTextBasedChannel,
+    emoji: GuildEmoji,
+    user: GuildMember) {
+    
+      const boostData: MythicPlusBoost = boost.get(message.id);
+      if (!boostData) return;
+    
+      user = message.guild.members.cache.get(user.id);
+    
+      const teamNameOriginalRole: Role = utils.getUserTeamName(message, user.id);
+      if (teamNameOriginalRole === undefined) {
+        await utils.wrongRole(user, message, emoji);
+      }
+      const teamNameOriginal: string = teamNameOriginalRole.name;
+      if (!teamNameOriginal) {
+        await utils.wrongRole(user, message, emoji);
+      }
+      const teamName: string = teamNameOriginal.replace(/ /g, '');
+    
+      // Check eligibility
+      if (!this.canTeamClaimBoost(teamName)) {
+        await utils.wrongRole(user, message, emoji);
+        this.notifyFailedSignupTeamClaimUser(user);
+      }
+    
+      // eslint-disable-next-line no-prototype-builtins
+    
+      // If the team is not in the list, add them
+      if (!boostData.teamClaim.hasOwnProperty(teamName)) {
+        boostData.teamClaim[teamName] = [];
+      }
+    
+      // If the user is not in the team queue, add them
+      if (!boostData.teamClaim[teamName].includes(user.id)) {
+        boostData.teamClaim[teamName].push(user.id);
+      }
+    
+      // If the user is in the team queue
+      if (boostData.teamClaim[teamName].length >= 4) {
+        // If boost isn't already team claimed
+        if (!boostData.isTeamClaimed) {
+          boostData.isTeamClaimed = true;
+          boostData.teamName = teamName;
+          boostData.teamNameOriginal = teamNameOriginal;
+          boostData.teamNameOriginalRole = teamNameOriginalRole;
+    
+          boostData.throttleEdit();
+        } else if (
+          // Is already team claimed
+          boostData.isTeamClaimed &&
+          // Not the same team
+          boostData.teamName !== teamName &&
+          // Team queue does not include the team
+          !boostData.teamClaimQueue.some(
+            (teamData) => teamData.teamName === teamName
+          )
+        ) {
+          // Add to the queue
+          boostData.teamClaimQueue.push({
+            teamName,
+            teamNameOriginal,
+          });
+        }
+      }
 
-  const teamNameOriginalRole: Role = utils.getUserTeamName(message, user.id);
-  if (teamNameOriginalRole === undefined) {
-    await utils.wrongRole(user, message, emoji);
   }
-  const teamNameOriginal: string = teamNameOriginalRole.name;
-  if (!teamNameOriginal) {
-    await utils.wrongRole(user, message, emoji);
-  }
-  const teamName: string = teamNameOriginal.replace(/ /g, '');
 
-  // Check eligibility
-  if (!canTeamClaimBoost(teamName)) {
-    await utils.wrongRole(user, message, emoji);
-    notifyFailedSignupTeamClaimUser(user);
-  }
+  private async canTeamClaimBoost(teamName: string): Promise<boolean> {
+    let teamClaimCooldown = fs.readFileSync(teamClaimCooldownFilePath);
+    teamClaimCooldown = JSON.parse(teamClaimCooldown.toString());
+  
+    // eslint-disable-next-line no-prototype-builtins
+    if (!teamClaimCooldown.hasOwnProperty(teamName)) return true;
+    if (
+      teamClaimCooldown[teamClaimCooldown.indexOf(teamName)] === MAX_RUN_PER_DAY
+    )
+      return false;
+    return true;
+  };
 
-  // eslint-disable-next-line no-prototype-builtins
-
-  // If the team is not in the list, add them
-  if (!boostData.teamClaim.hasOwnProperty(teamName)) {
-    boostData.teamClaim[teamName] = [];
-  }
-
-  // If the user is not in the team queue, add them
-  if (!boostData.teamClaim[teamName].includes(user.id)) {
-    boostData.teamClaim[teamName].push(user.id);
-  }
-
-  // If the user is in the team queue
-  if (boostData.teamClaim[teamName].length >= 4) {
-    // If boost isn't already team claimed
-    if (!boostData.isTeamClaimed) {
-      boostData.isTeamClaimed = true;
-      boostData.teamName = teamName;
-      boostData.teamNameOriginal = teamNameOriginal;
-      boostData.teamNameOriginalRole = teamNameOriginalRole;
-
-      boostData.throttleEdit();
-    } else if (
-      // Is already team claimed
-      boostData.isTeamClaimed &&
-      // Not the same team
-      boostData.teamName !== teamName &&
-      // Team queue does not include the team
-      !boostData.teamClaimQueue.some(
-        (teamData) => teamData.teamName === teamName
-      )
-    ) {
-      // Add to the queue
-      boostData.teamClaimQueue.push({
-        teamName,
-        teamNameOriginal,
-      });
-    }
-  }
-};
-
-/**
- * Check if a team can claim a boost or not
- * @param {string} teamName
- * @return {boolean}
- */
-async function canTeamClaimBoost(teamName: string): Promise<boolean> {
-  let teamClaimCooldown = fs.readFileSync(teamClaimCooldownFilePath);
-  teamClaimCooldown = JSON.parse(teamClaimCooldown.toString());
-
-  // eslint-disable-next-line no-prototype-builtins
-  if (!teamClaimCooldown.hasOwnProperty(teamName)) return true;
-  if (
-    teamClaimCooldown[teamClaimCooldown.indexOf(teamName)] === MAX_RUN_PER_DAY
-  )
-    return false;
-  return true;
-}
-
-/**
- * Notify that they reach the CD limit and has to wait
- * @param {Message} message
- * @param {GuilMember} user
- */
-function notifyFailedSignupTeamClaimUser(user: GuildMember): void {
-  const embedMessage = new MessageEmbed();
-  embedMessage
-    .setDescription(
-      `Hello ${user},
+  /**
+  * Notify that they reach the CD limit and has to wait
+  * @param {Message} message
+  * @param {GuilMember} user
+  */
+  private notifyFailedSignupTeamClaimUser(user: GuildMember): void {
+    const embedMessage = new MessageEmbed();
+    embedMessage
+      .setDescription(
+        `Hello ${user},
             
             Your team can not boost through the \`TeamClaim\` option anymore today. 
             
             You can use this feature ${MAX_RUN_PER_DAY.toString()} times per day and the cool down resets at ${RESET_HOUR.toString()}am GMT 0.`
-    )
+      )
     .setColor('#DD0044')
     .addField('Boost done', MAX_RUN_PER_DAY.toString(), true)
     .addField('Remaining', '0', true);
-  user.send({ embeds: [embedMessage] }).catch(console.error);
+    user.send({ embeds: [embedMessage] }).catch(console.error);
+  };
 }
 
 /**
