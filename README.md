@@ -1,2 +1,3 @@
-# com.blboosting.sated
+# blbapps
 
+Official repo for Bloodlust Boosting Application bot
