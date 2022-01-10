@@ -170,6 +170,40 @@ client.on('messageReactionRemove', async (messageReaction, user) => {
     }
 });
 
+const raidSignups = require('./events/reaction-add/raidSignup');
+client.on('messageReactionAdd', async (messageReaction, user) => {
+    const message = messageReaction.message;
+    if (user.bot && message.author.id === client.user.id) return;
+    const channel = message.channel;
+    user = message.guild.members.cache.get(user.id);
+    
+    let emoji = messageReaction.emoji.id ?? messageReaction.emoji.name ?? messageReaction.emoji ?? '';
+
+    switch (message.channel.parentId) {
+        //TODO - this is the Id of the raid boost group, need to change to whatever the emoji is for the
+        // red dot. I.e. channels['[RED_DOT] Raid Signups'];
+        case channels['[RED_DOT] Raid Signups']:
+            //ignore anything in the raid-support channel. Probably not needed.
+            if(message.channelId == '912017943221649518') break;
+            await raidSignups(client, message, channel, emoji, user);
+            break;
+        default:
+            break;
+    }
+});
+
+/*//TODO - this is going to fire on EVERY. SINGLE. MESSAGE. Can we restrict it to a selection of channels?
+const raidSignups = require('./events/message/raidSignup');
+client.on('message', async(message) => {
+    if (user.bot && message.author.id === client.user.id) return;
+    const channel = message.channel;
+
+    //return if its not in the active raid boost signs
+    if(channel.parentId != '697453763509878849' || channel.id == '912017943221649518') return; //TODO - channel title search?
+    let user = message.guild.members.cache.get(user.id);
+    await raidSignups(client, message, channel, user);
+})*/
+
 client.on('raw', async (packet) => {
     // We don't want this to run on unrelated packets
     if (!['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE'].includes(packet.t)) return;
