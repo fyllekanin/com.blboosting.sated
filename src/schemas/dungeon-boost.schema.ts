@@ -1,5 +1,26 @@
 import { Schema } from 'jsonschema';
 
+export interface IDungeonBoost {
+    name: string;
+    realm: string;
+    source: 'TC' | 'TCL' | 'TIH' | 'D';
+    payments: Array<{ amount: number, realm: string, faction: 'HORDE' | 'ALLIANCE', collectorId: string }>;
+    paidBalance: number;
+    discount: number;
+    stack: Array<string>;
+    advertiser: { advertiserId: string, playing: boolean, role: 'Tank' | 'Healer' | 'DPS' },
+    notes: string;
+    keys: Array<{
+        dungeon: 'ANY' | 'DOS' | 'HOA' | 'MISTS' | 'PLAGUE' | 'SD' | 'SOA' | 'NW' | 'TOP' | 'TAZ',
+        level: number | string;
+        timed: boolean;
+        booster: {
+            boosterId: string;
+            role: 'Tank' | 'Healer' | 'DPS'
+        }
+    }>
+}
+
 export const DungeonBoostSchema: Schema = {
     id: '/DungeonBoost',
     type: 'object',

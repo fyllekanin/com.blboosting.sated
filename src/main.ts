@@ -1,5 +1,6 @@
 import { Client, Intents } from 'discord.js';
 import { CreateDungeonBoostEvent } from './events/create-dungeon-boost.event';
+import { DungeonBoostToolsEvent } from './events/dungeon-boost-tools.event';
 
 require('dotenv').config();
 
@@ -12,7 +13,10 @@ class Main {
             intents: new Intents([Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES])
         });
 
-        [new CreateDungeonBoostEvent()].forEach(evt => {
+        [
+            new CreateDungeonBoostEvent(),
+            new DungeonBoostToolsEvent()
+        ].forEach(evt => {
             this.client.on(evt.getEventName(), evt.run.bind(evt, this.client));
         });
 
