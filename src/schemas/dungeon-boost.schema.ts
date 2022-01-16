@@ -10,14 +10,19 @@ export interface IDungeonBoost {
     stack: Array<string>;
     advertiser: { advertiserId: string, playing: boolean, role: 'Tank' | 'Healer' | 'DPS' },
     notes: string;
-    keys: Array<{
+    key: {
         dungeon: 'ANY' | 'DOS' | 'HOA' | 'MISTS' | 'PLAGUE' | 'SD' | 'SOA' | 'NW' | 'TOP' | 'TAZ',
         level: number | string;
         timed: boolean;
+        runs: number;
         booster: {
             boosterId: string;
             role: 'Tank' | 'Healer' | 'DPS'
         }
+    },
+    boosters: Array<{
+        boosterId: string,
+        isKeyHolder: boolean
     }>
 }
 
@@ -79,44 +84,45 @@ export const DungeonBoostSchema: Schema = {
             properties: {
                 advertiserId: { type: 'string' },
                 playing: { type: 'boolean' },
-                role: { type: ['string', 'null'], enum: ['Tank', 'Healer', 'DPS', null]}
+                role: { type: ['string', 'null'], enum: ['Tank', 'Healer', 'DPS', null] }
             }
         },
         notes: {
             type: 'string'
         },
-        keys: {
+        key: {
+            type: 'object',
+            properties: {
+                dungeon: {
+                    type: 'string',
+                    enum: [
+                        'ANY',
+                        'DOS',
+                        'HOA',
+                        'MISTS',
+                        'PLAGUE',
+                        'SD',
+                        'SOA',
+                        'NW',
+                        'TOP',
+                        'TAZ'
+                    ]
+                },
+                level: { type: ['number', 'string'] },
+                runs: { type: 'number', minimum: 1 },
+                timed: { type: 'boolean' }
+            }
+        },
+        boosters: {
             type: 'array',
             items: {
                 type: 'object',
                 properties: {
-                    dungeon: {
-                        type: 'string',
-                        enum: [
-                            'ANY',
-                            'DOS',
-                            'HOA',
-                            'MISTS',
-                            'PLAGUE',
-                            'SD',
-                            'SOA',
-                            'NW',
-                            'TOP',
-                            'TAZ'
-                        ]
-                    },
-                    level: { type: ['number', 'string'] },
-                    timed: { type: 'boolean' },
-                    booster: {
-                        type: ['object', 'null'],
-                        properties: {
-                            boosterId: { type: 'string' },
-                            role: { type: 'string', enum: ['Tank', 'Healer', 'DPS'] }
-                        }
-                    }
+                    boosterId: { type: 'string' },
+                    isKeyHolder: { type: 'boolean' }
                 }
             }
-        },
+        }
     },
     required: [
         'name',

@@ -1,5 +1,5 @@
 import { IEvent } from './event.interface';
-import { CategoryChannel, Client, Message, MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
+import { CategoryChannel, Client, Message, MessageEmbed } from 'discord.js';
 import { Validator } from 'jsonschema';
 import { DungeonBoostSchema, IDungeonBoost } from '../schemas/dungeon-boost.schema';
 
@@ -35,51 +35,33 @@ export class CreateDungeonBoostEvent implements IEvent {
             `⚔️<@166322953850454016>`,
             `⚔️<@166322953850454016>`
         ].join('\n')
-        const keys = '\n' + payload.keys.map(key => `+${key.level} - ${key.dungeon}`).join('\n');
-        await channel.send({
+        const message = await channel.send({
             embeds: [
                 new MessageEmbed()
                     .setTitle(title)
                     .addFields([
                         { name: 'Boosters', value: boosters, inline: true },
                         { name: 'Armor Stack', value: payload.stack.join(', '), inline: true },
-                        { name: 'Keys', value: keys, inline: true },
-                        { name: 'Timed', value: payload.keys.some(key => key.timed) ? 'Yes' : 'No', inline: true }
+                        { name: 'Key', value: `${payload.key.dungeon} +${payload.key.level}`, inline: true },
+                        { name: 'Timed', value: payload.key.timed ? 'Yes' : 'No', inline: true }
                     ])
                     .setFooter({
                         text: 'Type !tools to bring out additional tools for advertisers'
                     })
-            ],
-            components: [
-                new MessageActionRow()
-                    .addComponents([
-                        new MessageButton()
-                            .setCustomId('Tank')
-                            .setLabel('🛡️ Tank')
-                            .setStyle('SECONDARY'),
-                        new MessageButton()
-                            .setCustomId('Healer')
-                            .setLabel('🩹 Healer')
-                            .setStyle('SECONDARY'),
-                        new MessageButton()
-                            .setCustomId('DPS')
-                            .setLabel('⚔️DPS')
-                            .setStyle('SECONDARY'),
-                        new MessageButton()
-                            .setCustomId('KEY')
-                            .setLabel('🔑️ Got Key')
-                            .setStyle('SECONDARY'),
-                        new MessageButton()
-                            .setCustomId('TEAM')
-                            .setLabel('👥 Team')
-                            .setStyle('SECONDARY')
-                    ])
             ]
         });
+        await message.react('🛡️');
+        await message.react('🩹');
+        await message.react('⚔️');
+        await message.react('🔑');
+        await message.react('💰');
+        await message.react('⬇️');
+        await message.react('👥');
+        await message.react('❌');
     }
 
     private getChannelTitle(payload: IDungeonBoost): string {
-        return `Mythic Dungeon Boost - ${payload.keys.length}x-${payload.keys[0].dungeon}-${payload.keys[0].timed ? 'timed' : 'untimed'}`;
+        return `Mythic Dungeon Boost - ${payload.key.runs}x-${payload.key.dungeon}-${payload.key.timed ? 'timed' : 'untimed'}`;
     }
 
     private getValidationResult(payload: Object): Array<string> {
@@ -88,7 +70,7 @@ export class CreateDungeonBoostEvent implements IEvent {
         const errorMessage: Array<string> = [];
         if (!result.valid) {
             errorMessage.push(`The data is having incorrect data or missing data.`);
-            result.errors.forEach((err, index) => errorMessage.push(`#${index+1} ${err.property} ${err.message}`));
+            result.errors.forEach((err, index) => errorMessage.push(`#${index + 1} ${err.property} ${err.message}`));
         }
         return errorMessage;
     }
