@@ -1,28 +1,23 @@
 import { Client, Intents } from 'discord.js';
-import { IEvent } from './events/event.interface';
-import { EventFactory } from './events/event.factory';
+import { CreateDungeonBoostEvent } from './events/create-dungeon-boost.event';
 
 require('dotenv').config();
 
 class Main {
     private readonly client: Client;
-    private readonly events: Map<string, IEvent>;
 
     constructor() {
-        this.events = EventFactory.getEvents();
 
         this.client = new Client({
-            intents: new Intents(Number(process.env.INTENTS))
+            intents: new Intents([Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES])
         });
 
-        this.events.forEach((value, key) => {
-            try {
-                this.client.on(key, value.run.bind(value, this.client));
-            } catch (ex) {
-                console.error(`Event: ${key} crashed`);
-            }
+        [new CreateDungeonBoostEvent()].forEach(evt => {
+            this.client.on(evt.getEventName(), evt.run.bind(evt, this.client));
         });
-        this.client.login(process.env.TOKEN).catch(err => {
+
+        this.client.on('ready', () => console.log('Logged in'));
+        this.client.login(process.env.BOT_TOKEN).catch(err => {
             console.error(`Shit went wrong, ${err}`);
         });
     }
