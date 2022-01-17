@@ -1,19 +1,20 @@
 import { Schema } from 'jsonschema';
 
 export interface IDungeonBoost {
-    name: string;
-    realm: string;
-    source: 'TC' | 'TCL' | 'TIH' | 'D';
-    payments: Array<{ amount: number, realm: string, faction: 'HORDE' | 'ALLIANCE', collectorId: string }>;
-    paidBalance: number;
+    source: 'TICKET' | 'TICKET_IN_HOUSE' | 'TRADE_CHAT' | 'DISCORD';
+    payments: Array<{ amount: number, realm: string, faction: 'Horde' | 'Alliance', collectorId: string, isBalance: boolean }>;
     discount: number;
     stack: Array<string>;
     advertiser: { advertiserId: string, playing: boolean, role: 'Tank' | 'Healer' | 'DPS' },
     notes: string;
+    contact: {
+        name: string;
+        realm: string;
+    }
     key: {
         dungeon: 'ANY' | 'DOS' | 'HOA' | 'MISTS' | 'PLAGUE' | 'SD' | 'SOA' | 'NW' | 'TOP' | 'TAZ',
         level: number | string;
-        timed: boolean;
+        isTimed: boolean;
         runs: number;
         booster: {
             boosterId: string;
@@ -30,11 +31,13 @@ export const DungeonBoostSchema: Schema = {
     id: '/DungeonBoost',
     type: 'object',
     properties: {
-        name: {
-            type: 'string'
-        },
-        realm: {
-            type: 'string'
+        contact: {
+            type: 'object',
+            properties: {
+                name: { type: 'string' },
+                realm: { type: 'realm' }
+            },
+            required: ['name', 'realm']
         },
         source: {
             type: 'string',
@@ -48,11 +51,11 @@ export const DungeonBoostSchema: Schema = {
                     amount: { type: 'number' },
                     realm: { type: 'string' },
                     faction: { type: 'string', enum: ['HORDE', 'ALLIANCE'] },
-                    collectorId: { type: 'string' }
+                    collectorId: { type: 'string' },
+                    isBalance: { type: 'boolean' }
                 }
             }
         },
-        paidBalance: { type: ['number', 'null'] },
         discount: { type: ['number', 'null'] },
         stack: {
             type: 'array',
@@ -85,7 +88,8 @@ export const DungeonBoostSchema: Schema = {
                 advertiserId: { type: 'string' },
                 playing: { type: 'boolean' },
                 role: { type: ['string', 'null'], enum: ['Tank', 'Healer', 'DPS', null] }
-            }
+            },
+            required: ['advertiserId']
         },
         notes: {
             type: 'string'
@@ -110,8 +114,9 @@ export const DungeonBoostSchema: Schema = {
                 },
                 level: { type: ['number', 'string'] },
                 runs: { type: 'number', minimum: 1 },
-                timed: { type: 'boolean' }
-            }
+                isTimed: { type: 'boolean' }
+            },
+            required: ['dungeon', 'level', 'runs', 'isTimed']
         },
         boosters: {
             type: 'array',
@@ -121,17 +126,16 @@ export const DungeonBoostSchema: Schema = {
                     boosterId: { type: 'string' },
                     isKeyHolder: { type: 'boolean' }
                 }
-            }
+            },
+            required: ['boosterId', 'isKeyHolder']
         }
     },
     required: [
-        'name',
-        'realm',
+        'contact',
         'source',
         'payments',
         'discount',
-        'paidBalance',
-        'keys',
+        'key',
         'stack'
     ]
 };

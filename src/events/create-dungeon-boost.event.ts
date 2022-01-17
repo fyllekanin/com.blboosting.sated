@@ -1,11 +1,14 @@
 import { IEvent } from './event.interface';
-import { CategoryChannel, Client, Message, MessageEmbed } from 'discord.js';
+import { CategoryChannel, Client, Message, TextChannel } from 'discord.js';
 import { Validator } from 'jsonschema';
 import { DungeonBoostSchema, IDungeonBoost } from '../schemas/dungeon-boost.schema';
+import { MythicPlusEmbed } from '../embeds/mythic-plus.embed';
+import { BoostsRepository } from '../persistance/repositories/boosts.repository';
 
 
 export class CreateDungeonBoostEvent implements IEvent {
     private static readonly STARTS_WITH = 'dungeonBoost';
+    private static readonly BUILDING_REACTIONS = ['🛡️', '🩹', '⚔', '🔑', '💰', '⬇️', '👥', '❌'];
 
     async run(client: Client, message: Message): Promise<void> {
         if (!await this.isApplicable(client, message)) {
@@ -20,59 +23,25 @@ export class CreateDungeonBoostEvent implements IEvent {
             return;
         }
 
-        await this.createChannelAndEmbed(client, payload);
-    }
-
-    private async createChannelAndEmbed(client: Client, payload: IDungeonBoost): Promise<void> {
-        const title = this.getChannelTitle(payload);
+        const title = `Mythic Dungeon Boost - ${payload.key.runs}x-${payload.key.dungeon}-${payload.key.isTimed ? 'timed' : 'untimed'}`;
         const category = await client.channels.fetch(process.env.DUNGEON_BOOST_CATEGORY) as CategoryChannel;
         const channel = await category.createChannel(title);
 
-        const boosters = [
-            '\n',
-            `🛡️ <@166322953850454016>`,
-            `🩹 <@166322953850454016>`,
-            `⚔️<@166322953850454016>`,
-            `⚔️<@166322953850454016>`
-        ].join('\n')
-        const message = await channel.send({
-            embeds: [
-                new MessageEmbed()
-                    .setTitle(title)
-                    .addFields([
-                        { name: 'Boosters', value: boosters, inline: true },
-                        { name: 'Armor Stack', value: payload.stack.join(', '), inline: true },
-                        { name: 'Key', value: `${payload.key.dungeon} +${payload.key.level}`, inline: true },
-                        { name: 'Timed', value: payload.key.timed ? 'Yes' : 'No', inline: true }
-                    ])
-                    .setFooter({
-                        text: 'Type !tools to bring out additional tools for advertisers'
-                    })
-            ]
+        const repository = new BoostsRepository();
+        await repository.insert({
+            channelId: channel.id,
+            contact: payload.contact,
+            source: payload.source,
+            payments: payload.payments,
+            discount: payload.discount,
+            stack: payload.stack,
+            advertiserId: payload.advertiser.advertiserId,
+            notes: payload.notes,
+            key: payload.key,
+            boosters: {}
         });
-        await message.react('🛡️');
-        await message.react('🩹');
-        await message.react('⚔️');
-        await message.react('🔑');
-        await message.react('💰');
-        await message.react('⬇️');
-        await message.react('👥');
-        await message.react('❌');
-    }
 
-    private getChannelTitle(payload: IDungeonBoost): string {
-        return `Mythic Dungeon Boost - ${payload.key.runs}x-${payload.key.dungeon}-${payload.key.timed ? 'timed' : 'untimed'}`;
-    }
-
-    private getValidationResult(payload: Object): Array<string> {
-        const validator = new Validator();
-        const result = validator.validate(payload, DungeonBoostSchema);
-        const errorMessage: Array<string> = [];
-        if (!result.valid) {
-            errorMessage.push(`The data is having incorrect data or missing data.`);
-            result.errors.forEach((err, index) => errorMessage.push(`#${index + 1} ${err.property} ${err.message}`));
-        }
-        return errorMessage;
+        await this.createEmbed(channel, title, payload);
     }
 
     async isApplicable(_: Client, message: Message): Promise<boolean> {
@@ -92,5 +61,40 @@ export class CreateDungeonBoostEvent implements IEvent {
         } catch (_) {
             return null;
         }
+    }
+
+    private async createEmbed(channel: TextChannel, title: string, payload: IDungeonBoost): Promise<void> {
+        const totalPot = payload.payments.reduce((prev, curr) => prev + curr.amount, 0);
+
+        const message = await channel.send({
+            embeds: [
+                new MythicPlusEmbed()
+                    .withTitle(title)
+                    .withBoosters([])
+                    .withStacks(payload.stack)
+                    .withKey({ dungeon: payload.key.dungeon, level: payload.key.level })
+                    .withIsTimed(payload.key.isTimed)
+                    .withBoosterPot((totalPot * 0.70) / 4)
+                    .withTotalPot(totalPot)
+                    .withSource(payload.source)
+                    .withPayments(payload.payments.map(payment => ({ realm: payment.realm, faction: payment.faction })))
+                    .withAdvertiserId(payload.advertiser.advertiserId)
+                    .generate()
+            ]
+        });
+        for (const reaction of CreateDungeonBoostEvent.BUILDING_REACTIONS) {
+            await message.react(reaction);
+        }
+    }
+
+    private getValidationResult(payload: Object): Array<string> {
+        const validator = new Validator();
+        const result = validator.validate(payload, DungeonBoostSchema);
+        const errorMessage: Array<string> = [];
+        if (!result.valid) {
+            errorMessage.push(`The data is having incorrect data or missing data.`);
+            result.errors.forEach((err, index) => errorMessage.push(`#${index + 1} ${err.property} ${err.message}`));
+        }
+        return errorMessage;
     }
 }
