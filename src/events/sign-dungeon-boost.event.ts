@@ -14,7 +14,6 @@ export class SignDungeonBoostEvent implements IEvent {
 
     async run(_: Client, messageReaction: MessageReaction, user: User): Promise<void> {
         if (!await this.isApplicable(messageReaction, user)) {
-            console.log('No applicable')
             return;
         }
         const reaction = messageReaction.partial ? await messageReaction.fetch() : messageReaction;
@@ -23,7 +22,7 @@ export class SignDungeonBoostEvent implements IEvent {
 
         switch (reaction.emoji.name) {
             case '🛡️':
-                if (!entity.signups.tanks.every(item => item.boosterId !== user.id)) {
+                if (entity.signups.tanks.every(item => item.boosterId !== user.id)) {
                     entity.signups.tanks.push({
                         boosterId: user.id,
                         haveKey: await this.doHaveKey(reaction, user.id),
@@ -32,7 +31,7 @@ export class SignDungeonBoostEvent implements IEvent {
                 }
                 break;
             case '🩹':
-                if (!entity.signups.healers.every(item => item.boosterId !== user.id)) {
+                if (entity.signups.healers.every(item => item.boosterId !== user.id)) {
                     entity.signups.healers.push({
                         boosterId: user.id,
                         haveKey: await this.doHaveKey(reaction, user.id),
@@ -41,7 +40,7 @@ export class SignDungeonBoostEvent implements IEvent {
                 }
                 break;
             case '⚔':
-                if (!entity.signups.dpses.every(item => item.boosterId !== user.id)) {
+                if (entity.signups.dpses.every(item => item.boosterId !== user.id)) {
                     entity.signups.dpses.push({
                         boosterId: user.id,
                         haveKey: await this.doHaveKey(reaction, user.id),

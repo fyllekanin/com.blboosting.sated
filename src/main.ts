@@ -23,7 +23,7 @@ class Main {
     async start(): Promise<void> {
         await DatabaseService.startup();
 
-        const eventBus = new EventBus();
+        const eventBus = new EventBus(this.client);
         this.client.on('ready', async () => {
             console.log('Logged in');
             [
@@ -33,7 +33,6 @@ class Main {
                 this.client.on(evt.getEventName(), evt.run.bind(evt, this.client));
             });
         });
-        this.client.on('messageReactionAdd', () => console.log('gg'));
         this.client.login(process.env.BOT_TOKEN).catch(err => {
             console.error(`Shit went wrong, ${err}`);
         });

@@ -2,6 +2,7 @@ import { BaseEntity } from './base.entity';
 
 export interface BoostEntity extends BaseEntity {
     channelId: string;
+    messageId: string;
     contact: {
         name: string;
         realm: string;

@@ -97,10 +97,10 @@ export class MythicPlusEmbed implements EmbedInterface {
         const dpses = this.boosters.filter(item => item.isDps);
 
         return [
-            `🛡️${tank ? `<@${tank}>` : ''}`,
-            `🩹${healer ? `<@${healer}>` : ''}`,
-            `⚔${dpses[0] ? `<@${dpses[0]}>` : ''}`,
-            `⚔${dpses[1] ? `<@${dpses[1]}>` : ''}`
+            `🛡️${tank?.boosterId ? `<@${tank.boosterId}>` : ''}`,
+            `🩹${healer?.boosterId ? `<@${healer.boosterId}>` : ''}`,
+            `⚔${dpses[0]?.boosterId ? `<@${dpses[0].boosterId}>` : ''}`,
+            `⚔${dpses[1]?.boosterId ? `<@${dpses[1].boosterId}>` : ''}`
         ].join('\n');
     }
 }

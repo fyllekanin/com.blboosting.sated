@@ -12,7 +12,6 @@ export class CreateDungeonBoostEvent implements IEvent {
 
     async run(client: Client, message: Message): Promise<void> {
         if (!await this.isApplicable(client, message)) {
-            console.log('Was not applicable');
             return;
         }
 
@@ -28,8 +27,9 @@ export class CreateDungeonBoostEvent implements IEvent {
         const channel = await category.createChannel(title);
 
         const repository = new BoostsRepository();
-        await repository.insert({
+        const entity = await repository.insert({
             channelId: channel.id,
+            messageId: null,
             contact: payload.contact,
             source: payload.source,
             payments: payload.payments,
@@ -46,7 +46,13 @@ export class CreateDungeonBoostEvent implements IEvent {
             }
         });
 
-        await this.createEmbed(channel, title, payload);
+        const embedMessage = await this.createEmbed(channel, title, payload);
+        entity.messageId = embedMessage.id;
+        await repository.update({ channelId: channel.id }, entity);
+
+        for (const reaction of CreateDungeonBoostEvent.BUILDING_REACTIONS) {
+            await embedMessage.react(reaction);
+        }
     }
 
     async isApplicable(_: Client, message: Message): Promise<boolean> {
@@ -68,7 +74,7 @@ export class CreateDungeonBoostEvent implements IEvent {
         }
     }
 
-    private async createEmbed(channel: TextChannel, title: string, payload: IDungeonBoost): Promise<void> {
+    private async createEmbed(channel: TextChannel, title: string, payload: IDungeonBoost): Promise<Message> {
         const totalPot = payload.payments.reduce((prev, curr) => prev + curr.amount, 0);
 
         const message = await channel.send({
@@ -87,9 +93,8 @@ export class CreateDungeonBoostEvent implements IEvent {
                     .generate()
             ]
         });
-        for (const reaction of CreateDungeonBoostEvent.BUILDING_REACTIONS) {
-            await message.react(reaction);
-        }
+
+        return message;
     }
 
     private getValidationResult(payload: Object): Array<string> {

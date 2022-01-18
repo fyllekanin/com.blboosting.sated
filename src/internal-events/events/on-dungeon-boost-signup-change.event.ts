@@ -1,10 +1,17 @@
 import { InternalEventInterface } from '../internal-event.interface';
 import { BoostsRepository } from '../../persistance/repositories/boosts.repository';
 import { BoostEntity } from '../../persistance/entities/boost.entity';
+import { Client, TextChannel } from 'discord.js';
+import { MythicPlusEmbed } from '../../embeds/mythic-plus.embed';
 
 export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
     private readonly boostsRepository = new BoostsRepository();
+    private readonly client: Client;
     private throttleTimeout: any;
+
+    constructor(client: Client) {
+        this.client = client;
+    }
 
     async run(channelId: string): Promise<void> {
         if (this.throttleTimeout) {
@@ -20,13 +27,57 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
         if (!entity.boosters.healer) this.findHealer(entity);
         if (!entity.boosters.dpsOne) this.findDps(entity, entity.boosters.dpsTwo, 1);
         if (!entity.boosters.dpsTwo) this.findDps(entity, entity.boosters.dpsOne, 2);
-        
 
+        const channel = await this.client.channels.fetch(channelId) as TextChannel;
+        const message = await channel.messages.fetch(entity.messageId);
+
+        const title = `Mythic Dungeon Boost - ${entity.key.runs}x-${entity.key.dungeon}-${entity.key.isTimed ? 'timed' : 'untimed'}`;
+        const totalPot = entity.payments.reduce((prev, curr) => prev + curr.amount, 0);
+        await this.boostsRepository.update({ channelId: entity.channelId }, entity);
+        await message.edit({
+            embeds: [
+                new MythicPlusEmbed()
+                    .withTitle(title)
+                    .withBoosters(this.getBoosters(entity))
+                    .withStacks(entity.stack)
+                    .withKey({ dungeon: entity.key.dungeon, level: entity.key.level })
+                    .withIsTimed(entity.key.isTimed)
+                    .withBoosterPot((totalPot * 0.70) / 4)
+                    .withTotalPot(totalPot)
+                    .withSource(entity.source)
+                    .withPayments(entity.payments.map(payment => ({ realm: payment.realm, faction: payment.faction })))
+                    .withAdvertiserId(entity.advertiserId)
+                    .generate()
+            ]
+        })
+    }
+
+    private getBoosters(entity: BoostEntity): Array<{ boosterId: string, isTank: boolean, isHealer: boolean, isDps: boolean }> {
+        const boosters: Array<{ boosterId: string, isTank: boolean, isHealer: boolean, isDps: boolean }> = [];
+
+        if (entity.boosters.tank) {
+            boosters.push({ boosterId: entity.boosters?.tank, isTank: true, isHealer: false, isDps: false });
+        }
+        if (entity.boosters.healer) {
+            boosters.push({ boosterId: entity.boosters?.healer, isTank: false, isHealer: true, isDps: false });
+        }
+        if (entity.boosters.dpsOne) {
+            boosters.push({ boosterId: entity.boosters?.dpsOne, isTank: false, isHealer: false, isDps: true });
+        }
+        if (entity.boosters.dpsTwo) {
+            boosters.push({ boosterId: entity.boosters?.dpsTwo, isTank: false, isHealer: false, isDps: true });
+        }
+
+        return boosters;
     }
 
     private findTank(entity: BoostEntity): void {
         let tank: { boosterId: string, createdAt: number };
+        const alreadyChosen = this.getAlreadyChosenPlayers(entity);
         for (const item of entity.signups.tanks) {
+            if (alreadyChosen.includes(item.boosterId)) {
+                continue;
+            }
             if (!tank || tank?.createdAt > item.createdAt) {
                 tank = item;
             }
@@ -36,7 +87,11 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
 
     private findHealer(entity: BoostEntity): void {
         let healer: { boosterId: string, createdAt: number };
+        const alreadyChosen = this.getAlreadyChosenPlayers(entity);
         for (const item of entity.signups.healers) {
+            if (alreadyChosen.includes(item.boosterId)) {
+                continue;
+            }
             if (!healer || healer?.createdAt > item.createdAt) {
                 healer = item;
             }
@@ -46,8 +101,9 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
 
     private findDps(entity: BoostEntity, ignoreId: string, slot: number): void {
         let dps: { boosterId: string, createdAt: number };
-        for (const item of entity.signups.healers) {
-            if (item.boosterId === ignoreId) {
+        const alreadyChosen = this.getAlreadyChosenPlayers(entity);
+        for (const item of entity.signups.dpses) {
+            if (item.boosterId === ignoreId || alreadyChosen.includes(item.boosterId)) {
                 continue;
             }
             if (!dps || dps?.createdAt > item.createdAt) {
@@ -64,10 +120,14 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
         }
     }
 
+    private getAlreadyChosenPlayers(entity: BoostEntity): Array<string> {
+        return [entity.boosters.tank, entity.boosters.healer, entity.boosters.dpsOne, entity.boosters.dpsTwo].filter(item => item);
+    }
+
     private findKeyHolder(entity: BoostEntity): void {
         const keyHolder = this.getKeyHolder(entity);
         entity.boosters.keyholder = keyHolder ? keyHolder.boosterId : null;
-        switch (keyHolder.role) {
+        switch (keyHolder?.role) {
             case 'Tank':
                 entity.boosters.tank = keyHolder.boosterId;
                 break;
@@ -85,19 +145,28 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
     }
 
     private getKeyHolder(entity: BoostEntity): { role: 'Tank' | 'Healer' | 'Dps', boosterId: string } {
-        const tankKeyHolder = this.getKeyHolderFrom(entity.signups.tanks);
-        const healerKeyHolder = this.getKeyHolderFrom(entity.signups.healers);
-        const dpsKeyHolder = this.getKeyHolderFrom(entity.signups.dpses);
+        const tankKeyHolder = this.getKeyHolderFrom(entity.signups.tanks) || {
+            createdAt: Number.MAX_SAFE_INTEGER,
+            boosterId: null
+        };
+        const healerKeyHolder = this.getKeyHolderFrom(entity.signups.healers) || {
+            createdAt: Number.MAX_SAFE_INTEGER,
+            boosterId: null
+        };
+        const dpsKeyHolder = this.getKeyHolderFrom(entity.signups.dpses) || {
+            createdAt: Number.MAX_SAFE_INTEGER,
+            boosterId: null
+        };
 
-        if (tankKeyHolder.createdAt < healerKeyHolder.createdAt && tankKeyHolder.createdAt < dpsKeyHolder.createdAt) {
+        if (tankKeyHolder && tankKeyHolder.createdAt < healerKeyHolder.createdAt && tankKeyHolder.createdAt < dpsKeyHolder.createdAt) {
             return { role: 'Tank', boosterId: tankKeyHolder.boosterId };
         }
 
-        if (healerKeyHolder.createdAt < tankKeyHolder.createdAt && healerKeyHolder.createdAt < dpsKeyHolder.createdAt) {
+        if (healerKeyHolder && healerKeyHolder.createdAt < tankKeyHolder.createdAt && healerKeyHolder.createdAt < dpsKeyHolder.createdAt) {
             return { role: 'Healer', boosterId: healerKeyHolder.boosterId };
         }
 
-        if (dpsKeyHolder.createdAt < healerKeyHolder.createdAt && dpsKeyHolder.createdAt < tankKeyHolder.createdAt) {
+        if (dpsKeyHolder && dpsKeyHolder.createdAt < healerKeyHolder.createdAt && dpsKeyHolder.createdAt < tankKeyHolder.createdAt) {
             return { role: 'Dps', boosterId: dpsKeyHolder.boosterId };
         }
 
