@@ -38,7 +38,12 @@ export class CreateDungeonBoostEvent implements IEvent {
             advertiserId: payload.advertiser.advertiserId,
             notes: payload.notes,
             key: payload.key,
-            boosters: {}
+            boosters: {},
+            signups: {
+                tanks: [],
+                healers: [],
+                dpses: []
+            }
         });
 
         await this.createEmbed(channel, title, payload);

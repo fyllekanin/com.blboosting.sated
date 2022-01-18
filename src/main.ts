@@ -2,6 +2,7 @@ import { Client, Intents } from 'discord.js';
 import { CreateDungeonBoostEvent } from './events/create-dungeon-boost.event';
 import { DatabaseService } from './persistance/database.service';
 import { SignDungeonBoostEvent } from './events/sign-dungeon-boost.event';
+import { EventBus } from './internal-events/event.bus';
 
 require('dotenv').config();
 
@@ -22,11 +23,12 @@ class Main {
     async start(): Promise<void> {
         await DatabaseService.startup();
 
+        const eventBus = new EventBus();
         this.client.on('ready', async () => {
             console.log('Logged in');
             [
                 new CreateDungeonBoostEvent(),
-                new SignDungeonBoostEvent()
+                new SignDungeonBoostEvent(eventBus)
             ].forEach(evt => {
                 this.client.on(evt.getEventName(), evt.run.bind(evt, this.client));
             });
