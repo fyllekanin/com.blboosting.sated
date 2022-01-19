@@ -4,6 +4,8 @@ import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
 import { CategoryChannel, Client, MessageReaction, TextChannel, User } from 'discord.js';
 import { Collection } from '@discordjs/collection';
 import { Snowflake } from 'discord-api-types';
+import { BoostEntity } from '../persistance/entities/boost.entity';
+import { EmojiReaction } from '../constants/emoji.enum';
 
 export class UpdateDungeonSignupsStartup implements StartupInterface {
     private readonly boostsRepository = new BoostsRepository();
@@ -21,22 +23,31 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
         }
         const message = await channel.messages.fetch(entity.messageId);
 
-        const keyReactions = await message.reactions.resolve('🔑');
-        const tankReactions = await message.reactions.resolve('🛡️');
-        const healerReactions = await message.reactions.resolve('🩹');
-        const dpsReactions = await message.reactions.resolve('⚔');
+        const keyReaction = await message.reactions.resolve(EmojiReaction.KEYSTONE);
+        const tankReaction = await message.reactions.resolve(EmojiReaction.TANK);
+        const healerReaction = await message.reactions.resolve(EmojiReaction.HEALER);
+        const dpsReactions = await message.reactions.resolve(EmojiReaction.DPS);
 
-        const keyUsers = (await keyReactions.users.fetch()).filter(user => !user.bot);
-        const tankUsers = (await tankReactions.users.fetch()).filter(user => !user.bot);
-        const healerUsers = (await healerReactions.users.fetch()).filter(user => !user.bot);
-        const dpsUsers = (await dpsReactions.users.fetch()).filter(user => !user.bot);
+        const keyUsers = (await keyReaction.users.fetch()).filter(user => !user.bot);
 
-        await this.addUsersByReaction(tankReactions, keyUsers, entity.signups.tanks);
-        await this.addUsersByReaction(healerReactions, keyUsers, entity.signups.healers);
-        await this.addUsersByReaction(dpsReactions, keyUsers, entity.signups.dpses);
+        await this.updateTanks(entity, tankReaction, keyUsers);
+        await this.updateHealers(entity, healerReaction, keyUsers);
+        await this.updateDpses(entity, dpsReactions, keyUsers);
+
+        if (![entity.boosters.tank, entity.boosters.healer, entity.boosters.dpsOne, entity.boosters.dpsTwo].includes(entity.boosters.keyholder)) {
+            entity.boosters.keyholder = null;
+        }
+
+        await this.boostsRepository.update({ channelId: entity.channelId }, entity);
+        eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, entity.channelId);
+    }
+
+    private async updateTanks(entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
+        await this.addUsersByReaction(reaction, keyUsers, entity.signups.tanks);
+        const users = (await reaction.users.fetch()).filter(user => !user.bot);
 
         entity.signups.tanks.forEach(user => {
-            if (tankUsers.some(tankUser => tankUser.id === user.boosterId)) {
+            if (users.some(item => item.id === user.boosterId)) {
                 return;
             }
 
@@ -45,20 +56,30 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
                 entity.boosters.tank = null;
             }
         });
+    }
+
+    private async updateHealers(entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
+        await this.addUsersByReaction(reaction, keyUsers, entity.signups.healers);
+        const users = (await reaction.users.fetch()).filter(user => !user.bot);
 
         entity.signups.healers.forEach(user => {
-            if (healerUsers.some(healerUser => healerUser.id === user.boosterId)) {
+            if (users.some(item => item.id === user.boosterId)) {
                 return;
             }
 
             entity.signups.healers = entity.signups.healers.filter(item => item.boosterId !== user.boosterId);
-            if (entity.signups.healers.every(healer => healer.boosterId !== entity.boosters.healer)) {
+            if (entity.signups.healers.every(tank => tank.boosterId !== entity.boosters.healer)) {
                 entity.boosters.healer = null;
             }
         });
+    }
+
+    private async updateDpses(entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
+        await this.addUsersByReaction(reaction, keyUsers, entity.signups.dpses);
+        const users = (await reaction.users.fetch()).filter(user => !user.bot);
 
         entity.signups.dpses.forEach(user => {
-            if (dpsUsers.some(dpsUser => dpsUser.id === user.boosterId)) {
+            if (users.some(item => item.id === user.boosterId)) {
                 return;
             }
 
@@ -70,13 +91,6 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
                 entity.boosters.dpsTwo = null;
             }
         });
-
-        if (![entity.boosters.tank, entity.boosters.healer, entity.boosters.dpsOne, entity.boosters.dpsTwo].includes(entity.boosters.keyholder)) {
-            entity.boosters.keyholder = null;
-        }
-
-        await this.boostsRepository.update({ channelId: entity.channelId }, entity);
-        eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, entity.channelId);
     }
 
     private async addUsersByReaction(reaction: MessageReaction, keyUsers: Collection<Snowflake, User>,

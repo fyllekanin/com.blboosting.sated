@@ -1,5 +1,6 @@
 import { EmbedInterface } from './embed.interface';
 import { MessageEmbed } from 'discord.js';
+import { Dungeon } from '../constants/dungeon.enum';
 
 interface Booster {
     boosterId: string;
@@ -77,7 +78,7 @@ export class MythicPlusEmbed implements EmbedInterface {
             .addFields([
                 { name: 'Boosters', value: this.getBoosters() },
                 { name: 'Armor Stack', value: this.stacks.join(', '), inline: true },
-                { name: 'Key', value: `${this.key.dungeon} +${this.key.level}`, inline: true },
+                { name: 'Key', value: `${Dungeon[this.key.dungeon]} +${this.key.level}`, inline: true },
                 { name: 'Timed', value: this.isTimed ? 'Yes' : 'No', inline: true },
                 {
                     name: 'Booster pot',

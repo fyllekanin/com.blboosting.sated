@@ -1,4 +1,6 @@
 import { BaseEntity } from './base.entity';
+import { SourceKey } from '../../constants/source.enum';
+import { FactionKey } from '../../constants/faction.enum';
 
 export interface BoostEntity extends BaseEntity {
     channelId: string;
@@ -7,11 +9,11 @@ export interface BoostEntity extends BaseEntity {
         name: string;
         realm: string;
     },
-    source: 'TICKET' | 'TICKET_IN_HOUSE' | 'TRADE_CHAT' | 'DISCORD';
+    source: SourceKey;
     payments: Array<{
         amount: number;
         realm: string;
-        faction: 'Horde' | 'Alliance';
+        faction: FactionKey;
         collectorId: string;
         isBalance: boolean;
     }>;

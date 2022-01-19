@@ -1,4 +1,6 @@
 export enum DiscordEvent {
     Ready = 'ready',
-    MessageCreate = 'messageCreate'
+    MessageCreate = 'messageCreate',
+    MessageReactionAdd = 'messageReactionAdd',
+    MessageReactionRemove = 'messageReactionRemove'
 }

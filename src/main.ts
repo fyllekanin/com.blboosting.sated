@@ -32,7 +32,7 @@ class Main {
             await (new UpdateDungeonSignupsStartup()).run(this.client, eventBus);
 
             const events = [
-                new CreateDungeonBoostEvent(),
+                new CreateDungeonBoostEvent(eventBus),
                 new SignDungeonBoostEvent(eventBus),
                 new UnSignDungeonBoostEvent(eventBus)
             ];

@@ -1,28 +1,29 @@
 import { Schema } from 'jsonschema';
+import { Dungeon, DungeonKey } from '../constants/dungeon.enum';
+import { Role, RoleKey } from '../constants/role.constant';
+import { Source, SourceKey } from '../constants/source.enum';
+import { Faction, FactionKey } from '../constants/faction.enum';
 
 export interface IDungeonBoost {
-    source: 'TICKET' | 'TICKET_IN_HOUSE' | 'TRADE_CHAT' | 'DISCORD';
-    payments: Array<{ amount: number, realm: string, faction: 'Horde' | 'Alliance', collectorId: string, isBalance: boolean }>;
+    source: SourceKey;
+    payments: Array<{ amount: number, realm: string, faction: FactionKey, collectorId: string, isBalance: boolean }>;
     discount: number;
     stack: Array<string>;
-    advertiser: { advertiserId: string, playing: boolean, role: 'Tank' | 'Healer' | 'DPS' },
+    advertiserId: string,
     notes: string;
     contact: {
         name: string;
         realm: string;
     }
     key: {
-        dungeon: 'ANY' | 'DOS' | 'HOA' | 'MISTS' | 'PLAGUE' | 'SD' | 'SOA' | 'NW' | 'TOP' | 'TAZ',
+        dungeon: DungeonKey,
         level: number | string;
         isTimed: boolean;
         runs: number;
-        booster: {
-            boosterId: string;
-            role: 'Tank' | 'Healer' | 'DPS'
-        }
     },
     boosters: Array<{
         boosterId: string,
+        role: RoleKey,
         isKeyHolder: boolean
     }>
 }
@@ -41,7 +42,7 @@ export const DungeonBoostSchema: Schema = {
         },
         source: {
             type: 'string',
-            enum: ['TC', 'TCL', 'TIH', 'D']
+            enum: Object.keys(Source)
         },
         payments: {
             type: 'array',
@@ -50,7 +51,7 @@ export const DungeonBoostSchema: Schema = {
                 properties: {
                     amount: { type: 'number' },
                     realm: { type: 'string' },
-                    faction: { type: 'string', enum: ['HORDE', 'ALLIANCE'] },
+                    faction: { type: 'string', enum: Object.keys(Faction) },
                     collectorId: { type: 'string' },
                     isBalance: { type: 'boolean' }
                 }
@@ -61,25 +62,7 @@ export const DungeonBoostSchema: Schema = {
             type: 'array',
             items: {
                 type: 'string',
-                enum: [
-                    'Cloth',
-                    'Leather',
-                    'Mail',
-                    'Plate',
-                    'Mage',
-                    'Priest',
-                    'Warlock',
-                    'Demon Hunter',
-                    'Druid',
-                    'Monk',
-                    'Rogue',
-                    'Hunter',
-                    'Shaman',
-                    'Death Knight',
-                    'Paladin',
-                    'Warrior',
-                    'ANY'
-                ]
+                enum: Object.keys(Dungeon)
             }
         },
         advertiser: {
@@ -87,7 +70,7 @@ export const DungeonBoostSchema: Schema = {
             properties: {
                 advertiserId: { type: 'string' },
                 playing: { type: 'boolean' },
-                role: { type: ['string', 'null'], enum: ['Tank', 'Healer', 'DPS', null] }
+                role: { type: ['string', 'null'], enum: [...Object.keys(Role), ...[null]] }
             },
             required: ['advertiserId']
         },
@@ -99,18 +82,7 @@ export const DungeonBoostSchema: Schema = {
             properties: {
                 dungeon: {
                     type: 'string',
-                    enum: [
-                        'ANY',
-                        'DOS',
-                        'HOA',
-                        'MISTS',
-                        'PLAGUE',
-                        'SD',
-                        'SOA',
-                        'NW',
-                        'TOP',
-                        'TAZ'
-                    ]
+                    enum: Object.keys(Dungeon)
                 },
                 level: { type: ['number', 'string'] },
                 runs: { type: 'number', minimum: 1 },
@@ -124,10 +96,11 @@ export const DungeonBoostSchema: Schema = {
                 type: 'object',
                 properties: {
                     boosterId: { type: 'string' },
+                    role: { type: 'string', enum: Object.keys(Role) },
                     isKeyHolder: { type: 'boolean' }
                 }
             },
-            required: ['boosterId', 'isKeyHolder']
+            required: ['boosterId', 'isKeyHolder', 'role']
         }
     },
     required: [

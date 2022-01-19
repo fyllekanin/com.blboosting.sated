@@ -4,11 +4,29 @@ import { Validator } from 'jsonschema';
 import { DungeonBoostSchema, IDungeonBoost } from '../schemas/dungeon-boost.schema';
 import { MythicPlusEmbed } from '../embeds/mythic-plus.embed';
 import { BoostsRepository } from '../persistance/repositories/boosts.repository';
+import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
+import { DiscordEvent } from '../constants/discord-event.enum';
+import { Role } from '../constants/role.constant';
+import { EmojiReaction } from '../constants/emoji.enum';
 
 
 export class CreateDungeonBoostEvent implements IEvent {
     private static readonly STARTS_WITH = 'dungeonBoost';
-    private static readonly BUILDING_REACTIONS = ['🛡️', '🩹', '⚔', '🔑', '💰', '⬇️', '👥', '❌'];
+    private static readonly BUILDING_REACTIONS = [
+        EmojiReaction.TANK,
+        EmojiReaction.HEALER,
+        EmojiReaction.DPS,
+        EmojiReaction.KEYSTONE,
+        EmojiReaction.MONEY_BAG,
+        EmojiReaction.ARROW_DOWN,
+        EmojiReaction.TEAM,
+        EmojiReaction.CANCEL
+    ];
+    private readonly eventBus: EventBus;
+
+    constructor(eventBus: EventBus) {
+        this.eventBus = eventBus;
+    }
 
     async run(client: Client, message: Message): Promise<void> {
         if (!await this.isApplicable(client, message)) {
@@ -35,10 +53,16 @@ export class CreateDungeonBoostEvent implements IEvent {
             payments: payload.payments,
             discount: payload.discount,
             stack: payload.stack,
-            advertiserId: payload.advertiser.advertiserId,
+            advertiserId: payload.advertiserId,
             notes: payload.notes,
             key: payload.key,
-            boosters: {},
+            boosters: {
+                tank: payload.boosters.find(item => item.role === Role.TANK.value)?.boosterId,
+                healer: payload.boosters.find(item => item.role === Role.HEALER.value)?.boosterId,
+                dpsOne: payload.boosters.filter(item => item.role === Role.DPS.value)[0]?.boosterId,
+                dpsTwo: payload.boosters.filter(item => item.role === Role.DPS.value)[1]?.boosterId,
+                keyholder: payload.boosters.find(item => item.isKeyHolder)?.boosterId
+            },
             status: {},
             signups: {
                 tanks: [],
@@ -50,6 +74,7 @@ export class CreateDungeonBoostEvent implements IEvent {
         const embedMessage = await this.createEmbed(channel, title, payload);
         entity.messageId = embedMessage.id;
         await repository.update({ channelId: channel.id }, entity);
+        this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, entity.channelId);
 
         for (const reaction of CreateDungeonBoostEvent.BUILDING_REACTIONS) {
             await embedMessage.react(reaction);
@@ -62,8 +87,8 @@ export class CreateDungeonBoostEvent implements IEvent {
             message.content.startsWith(startsWith);
     }
 
-    getEventName(): string {
-        return 'messageCreate';
+    getEventName(): DiscordEvent {
+        return DiscordEvent.MessageCreate;
     }
 
     private getPayload(message: Message): IDungeonBoost {
@@ -90,7 +115,7 @@ export class CreateDungeonBoostEvent implements IEvent {
                     .withTotalPot(totalPot)
                     .withSource(payload.source)
                     .withPayments(payload.payments.map(payment => ({ realm: payment.realm, faction: payment.faction })))
-                    .withAdvertiserId(payload.advertiser.advertiserId)
+                    .withAdvertiserId(payload.advertiserId)
                     .generate()
             ]
         });
