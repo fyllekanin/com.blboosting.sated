@@ -39,6 +39,7 @@ export class CreateDungeonBoostEvent implements IEvent {
             notes: payload.notes,
             key: payload.key,
             boosters: {},
+            status: {},
             signups: {
                 tanks: [],
                 healers: [],
