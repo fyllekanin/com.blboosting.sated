@@ -1,6 +1,9 @@
 import { EmbedInterface } from './embed.interface';
 import { MessageEmbed } from 'discord.js';
 import { Dungeon } from '../constants/dungeon.enum';
+import { Source } from '../constants/source.enum';
+import { Faction } from '../constants/faction.enum';
+import { Stack } from '../constants/Stack.enum';
 
 interface Booster {
     boosterId: string;
@@ -72,13 +75,13 @@ export class MythicPlusEmbed implements EmbedInterface {
     }
 
     generate(): MessageEmbed {
-        const payments = this.payments.map(payment => `${payment.realm} [${payment.faction}]`).join('\n');
+        const payments = this.payments.map(payment => `${payment.realm} [${Faction[payment.faction].label}]`).join('\n');
         return new MessageEmbed()
             .setTitle(this.title)
             .addFields([
                 { name: 'Boosters', value: this.getBoosters() },
-                { name: 'Armor Stack', value: this.stacks.join(', '), inline: true },
-                { name: 'Key', value: `${Dungeon[this.key.dungeon]} +${this.key.level}`, inline: true },
+                { name: 'Armor Stack', value: this.stacks.map(stack => Stack[stack].label).join(', '), inline: true },
+                { name: 'Key', value: `${Dungeon[this.key.dungeon].label} +${this.key.level}`, inline: true },
                 { name: 'Timed', value: this.isTimed ? 'Yes' : 'No', inline: true },
                 {
                     name: 'Booster pot',
@@ -86,7 +89,7 @@ export class MythicPlusEmbed implements EmbedInterface {
                     inline: true
                 },
                 { name: 'Total pot', value: `💰 ${this.totalPot.toLocaleString()}`, inline: true },
-                { name: 'Source', value: `${this.source}`, inline: true },
+                { name: 'Source', value: `${Source[this.source].label}`, inline: true },
                 { name: 'Server Payment(s)', value: payments, inline: true },
                 { name: 'Advertiser', value: `<@${this.advertiserId}>`, inline: true }
             ])

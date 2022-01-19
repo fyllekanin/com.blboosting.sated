@@ -5,6 +5,7 @@ import { SignDungeonBoostEvent } from './events/sign-dungeon-boost.event';
 import { EventBus } from './internal-events/event.bus';
 import { UnSignDungeonBoostEvent } from './events/un-sign-dungeon-boost.event';
 import { UpdateDungeonSignupsStartup } from './startup/update-dungeon-signups.startup';
+import { ConfigEnv } from './config.env';
 
 require('dotenv').config();
 
@@ -12,6 +13,7 @@ class Main {
     private readonly client: Client;
 
     constructor() {
+        ConfigEnv.load();
         this.client = new Client({
             intents: new Intents([
                 Intents.FLAGS.GUILDS,
@@ -41,7 +43,7 @@ class Main {
                 this.client.on(eventItem.getEventName(), eventItem.run.bind(eventItem, this.client));
             }
         });
-        this.client.login(process.env.BOT_TOKEN).catch(err => {
+        this.client.login(ConfigEnv.getConfig().BOT_TOKEN).catch(err => {
             console.error(`Shit went wrong, ${err}`);
         });
     }

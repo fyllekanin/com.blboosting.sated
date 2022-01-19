@@ -3,12 +3,13 @@ import { Dungeon, DungeonKey } from '../constants/dungeon.enum';
 import { Role, RoleKey } from '../constants/role.constant';
 import { Source, SourceKey } from '../constants/source.enum';
 import { Faction, FactionKey } from '../constants/faction.enum';
+import { Stack, StackKey } from '../constants/Stack.enum';
 
 export interface IDungeonBoost {
     source: SourceKey;
     payments: Array<{ amount: number, realm: string, faction: FactionKey, collectorId: string, isBalance: boolean }>;
     discount: number;
-    stack: Array<string>;
+    stack: Array<StackKey>;
     advertiserId: string,
     notes: string;
     contact: {
@@ -62,7 +63,7 @@ export const DungeonBoostSchema: Schema = {
             type: 'array',
             items: {
                 type: 'string',
-                enum: Object.keys(Dungeon)
+                enum: Object.keys(Stack)
             }
         },
         advertiser: {

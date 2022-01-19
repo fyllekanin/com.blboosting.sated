@@ -6,12 +6,13 @@ import { Collection } from '@discordjs/collection';
 import { Snowflake } from 'discord-api-types';
 import { BoostEntity } from '../persistance/entities/boost.entity';
 import { EmojiReaction } from '../constants/emoji.enum';
+import { ConfigEnv } from '../config.env';
 
 export class UpdateDungeonSignupsStartup implements StartupInterface {
     private readonly boostsRepository = new BoostsRepository();
 
     async run(client: Client, eventBus: EventBus): Promise<Array<void>> {
-        const category = await client.channels.fetch(process.env.DUNGEON_BOOST_CATEGORY) as CategoryChannel;
+        const category = await client.channels.fetch(ConfigEnv.getConfig().DUNGEON_BOOST_CATEGORY) as CategoryChannel;
         const promises = category.children.map(channel => this.updateEntity(eventBus, channel as TextChannel));
         return Promise.all(promises);
     }

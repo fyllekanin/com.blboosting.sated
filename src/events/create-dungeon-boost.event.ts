@@ -1,5 +1,5 @@
 import { IEvent } from './event.interface';
-import { CategoryChannel, Client, Message, TextChannel } from 'discord.js';
+import { CategoryChannel, CategoryCreateChannelOptions, Client, Message, TextChannel } from 'discord.js';
 import { Validator } from 'jsonschema';
 import { DungeonBoostSchema, IDungeonBoost } from '../schemas/dungeon-boost.schema';
 import { MythicPlusEmbed } from '../embeds/mythic-plus.embed';
@@ -8,6 +8,8 @@ import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
 import { DiscordEvent } from '../constants/discord-event.enum';
 import { Role } from '../constants/role.constant';
 import { EmojiReaction } from '../constants/emoji.enum';
+import { ConfigEnv } from '../config.env';
+import { DungeonBoosterUtils } from '../utils/dungeon-booster.utils';
 
 
 export class CreateDungeonBoostEvent implements IEvent {
@@ -41,8 +43,10 @@ export class CreateDungeonBoostEvent implements IEvent {
         }
 
         const title = `Mythic Dungeon Boost - ${payload.key.runs}x-${payload.key.dungeon}-${payload.key.isTimed ? 'timed' : 'untimed'}`;
-        const category = await client.channels.fetch(process.env.DUNGEON_BOOST_CATEGORY) as CategoryChannel;
-        const channel = await category.createChannel(title);
+        const category = await client.channels.fetch(ConfigEnv.getConfig().DUNGEON_BOOST_CATEGORY) as CategoryChannel;
+
+        const boostingRoleId = DungeonBoosterUtils.getAllowedBoostingRoleId(payload.key.level, payload.key.isTimed);
+        const channel = await category.createChannel(title, this.getChannelOptions(payload, boostingRoleId));
 
         const repository = new BoostsRepository();
         const entity = await repository.insert({
@@ -71,7 +75,7 @@ export class CreateDungeonBoostEvent implements IEvent {
             }
         });
 
-        const embedMessage = await this.createEmbed(channel, title, payload);
+        const embedMessage = await this.createEmbed(channel, title, payload, boostingRoleId);
         entity.messageId = embedMessage.id;
         await repository.update({ channelId: channel.id }, entity);
         this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, entity.channelId);
@@ -82,8 +86,8 @@ export class CreateDungeonBoostEvent implements IEvent {
     }
 
     async isApplicable(_: Client, message: Message): Promise<boolean> {
-        const startsWith = `${process.env.DEFAULT_PREFIX}${CreateDungeonBoostEvent.STARTS_WITH}`;
-        return message.channelId === process.env.CREATE_DUNGEON_BOOST_CHANNEL &&
+        const startsWith = `${ConfigEnv.getConfig().DEFAULT_PREFIX}${CreateDungeonBoostEvent.STARTS_WITH}`;
+        return message.channelId === ConfigEnv.getConfig().CREATE_DUNGEON_BOOST_CHANNEL &&
             message.content.startsWith(startsWith);
     }
 
@@ -91,8 +95,20 @@ export class CreateDungeonBoostEvent implements IEvent {
         return DiscordEvent.MessageCreate;
     }
 
+    private getChannelOptions(_payload: IDungeonBoost, boostingRoleId: string): CategoryCreateChannelOptions {
+        return {
+            permissionOverwrites: [
+                {
+                    allow: ['VIEW_CHANNEL', 'ADD_REACTIONS'],
+                    id: boostingRoleId,
+                    type: 'role'
+                }
+            ]
+        }
+    }
+
     private getPayload(message: Message): IDungeonBoost {
-        const content = message.content.replace(`${process.env.DEFAULT_PREFIX}${CreateDungeonBoostEvent.STARTS_WITH} `, '');
+        const content = message.content.replace(`${ConfigEnv.getConfig().DEFAULT_PREFIX}${CreateDungeonBoostEvent.STARTS_WITH} `, '');
         try {
             return JSON.parse(content);
         } catch (_) {
@@ -100,10 +116,11 @@ export class CreateDungeonBoostEvent implements IEvent {
         }
     }
 
-    private async createEmbed(channel: TextChannel, title: string, payload: IDungeonBoost): Promise<Message> {
+    private async createEmbed(channel: TextChannel, title: string, payload: IDungeonBoost, boostingRoleId: string): Promise<Message> {
         const totalPot = payload.payments.reduce((prev, curr) => prev + curr.amount, 0);
 
         const message = await channel.send({
+            content: `<@&${boostingRoleId}> ${DungeonBoosterUtils.getStackRoleIds(payload.stack).map(id => `<@&${id}>`).join(' ')}`,
             embeds: [
                 new MythicPlusEmbed()
                     .withTitle(title)
