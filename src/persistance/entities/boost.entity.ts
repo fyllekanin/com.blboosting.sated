@@ -1,10 +1,12 @@
 import { BaseEntity } from './base.entity';
 import { SourceKey } from '../../constants/source.enum';
 import { FactionKey } from '../../constants/faction.enum';
+import { StackKey } from '../../constants/Stack.enum';
 
 export interface BoostEntity extends BaseEntity {
     channelId: string;
     messageId: string;
+    boostRoleId: string;
     contact: {
         name: string;
         realm: string;
@@ -18,7 +20,7 @@ export interface BoostEntity extends BaseEntity {
         isBalance: boolean;
     }>;
     discount: number;
-    stack: Array<string>;
+    stack: Array<StackKey>;
     advertiserId: string;
     notes: string;
     key: {

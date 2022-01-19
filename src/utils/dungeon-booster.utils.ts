@@ -9,6 +9,20 @@ export class DungeonBoosterUtils {
             .map(key => process.env[`DISCORD_ROLE_${key}`]);
     }
 
+    static getDowngradedBoostingRoleId(currentId: string, isTimed: boolean): string {
+        const current = ConfigEnv.getConfig().BOOSTING_ROLES.find(item => item.id === currentId);
+        return ConfigEnv.getConfig().BOOSTING_ROLES
+            .filter(item => isTimed ? (item.maxTimed < current.maxTimed) : (item.maxUntimed < current.maxUntimed)).reduce((prev, curr) => {
+                if (!prev) {
+                    return curr;
+                }
+                const prevValue = isTimed ? prev.maxTimed : prev.maxUntimed;
+                const currValue = isTimed ? curr.maxTimed : curr.maxUntimed;
+
+                return prevValue >= currValue ? prev : curr;
+            }, null)?.id;
+    }
+
     static getAllowedBoostingRoleId(level: number | string, isTimed: boolean): string {
         return ConfigEnv.getConfig().BOOSTING_ROLES.reduce((prev, curr) => {
             if (!prev) {

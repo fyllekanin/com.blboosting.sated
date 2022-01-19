@@ -6,6 +6,7 @@ import { EventBus } from './internal-events/event.bus';
 import { UnSignDungeonBoostEvent } from './events/un-sign-dungeon-boost.event';
 import { UpdateDungeonSignupsStartup } from './startup/update-dungeon-signups.startup';
 import { ConfigEnv } from './config.env';
+import { DowngradeDungeonBoostEvent } from './events/downgrade-dungeon-boost.event';
 
 require('dotenv').config();
 
@@ -19,8 +20,7 @@ class Main {
                 Intents.FLAGS.GUILDS,
                 Intents.FLAGS.GUILD_MESSAGES,
                 Intents.FLAGS.GUILD_MESSAGE_REACTIONS
-            ]),
-            partials: ['MESSAGE', 'CHANNEL', 'REACTION']
+            ])
         });
     }
 
@@ -36,7 +36,8 @@ class Main {
             const events = [
                 new CreateDungeonBoostEvent(eventBus),
                 new SignDungeonBoostEvent(eventBus),
-                new UnSignDungeonBoostEvent(eventBus)
+                new UnSignDungeonBoostEvent(eventBus),
+                new DowngradeDungeonBoostEvent()
             ];
 
             for (const eventItem of events) {

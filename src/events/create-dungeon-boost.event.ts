@@ -52,6 +52,7 @@ export class CreateDungeonBoostEvent implements IEvent {
         const entity = await repository.insert({
             channelId: channel.id,
             messageId: null,
+            boostRoleId: boostingRoleId,
             contact: payload.contact,
             source: payload.source,
             payments: payload.payments,
