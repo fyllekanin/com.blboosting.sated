@@ -4,6 +4,7 @@ import { BoostsRepository } from '../persistance/repositories/boosts.repository'
 import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
 import { DiscordEvent } from '../constants/discord-event.enum';
 import { EmojiReaction } from '../constants/emoji.enum';
+import { ConfigEnv } from '../config.env';
 
 export class SignDungeonBoostEvent implements IEvent {
     private static readonly VALID_REACTIONS = [EmojiReaction.TANK, EmojiReaction.HEALER, EmojiReaction.DPS, EmojiReaction.KEYSTONE];
@@ -14,16 +15,23 @@ export class SignDungeonBoostEvent implements IEvent {
         this.eventBus = eventBus;
     }
 
-    async run(_: Client, messageReaction: MessageReaction, user: User): Promise<void> {
+    async run(client: Client, messageReaction: MessageReaction, user: User): Promise<void> {
         if (!await this.isApplicable(messageReaction, user)) {
             return;
         }
+        const guild = await client.guilds.fetch(ConfigEnv.getConfig().DISCORD_GUILD);
         const reaction = messageReaction.partial ? await messageReaction.fetch() : messageReaction;
         const message = reaction.message.partial ? await reaction.message.fetch() : reaction.message;
         const entity = await this.boostsRepository.getBoostForChannel(messageReaction.message.channelId);
+        const isCorrectArmorStack =
 
         switch (reaction.emoji.name) {
             case EmojiReaction.TANK:
+                const tankRole = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_TANK);
+                if (!tankRole.members.find(member => member.id === user.id)) {
+                    await messageReaction.users.remove(user.id);
+                    return;
+                }
                 if (entity.signups.tanks.every(item => item.boosterId !== user.id)) {
                     entity.signups.tanks.push({
                         boosterId: user.id,
@@ -33,6 +41,11 @@ export class SignDungeonBoostEvent implements IEvent {
                 }
                 break;
             case EmojiReaction.HEALER:
+                const healerRole = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_HEALER);
+                if (!healerRole.members.find(member => member.id === user.id)) {
+                    await messageReaction.users.remove(user.id);
+                    return;
+                }
                 if (entity.signups.healers.every(item => item.boosterId !== user.id)) {
                     entity.signups.healers.push({
                         boosterId: user.id,
@@ -42,6 +55,11 @@ export class SignDungeonBoostEvent implements IEvent {
                 }
                 break;
             case EmojiReaction.DPS:
+                const dpsRole = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_HEALER);
+                if (!dpsRole.members.find(member => member.id === user.id)) {
+                    await messageReaction.users.remove(user.id);
+                    return;
+                }
                 if (entity.signups.dpses.every(item => item.boosterId !== user.id)) {
                     entity.signups.dpses.push({
                         boosterId: user.id,

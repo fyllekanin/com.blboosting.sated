@@ -1,7 +1,7 @@
 import { StartupInterface } from './startup.interface';
 import { BoostsRepository } from '../persistance/repositories/boosts.repository';
 import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
-import { CategoryChannel, Client, MessageReaction, TextChannel, User } from 'discord.js';
+import { CategoryChannel, Client, Guild, MessageReaction, TextChannel, User } from 'discord.js';
 import { Collection } from '@discordjs/collection';
 import { Snowflake } from 'discord-api-types';
 import { BoostEntity } from '../persistance/entities/boost.entity';
@@ -13,16 +13,17 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
 
     async run(client: Client, eventBus: EventBus): Promise<Array<void>> {
         const category = await client.channels.fetch(ConfigEnv.getConfig().DUNGEON_BOOST_CATEGORY) as CategoryChannel;
-        const promises = category.children.map(channel => this.updateEntity(eventBus, channel as TextChannel));
+        const promises = category.children.map(channel => this.updateEntity(client, eventBus, channel as TextChannel));
         return Promise.all(promises);
     }
 
-    private async updateEntity(eventBus: EventBus, channel: TextChannel): Promise<void> {
+    private async updateEntity(client: Client, eventBus: EventBus, channel: TextChannel): Promise<void> {
         const entity = await this.boostsRepository.getBoostForChannel(channel.id);
         if (entity.status.isStarted) {
             return;
         }
         const message = await channel.messages.fetch(entity.messageId);
+        const guild = await client.guilds.fetch(ConfigEnv.getConfig().DISCORD_GUILD);
 
         const keyReaction = await message.reactions.resolve(EmojiReaction.KEYSTONE);
         const tankReaction = await message.reactions.resolve(EmojiReaction.TANK);
@@ -31,9 +32,9 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
 
         const keyUsers = (await keyReaction.users.fetch()).filter(user => !user.bot);
 
-        await this.updateTanks(entity, tankReaction, keyUsers);
-        await this.updateHealers(entity, healerReaction, keyUsers);
-        await this.updateDpses(entity, dpsReactions, keyUsers);
+        await this.updateTanks(guild, entity, tankReaction, keyUsers);
+        await this.updateHealers(guild, entity, healerReaction, keyUsers);
+        await this.updateDpses(guild, entity, dpsReactions, keyUsers);
 
         if (![entity.boosters.tank, entity.boosters.healer, entity.boosters.dpsOne, entity.boosters.dpsTwo].includes(entity.boosters.keyholder)) {
             entity.boosters.keyholder = null;
@@ -43,11 +44,18 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
         eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, entity.channelId);
     }
 
-    private async updateTanks(entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
+    private async updateTanks(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
         await this.addUsersByReaction(reaction, keyUsers, entity.signups.tanks);
         const users = (await reaction.users.fetch()).filter(user => !user.bot);
+        const role = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_TANK);
 
         entity.signups.tanks.forEach(user => {
+            console.log(`Tank role have ${role.members.size} members`);
+            if (!role.members.find(member => member.id === user.boosterId)) {
+                reaction.users.remove(user.boosterId);
+                return;
+            }
+
             if (users.some(item => item.id === user.boosterId)) {
                 return;
             }
@@ -59,11 +67,17 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
         });
     }
 
-    private async updateHealers(entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
+    private async updateHealers(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
         await this.addUsersByReaction(reaction, keyUsers, entity.signups.healers);
         const users = (await reaction.users.fetch()).filter(user => !user.bot);
+        const role = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_HEALER);
 
         entity.signups.healers.forEach(user => {
+            if (!role.members.find(member => member.id === user.boosterId)) {
+                reaction.users.remove(user.boosterId);
+                return;
+            }
+
             if (users.some(item => item.id === user.boosterId)) {
                 return;
             }
@@ -75,11 +89,17 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
         });
     }
 
-    private async updateDpses(entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
+    private async updateDpses(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
         await this.addUsersByReaction(reaction, keyUsers, entity.signups.dpses);
         const users = (await reaction.users.fetch()).filter(user => !user.bot);
+        const role = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_DPS);
 
         entity.signups.dpses.forEach(user => {
+            if (!role.members.find(member => member.id === user.boosterId)) {
+                reaction.users.remove(user.boosterId);
+                return;
+            }
+
             if (users.some(item => item.id === user.boosterId)) {
                 return;
             }

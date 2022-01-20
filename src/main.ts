@@ -18,6 +18,8 @@ class Main {
         this.client = new Client({
             intents: new Intents([
                 Intents.FLAGS.GUILDS,
+                Intents.FLAGS.GUILD_MEMBERS,
+                Intents.FLAGS.GUILD_PRESENCES,
                 Intents.FLAGS.GUILD_MESSAGES,
                 Intents.FLAGS.GUILD_MESSAGE_REACTIONS
             ])
@@ -43,6 +45,7 @@ class Main {
             for (const eventItem of events) {
                 this.client.on(eventItem.getEventName(), eventItem.run.bind(eventItem, this.client));
             }
+            console.log('Everything ready');
         });
         this.client.login(ConfigEnv.getConfig().BOT_TOKEN).catch(err => {
             console.error(`Shit went wrong, ${err}`);

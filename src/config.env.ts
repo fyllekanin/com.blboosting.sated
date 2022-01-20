@@ -4,6 +4,7 @@ interface EnvConfig {
     BOT_TOKEN: string;
     BOT_INTENTS: string;
     DEFAULT_PREFIX: string;
+    DISCORD_GUILD: string;
     CREATE_DUNGEON_BOOST_CHANNEL: string;
     DUNGEON_BOOST_CATEGORY: string;
     MONGODB_HOST: string;
@@ -30,6 +31,10 @@ interface EnvConfig {
     DISCORD_ROLE_WARRIOR: string;
     DISCORD_ROLE_PALADIN: string;
     DISCORD_ROLE_DEATH_KNIGHT: string;
+
+    DISCORD_ROLE_TANK: string;
+    DISCORD_ROLE_HEALER: string;
+    DISCORD_ROLE_DPS: string;
 
     BOOSTING_ROLES: Array<{ id: string; maxUntimed: number, maxTimed: number }>;
 }
