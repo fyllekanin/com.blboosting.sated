@@ -54,7 +54,7 @@ export class DungeonBoosterUtils {
                 const currValue = isTimed ? curr.maxTimed : curr.maxUntimed;
 
                 return prevValue >= currValue ? prev : curr;
-            }, null)?.id;
+            }, null)?.roleId;
     }
 
     static getAllowedBoostingRoleId(level: number | string, isTimed: boolean): string {
@@ -68,7 +68,7 @@ export class DungeonBoosterUtils {
             const isAllowed = maxAllowed >= level;
 
             return isAllowed && (maxAllowed < prevMaxAllowed || !isPrevAllowed) ? curr : prev;
-        }, null)?.id;
+        }, null)?.roleId;
     }
 
     static getTankRoleIds(): Array<string> {

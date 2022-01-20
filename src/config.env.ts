@@ -33,11 +33,14 @@ interface EnvConfig {
     DISCORD_ROLE_PALADIN: string;
     DISCORD_ROLE_DEATH_KNIGHT: string;
 
-    DISCORD_ROLE_TANK: string;
-    DISCORD_ROLE_HEALER: string;
-    DISCORD_ROLE_DPS: string;
-
-    BOOSTING_ROLES: Array<{ id: string; maxUntimed: number, maxTimed: number }>;
+    BOOSTING_ROLES: Array<{
+        roleId: string;
+        tankRoleId: string;
+        healerRoleId: string;
+        dpsRoleId: string;
+        maxUntimed: number,
+        maxTimed: number
+    }>;
 }
 
 export class ConfigEnv {

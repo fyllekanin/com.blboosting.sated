@@ -31,9 +31,10 @@ export class SignDungeonBoostEvent implements IEvent {
             return;
         }
 
+        const boostingRole = ConfigEnv.getConfig().BOOSTING_ROLES.find(boostingRole => boostingRole.roleId === entity.boostRoleId);
         switch (reaction.emoji.name) {
             case EmojiReaction.TANK:
-                const tankRole = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_TANK);
+                const tankRole = await guild.roles.fetch(boostingRole.tankRoleId);
                 if (!tankRole.members.find(member => member.id === user.id)) {
                     await messageReaction.users.remove(user.id);
                     return;
@@ -47,7 +48,7 @@ export class SignDungeonBoostEvent implements IEvent {
                 }
                 break;
             case EmojiReaction.HEALER:
-                const healerRole = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_HEALER);
+                const healerRole = await guild.roles.fetch(boostingRole.healerRoleId);
                 if (!healerRole.members.find(member => member.id === user.id)) {
                     await messageReaction.users.remove(user.id);
                     return;
@@ -61,7 +62,7 @@ export class SignDungeonBoostEvent implements IEvent {
                 }
                 break;
             case EmojiReaction.DPS:
-                const dpsRole = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_HEALER);
+                const dpsRole = await guild.roles.fetch(boostingRole.dpsRoleId);
                 if (!dpsRole.members.find(member => member.id === user.id)) {
                     await messageReaction.users.remove(user.id);
                     return;

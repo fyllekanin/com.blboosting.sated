@@ -33,7 +33,7 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
         const dpsReactions = await message.reactions.resolve(EmojiReaction.DPS);
 
         const keyUsers = (await keyReaction.users.fetch()).filter(user => !user.bot);
-        
+
         await this.updateTanks(guild, entity, tankReaction, keyUsers);
         await this.updateHealers(guild, entity, healerReaction, keyUsers);
         await this.updateDpses(guild, entity, dpsReactions, keyUsers);
@@ -49,7 +49,9 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
     private async updateTanks(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
         await this.addUsersByReaction(reaction, keyUsers, entity.signups.tanks);
         const users = (await reaction.users.fetch()).filter(user => !user.bot);
-        const role = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_TANK);
+
+        const boostingRole = ConfigEnv.getConfig().BOOSTING_ROLES.find(boostingRole => boostingRole.roleId === entity.boostRoleId);
+        const role = await guild.roles.fetch(boostingRole.tankRoleId);
 
         for (const user of entity.signups.tanks) {
             if (!await DungeonBoosterUtils.isAllowedToSignWithStack(guild, DungeonBoosterUtils.getStackRoleIds(entity.stack), user.boosterId, BoosterRole.TANK.value)) {
@@ -75,7 +77,9 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
     private async updateHealers(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
         await this.addUsersByReaction(reaction, keyUsers, entity.signups.healers);
         const users = (await reaction.users.fetch()).filter(user => !user.bot);
-        const role = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_HEALER);
+
+        const boostingRole = ConfigEnv.getConfig().BOOSTING_ROLES.find(boostingRole => boostingRole.roleId === entity.boostRoleId);
+        const role = await guild.roles.fetch(boostingRole.healerRoleId);
 
         for (const user of entity.signups.healers) {
             if (!await DungeonBoosterUtils.isAllowedToSignWithStack(guild, DungeonBoosterUtils.getStackRoleIds(entity.stack), user.boosterId, BoosterRole.HEALER.value)) {
@@ -102,7 +106,9 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
     private async updateDpses(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
         await this.addUsersByReaction(reaction, keyUsers, entity.signups.dpses);
         const users = (await reaction.users.fetch()).filter(user => !user.bot);
-        const role = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_DPS);
+
+        const boostingRole = ConfigEnv.getConfig().BOOSTING_ROLES.find(boostingRole => boostingRole.roleId === entity.boostRoleId);
+        const role = await guild.roles.fetch(boostingRole.dpsRoleId);
 
         for (const user of entity.signups.dpses) {
             if (!role.members.find(member => member.id === user.boosterId)) {
