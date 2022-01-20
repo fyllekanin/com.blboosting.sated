@@ -29,7 +29,7 @@ export class CollectedDungeonBoostEvent implements IEvent {
 
         const date = new Date();
         const totalAmount = entity.payments.reduce((prev, curr) => prev + curr.amount, 0);
-        user.send(`
+        await user.send(`
         RunID: ${entity._id}-${entity.contact.realm}
         Date: ${date.toLocaleDateString('en-US')} ${date.toLocaleTimeString('en-GB')}
         Activity: MPLUS
