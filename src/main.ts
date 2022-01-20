@@ -7,6 +7,7 @@ import { UnSignDungeonBoostEvent } from './events/un-sign-dungeon-boost.event';
 import { UpdateDungeonSignupsStartup } from './startup/update-dungeon-signups.startup';
 import { ConfigEnv } from './config.env';
 import { DowngradeDungeonBoostEvent } from './events/downgrade-dungeon-boost.event';
+import { DungeonBoostActionEvent } from './events/dungeon-boost-action.event';
 
 require('dotenv').config();
 
@@ -39,7 +40,8 @@ class Main {
                 new CreateDungeonBoostEvent(eventBus),
                 new SignDungeonBoostEvent(eventBus),
                 new UnSignDungeonBoostEvent(eventBus),
-                new DowngradeDungeonBoostEvent()
+                new DowngradeDungeonBoostEvent(),
+                new DungeonBoostActionEvent()
             ];
 
             for (const eventItem of events) {

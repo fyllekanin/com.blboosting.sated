@@ -44,7 +44,7 @@ export class DungeonBoosterUtils {
     }
 
     static getDowngradedBoostingRoleId(currentId: string, isTimed: boolean): string {
-        const current = ConfigEnv.getConfig().BOOSTING_ROLES.find(item => item.id === currentId);
+        const current = ConfigEnv.getConfig().BOOSTING_ROLES.find(item => item.roleId === currentId);
         return ConfigEnv.getConfig().BOOSTING_ROLES
             .filter(item => isTimed ? (item.maxTimed < current.maxTimed) : (item.maxUntimed < current.maxUntimed)).reduce((prev, curr) => {
                 if (!prev) {

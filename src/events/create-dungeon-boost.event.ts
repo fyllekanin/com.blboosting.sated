@@ -1,5 +1,5 @@
 import { IEvent } from './event.interface';
-import { CategoryChannel, CategoryCreateChannelOptions, Client, Message, TextChannel } from 'discord.js';
+import { CategoryChannel, Client, Message, TextChannel } from 'discord.js';
 import { Validator } from 'jsonschema';
 import { DungeonBoostSchema, IDungeonBoost } from '../schemas/dungeon-boost.schema';
 import { MythicPlusEmbed } from '../embeds/mythic-plus.embed';
@@ -31,7 +31,7 @@ export class CreateDungeonBoostEvent implements IEvent {
     }
 
     async run(client: Client, message: Message): Promise<void> {
-        if (!await this.isApplicable(client, message)) {
+        if (!await this.isApplicable(message)) {
             return;
         }
 
@@ -46,7 +46,12 @@ export class CreateDungeonBoostEvent implements IEvent {
         const category = await client.channels.fetch(ConfigEnv.getConfig().DUNGEON_BOOST_CATEGORY) as CategoryChannel;
 
         const boostingRoleId = DungeonBoosterUtils.getAllowedBoostingRoleId(payload.key.level, payload.key.isTimed);
-        const channel = await category.createChannel(title, this.getChannelOptions(payload, boostingRoleId));
+        const channel = await category.createChannel(title);
+        await channel.lockPermissions();
+        await channel.permissionOverwrites.create(boostingRoleId, {
+            VIEW_CHANNEL: true
+        });
+
 
         const repository = new BoostsRepository();
         const entity = await repository.insert({
@@ -86,31 +91,14 @@ export class CreateDungeonBoostEvent implements IEvent {
         }
     }
 
-    async isApplicable(_: Client, message: Message): Promise<boolean> {
-        const startsWith = `${ConfigEnv.getConfig().DEFAULT_PREFIX}${CreateDungeonBoostEvent.STARTS_WITH}`;
-        return message.channelId === ConfigEnv.getConfig().CREATE_DUNGEON_BOOST_CHANNEL &&
-            message.content.startsWith(startsWith);
-    }
-
     getEventName(): DiscordEvent {
         return DiscordEvent.MessageCreate;
     }
 
-    private getChannelOptions(_payload: IDungeonBoost, boostingRoleId: string): CategoryCreateChannelOptions {
-        return {
-            permissionOverwrites: [
-                {
-                    deny: ['VIEW_CHANNEL'],
-                    id: ConfigEnv.getConfig().DISCORD_ROLE_EVERYONE,
-                    type: 'role'
-                },
-                {
-                    allow: ['VIEW_CHANNEL', 'ADD_REACTIONS'],
-                    id: boostingRoleId,
-                    type: 'role'
-                }
-            ]
-        }
+    private async isApplicable(message: Message): Promise<boolean> {
+        const startsWith = `${ConfigEnv.getConfig().DEFAULT_PREFIX}${CreateDungeonBoostEvent.STARTS_WITH}`;
+        return message.channelId === ConfigEnv.getConfig().CREATE_DUNGEON_BOOST_CHANNEL &&
+            message.content.startsWith(startsWith);
     }
 
     private getPayload(message: Message): IDungeonBoost {
