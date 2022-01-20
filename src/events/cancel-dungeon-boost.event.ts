@@ -4,7 +4,7 @@ import { DiscordEvent } from '../constants/discord-event.enum';
 import { EmojiReaction } from '../constants/emoji.enum';
 import { ConfigEnv } from '../config.env';
 
-export class DungeonBoostActionEvent implements IEvent {
+export class CancelDungeonBoostEvent implements IEvent {
 
     async run(client: Client, messageReaction: MessageReaction, user: User): Promise<void> {
         const guild = await client.guilds.fetch(ConfigEnv.getConfig().DISCORD_GUILD);
