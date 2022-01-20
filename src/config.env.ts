@@ -11,6 +11,7 @@ interface EnvConfig {
     MONGODB_DATABASE: string;
     MONGODB_USERNAME: string;
     MONGODB_PASSWORD: string;
+    DISCORD_ROLE_EVERYONE: string;
     DISCORD_ROLE_CLOTH: string;
     DISCORD_ROLE_LEATHER: string;
     DISCORD_ROLE_MAIL: string;

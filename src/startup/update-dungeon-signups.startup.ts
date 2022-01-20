@@ -33,7 +33,7 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
         const dpsReactions = await message.reactions.resolve(EmojiReaction.DPS);
 
         const keyUsers = (await keyReaction.users.fetch()).filter(user => !user.bot);
-
+        
         await this.updateTanks(guild, entity, tankReaction, keyUsers);
         await this.updateHealers(guild, entity, healerReaction, keyUsers);
         await this.updateDpses(guild, entity, dpsReactions, keyUsers);

@@ -100,6 +100,11 @@ export class CreateDungeonBoostEvent implements IEvent {
         return {
             permissionOverwrites: [
                 {
+                    deny: ['VIEW_CHANNEL'],
+                    id: ConfigEnv.getConfig().DISCORD_ROLE_EVERYONE,
+                    type: 'role'
+                },
+                {
                     allow: ['VIEW_CHANNEL', 'ADD_REACTIONS'],
                     id: boostingRoleId,
                     type: 'role'
