@@ -3,7 +3,7 @@ import { BoostsRepository } from '../../persistance/repositories/boosts.reposito
 import { BoostEntity } from '../../persistance/entities/boost.entity';
 import { Client, TextChannel } from 'discord.js';
 import { MythicPlusEmbed } from '../../embeds/mythic-plus.embed';
-import { Role, RoleKey } from '../../constants/role.constant';
+import { BoosterRole, RoleKey } from '../../constants/role.constant';
 
 export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
     private readonly boostsRepository = new BoostsRepository();
@@ -129,13 +129,13 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
         const keyHolder = this.getKeyHolder(entity);
         entity.boosters.keyholder = keyHolder ? keyHolder.boosterId : null;
         switch (keyHolder?.role) {
-            case Role.TANK.value:
+            case BoosterRole.TANK.value:
                 entity.boosters.tank = keyHolder.boosterId;
                 break;
-            case Role.HEALER.value:
+            case BoosterRole.HEALER.value:
                 entity.boosters.healer = keyHolder.boosterId;
                 break;
-            case Role.DPS.value:
+            case BoosterRole.DPS.value:
                 if (!entity.boosters.dpsOne) {
                     entity.boosters.dpsOne = keyHolder.boosterId;
                 } else {
@@ -160,15 +160,15 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
         };
 
         if (tankKeyHolder && tankKeyHolder.createdAt < healerKeyHolder.createdAt && tankKeyHolder.createdAt < dpsKeyHolder.createdAt) {
-            return { role: Role.TANK.value, boosterId: tankKeyHolder.boosterId };
+            return { role: BoosterRole.TANK.value, boosterId: tankKeyHolder.boosterId };
         }
 
         if (healerKeyHolder && healerKeyHolder.createdAt < tankKeyHolder.createdAt && healerKeyHolder.createdAt < dpsKeyHolder.createdAt) {
-            return { role: Role.HEALER.value, boosterId: healerKeyHolder.boosterId };
+            return { role: BoosterRole.HEALER.value, boosterId: healerKeyHolder.boosterId };
         }
 
         if (dpsKeyHolder && dpsKeyHolder.createdAt < healerKeyHolder.createdAt && dpsKeyHolder.createdAt < tankKeyHolder.createdAt) {
-            return { role: Role.DPS.value, boosterId: dpsKeyHolder.boosterId };
+            return { role: BoosterRole.DPS.value, boosterId: dpsKeyHolder.boosterId };
         }
 
         return null;

@@ -1,6 +1,6 @@
 import { Schema } from 'jsonschema';
 import { Dungeon, DungeonKey } from '../constants/dungeon.enum';
-import { Role, RoleKey } from '../constants/role.constant';
+import { BoosterRole, RoleKey } from '../constants/role.constant';
 import { Source, SourceKey } from '../constants/source.enum';
 import { Faction, FactionKey } from '../constants/faction.enum';
 import { Stack, StackKey } from '../constants/Stack.enum';
@@ -71,7 +71,7 @@ export const DungeonBoostSchema: Schema = {
             properties: {
                 advertiserId: { type: 'string' },
                 playing: { type: 'boolean' },
-                role: { type: ['string', 'null'], enum: [...Object.keys(Role), ...[null]] }
+                role: { type: ['string', 'null'], enum: [...Object.keys(BoosterRole), ...[null]] }
             },
             required: ['advertiserId']
         },
@@ -97,7 +97,7 @@ export const DungeonBoostSchema: Schema = {
                 type: 'object',
                 properties: {
                     boosterId: { type: 'string' },
-                    role: { type: 'string', enum: Object.keys(Role) },
+                    role: { type: 'string', enum: Object.keys(BoosterRole) },
                     isKeyHolder: { type: 'boolean' }
                 }
             },

@@ -1,7 +1,41 @@
 import { ConfigEnv } from '../config.env';
 import { StackKey } from '../constants/Stack.enum';
+import { BoosterRole, RoleKey } from '../constants/role.constant';
+import { Guild } from 'discord.js';
+import { EmojiReaction } from '../constants/emoji.enum';
 
 export class DungeonBoosterUtils {
+
+    static getRoleFromEmoji(emoji: EmojiReaction): RoleKey {
+        switch (emoji) {
+            case EmojiReaction.TANK:
+                return BoosterRole.TANK.value;
+            case EmojiReaction.HEALER:
+                return BoosterRole.HEALER.value;
+            case EmojiReaction.DPS:
+                return BoosterRole.DPS.value;
+        }
+        return null;
+    }
+
+    static async isAllowedToSignWithStack(guild: Guild, stackRoleIds: Array<string>, userId: string, role: RoleKey): Promise<boolean> {
+        if (stackRoleIds.length === 0) {
+            return true;
+        }
+
+        const isAnyTankStack = this.getTankRoleIds().some(roleId => stackRoleIds.includes(roleId));
+        const isAnyHealerStack = this.getHealerRoleIds().some(roleId => stackRoleIds.includes(roleId));
+        if ((!isAnyTankStack && role === BoosterRole.TANK.value) || (!isAnyHealerStack && role === BoosterRole.HEALER.value)) {
+            return true;
+        }
+        for (const stackRoleId of stackRoleIds) {
+            const role = await guild.roles.fetch(stackRoleId);
+            if (role.members.some(member => member.id === userId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     static getStackRoleIds(stacks: Array<StackKey>): Array<string> {
         return stacks
@@ -35,5 +69,32 @@ export class DungeonBoosterUtils {
 
             return isAllowed && (maxAllowed < prevMaxAllowed || !isPrevAllowed) ? curr : prev;
         }, null)?.id;
+    }
+
+    static getTankRoleIds(): Array<string> {
+        return [
+            ConfigEnv.getConfig().DISCORD_ROLE_LEATHER,
+            ConfigEnv.getConfig().DISCORD_ROLE_PLATE,
+            ConfigEnv.getConfig().DISCORD_ROLE_DRUID,
+            ConfigEnv.getConfig().DISCORD_ROLE_MONK,
+            ConfigEnv.getConfig().DISCORD_ROLE_DEMON_HUNTER,
+            ConfigEnv.getConfig().DISCORD_ROLE_WARRIOR,
+            ConfigEnv.getConfig().DISCORD_ROLE_PALADIN,
+            ConfigEnv.getConfig().DISCORD_ROLE_DEATH_KNIGHT
+        ];
+    }
+
+    static getHealerRoleIds(): Array<string> {
+        return [
+            ConfigEnv.getConfig().DISCORD_ROLE_CLOTH,
+            ConfigEnv.getConfig().DISCORD_ROLE_LEATHER,
+            ConfigEnv.getConfig().DISCORD_ROLE_MAIL,
+            ConfigEnv.getConfig().DISCORD_ROLE_PLATE,
+            ConfigEnv.getConfig().DISCORD_ROLE_PRIEST,
+            ConfigEnv.getConfig().DISCORD_ROLE_DRUID,
+            ConfigEnv.getConfig().DISCORD_ROLE_MONK,
+            ConfigEnv.getConfig().DISCORD_ROLE_SHAMAN,
+            ConfigEnv.getConfig().DISCORD_ROLE_PALADIN
+        ];
     }
 }

@@ -7,6 +7,8 @@ import { Snowflake } from 'discord-api-types';
 import { BoostEntity } from '../persistance/entities/boost.entity';
 import { EmojiReaction } from '../constants/emoji.enum';
 import { ConfigEnv } from '../config.env';
+import { DungeonBoosterUtils } from '../utils/dungeon-booster.utils';
+import { BoosterRole } from '../constants/role.constant';
 
 export class UpdateDungeonSignupsStartup implements StartupInterface {
     private readonly boostsRepository = new BoostsRepository();
@@ -49,8 +51,11 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
         const users = (await reaction.users.fetch()).filter(user => !user.bot);
         const role = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_TANK);
 
-        entity.signups.tanks.forEach(user => {
-            console.log(`Tank role have ${role.members.size} members`);
+        for (const user of entity.signups.tanks) {
+            if (!await DungeonBoosterUtils.isAllowedToSignWithStack(guild, DungeonBoosterUtils.getStackRoleIds(entity.stack), user.boosterId, BoosterRole.TANK.value)) {
+                await reaction.users.remove(user.boosterId);
+                return;
+            }
             if (!role.members.find(member => member.id === user.boosterId)) {
                 reaction.users.remove(user.boosterId);
                 return;
@@ -64,7 +69,7 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
             if (entity.signups.tanks.every(tank => tank.boosterId !== entity.boosters.tank)) {
                 entity.boosters.tank = null;
             }
-        });
+        }
     }
 
     private async updateHealers(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
@@ -72,7 +77,12 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
         const users = (await reaction.users.fetch()).filter(user => !user.bot);
         const role = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_HEALER);
 
-        entity.signups.healers.forEach(user => {
+        for (const user of entity.signups.healers) {
+            if (!await DungeonBoosterUtils.isAllowedToSignWithStack(guild, DungeonBoosterUtils.getStackRoleIds(entity.stack), user.boosterId, BoosterRole.HEALER.value)) {
+                await reaction.users.remove(user.boosterId);
+                return;
+            }
+
             if (!role.members.find(member => member.id === user.boosterId)) {
                 reaction.users.remove(user.boosterId);
                 return;
@@ -86,7 +96,7 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
             if (entity.signups.healers.every(tank => tank.boosterId !== entity.boosters.healer)) {
                 entity.boosters.healer = null;
             }
-        });
+        }
     }
 
     private async updateDpses(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
@@ -94,7 +104,7 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
         const users = (await reaction.users.fetch()).filter(user => !user.bot);
         const role = await guild.roles.fetch(ConfigEnv.getConfig().DISCORD_ROLE_DPS);
 
-        entity.signups.dpses.forEach(user => {
+        for (const user of entity.signups.dpses) {
             if (!role.members.find(member => member.id === user.boosterId)) {
                 reaction.users.remove(user.boosterId);
                 return;
@@ -111,7 +121,7 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
             if (entity.signups.dpses.every(dps => dps.boosterId !== entity.boosters.dpsTwo)) {
                 entity.boosters.dpsTwo = null;
             }
-        });
+        }
     }
 
     private async addUsersByReaction(reaction: MessageReaction, keyUsers: Collection<Snowflake, User>,

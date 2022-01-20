@@ -6,7 +6,7 @@ import { MythicPlusEmbed } from '../embeds/mythic-plus.embed';
 import { BoostsRepository } from '../persistance/repositories/boosts.repository';
 import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
 import { DiscordEvent } from '../constants/discord-event.enum';
-import { Role } from '../constants/role.constant';
+import { BoosterRole } from '../constants/role.constant';
 import { EmojiReaction } from '../constants/emoji.enum';
 import { ConfigEnv } from '../config.env';
 import { DungeonBoosterUtils } from '../utils/dungeon-booster.utils';
@@ -62,10 +62,10 @@ export class CreateDungeonBoostEvent implements IEvent {
             notes: payload.notes,
             key: payload.key,
             boosters: {
-                tank: payload.boosters.find(item => item.role === Role.TANK.value)?.boosterId,
-                healer: payload.boosters.find(item => item.role === Role.HEALER.value)?.boosterId,
-                dpsOne: payload.boosters.filter(item => item.role === Role.DPS.value)[0]?.boosterId,
-                dpsTwo: payload.boosters.filter(item => item.role === Role.DPS.value)[1]?.boosterId,
+                tank: payload.boosters.find(item => item.role === BoosterRole.TANK.value)?.boosterId,
+                healer: payload.boosters.find(item => item.role === BoosterRole.HEALER.value)?.boosterId,
+                dpsOne: payload.boosters.filter(item => item.role === BoosterRole.DPS.value)[0]?.boosterId,
+                dpsTwo: payload.boosters.filter(item => item.role === BoosterRole.DPS.value)[1]?.boosterId,
                 keyholder: payload.boosters.find(item => item.isKeyHolder)?.boosterId
             },
             status: {},

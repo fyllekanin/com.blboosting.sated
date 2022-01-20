@@ -1,6 +1,6 @@
 export type RoleKey = 'TANK' | 'HEALER' | 'DPS';
 
-export const Role: { [key: string]: { value: RoleKey, label: string } } = {
+export const BoosterRole: { [key: string]: { value: RoleKey, label: string } } = {
     TANK: {
         label: 'Tank',
         value: 'TANK'

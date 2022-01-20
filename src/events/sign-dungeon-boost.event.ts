@@ -5,6 +5,7 @@ import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
 import { DiscordEvent } from '../constants/discord-event.enum';
 import { EmojiReaction } from '../constants/emoji.enum';
 import { ConfigEnv } from '../config.env';
+import { DungeonBoosterUtils } from '../utils/dungeon-booster.utils';
 
 export class SignDungeonBoostEvent implements IEvent {
     private static readonly VALID_REACTIONS = [EmojiReaction.TANK, EmojiReaction.HEALER, EmojiReaction.DPS, EmojiReaction.KEYSTONE];
@@ -23,7 +24,12 @@ export class SignDungeonBoostEvent implements IEvent {
         const reaction = messageReaction.partial ? await messageReaction.fetch() : messageReaction;
         const message = reaction.message.partial ? await reaction.message.fetch() : reaction.message;
         const entity = await this.boostsRepository.getBoostForChannel(messageReaction.message.channelId);
-        const isCorrectArmorStack =
+
+        const role = DungeonBoosterUtils.getRoleFromEmoji(reaction.emoji.name as EmojiReaction);
+        if (!await DungeonBoosterUtils.isAllowedToSignWithStack(guild, DungeonBoosterUtils.getStackRoleIds(entity.stack), user.id, role)) {
+            await messageReaction.users.remove(user.id);
+            return;
+        }
 
         switch (reaction.emoji.name) {
             case EmojiReaction.TANK:
