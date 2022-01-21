@@ -45,7 +45,7 @@ export class CreateDungeonBoostEvent implements IEvent {
         const title = `Mythic Dungeon Boost - ${payload.key.runs}x-${payload.key.dungeon}-${payload.key.isTimed ? 'timed' : 'untimed'}`;
         const category = await client.channels.fetch(ConfigEnv.getConfig().DUNGEON_BOOST_CATEGORY) as CategoryChannel;
 
-        const boostingRoleId = DungeonBoosterUtils.getAllowedBoostingRoleId(payload.key.level, payload.key.isTimed);
+        const boostingRoleId = DungeonBoosterUtils.getAllowedBoostingRoleId(payload.key.level, payload.key.isTimed, payload.faction);
         const channel = await category.createChannel(title);
         await channel.lockPermissions();
         await channel.permissionOverwrites.create(boostingRoleId, {
@@ -55,6 +55,7 @@ export class CreateDungeonBoostEvent implements IEvent {
 
         const repository = new BoostsRepository();
         const entity = await repository.insert({
+            faction: payload.faction,
             channelId: channel.id,
             messageId: null,
             boostRoleId: boostingRoleId,

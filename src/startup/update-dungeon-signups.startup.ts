@@ -6,9 +6,10 @@ import { Collection } from '@discordjs/collection';
 import { Snowflake } from 'discord-api-types';
 import { BoostEntity } from '../persistance/entities/boost.entity';
 import { EmojiReaction } from '../constants/emoji.enum';
-import { ConfigEnv } from '../config.env';
+import { ConfigEnv, FactionBoostingRole } from '../config.env';
 import { DungeonBoosterUtils } from '../utils/dungeon-booster.utils';
 import { BoosterRole } from '../constants/role.constant';
+import { Faction } from '../constants/faction.enum';
 
 export class UpdateDungeonSignupsStartup implements StartupInterface {
     private readonly boostsRepository = new BoostsRepository();
@@ -33,10 +34,12 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
         const dpsReactions = await message.reactions.resolve(EmojiReaction.DPS);
 
         const keyUsers = (await keyReaction.users.fetch()).filter(user => !user.bot);
+        const boostingRole = (entity.faction === Faction.HORDE.value ? ConfigEnv.getConfig().BOOSTING_HORDE_ROLES : ConfigEnv.getConfig().BOOSTING_ALLIANCE_ROLES)
+            .find(boostingRole => boostingRole.roleId === entity.boostRoleId);
 
-        await this.updateTanks(guild, entity, tankReaction, keyUsers);
-        await this.updateHealers(guild, entity, healerReaction, keyUsers);
-        await this.updateDpses(guild, entity, dpsReactions, keyUsers);
+        await this.updateTanks(guild, entity, tankReaction, keyUsers, boostingRole);
+        await this.updateHealers(guild, entity, healerReaction, keyUsers, boostingRole);
+        await this.updateDpses(guild, entity, dpsReactions, keyUsers, boostingRole);
 
         if (![entity.boosters.tank, entity.boosters.healer, entity.boosters.dpsOne, entity.boosters.dpsTwo].includes(entity.boosters.keyholder)) {
             entity.boosters.keyholder = null;
@@ -46,11 +49,9 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
         eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, entity.channelId);
     }
 
-    private async updateTanks(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
+    private async updateTanks(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>, boostingRole: FactionBoostingRole): Promise<void> {
         await this.addUsersByReaction(reaction, keyUsers, entity.signups.tanks);
         const users = (await reaction.users.fetch()).filter(user => !user.bot);
-
-        const boostingRole = ConfigEnv.getConfig().BOOSTING_ROLES.find(boostingRole => boostingRole.roleId === entity.boostRoleId);
         const role = await guild.roles.fetch(boostingRole.tankRoleId);
 
         for (const user of entity.signups.tanks) {
@@ -74,11 +75,9 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
         }
     }
 
-    private async updateHealers(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
+    private async updateHealers(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>, boostingRole: FactionBoostingRole): Promise<void> {
         await this.addUsersByReaction(reaction, keyUsers, entity.signups.healers);
         const users = (await reaction.users.fetch()).filter(user => !user.bot);
-
-        const boostingRole = ConfigEnv.getConfig().BOOSTING_ROLES.find(boostingRole => boostingRole.roleId === entity.boostRoleId);
         const role = await guild.roles.fetch(boostingRole.healerRoleId);
 
         for (const user of entity.signups.healers) {
@@ -103,11 +102,9 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
         }
     }
 
-    private async updateDpses(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>): Promise<void> {
+    private async updateDpses(guild: Guild, entity: BoostEntity, reaction: MessageReaction, keyUsers: Collection<Snowflake, User>, boostingRole: FactionBoostingRole): Promise<void> {
         await this.addUsersByReaction(reaction, keyUsers, entity.signups.dpses);
         const users = (await reaction.users.fetch()).filter(user => !user.bot);
-
-        const boostingRole = ConfigEnv.getConfig().BOOSTING_ROLES.find(boostingRole => boostingRole.roleId === entity.boostRoleId);
         const role = await guild.roles.fetch(boostingRole.dpsRoleId);
 
         for (const user of entity.signups.dpses) {

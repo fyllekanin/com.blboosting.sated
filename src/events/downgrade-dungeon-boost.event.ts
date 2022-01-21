@@ -18,7 +18,7 @@ export class DowngradeDungeonBoostEvent implements IEvent {
         const entity = await this.boostsRepository.getBoostForChannel(messageReaction.message.channelId);
         const channel = await client.channels.fetch(entity.channelId) as TextChannel;
 
-        entity.boostRoleId = DungeonBoosterUtils.getDowngradedBoostingRoleId(entity.boostRoleId, entity.key.isTimed);
+        entity.boostRoleId = DungeonBoosterUtils.getDowngradedBoostingRoleId(entity.boostRoleId, entity.key.isTimed, entity.faction);
         await this.boostsRepository.update({ channelId: entity.channelId }, entity);
 
         await channel.edit({

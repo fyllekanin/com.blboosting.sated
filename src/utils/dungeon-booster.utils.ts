@@ -3,6 +3,7 @@ import { StackKey } from '../constants/Stack.enum';
 import { BoosterRole, RoleKey } from '../constants/role.constant';
 import { Guild } from 'discord.js';
 import { EmojiReaction } from '../constants/emoji.enum';
+import { Faction, FactionKey } from '../constants/faction.enum';
 
 export class DungeonBoosterUtils {
 
@@ -43,9 +44,10 @@ export class DungeonBoosterUtils {
             .map(key => process.env[`DISCORD_ROLE_${key}`]);
     }
 
-    static getDowngradedBoostingRoleId(currentId: string, isTimed: boolean): string {
-        const current = ConfigEnv.getConfig().BOOSTING_ROLES.find(item => item.roleId === currentId);
-        return ConfigEnv.getConfig().BOOSTING_ROLES
+    static getDowngradedBoostingRoleId(currentId: string, isTimed: boolean, faction: FactionKey): string {
+        const roles = faction === Faction.HORDE.value ? ConfigEnv.getConfig().BOOSTING_HORDE_ROLES : ConfigEnv.getConfig().BOOSTING_ALLIANCE_ROLES;
+        const current = roles.find(item => item.roleId === currentId);
+        return roles
             .filter(item => isTimed ? (item.maxTimed < current.maxTimed) : (item.maxUntimed < current.maxUntimed)).reduce((prev, curr) => {
                 if (!prev) {
                     return curr;
@@ -57,8 +59,9 @@ export class DungeonBoosterUtils {
             }, null)?.roleId;
     }
 
-    static getAllowedBoostingRoleId(level: number | string, isTimed: boolean): string {
-        return ConfigEnv.getConfig().BOOSTING_ROLES.reduce((prev, curr) => {
+    static getAllowedBoostingRoleId(level: number | string, isTimed: boolean, faction: FactionKey): string {
+        const roles = faction === Faction.HORDE.value ? ConfigEnv.getConfig().BOOSTING_HORDE_ROLES : ConfigEnv.getConfig().BOOSTING_ALLIANCE_ROLES;
+        return roles.reduce((prev, curr) => {
             if (!prev) {
                 return curr;
             }

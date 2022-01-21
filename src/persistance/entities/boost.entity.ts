@@ -4,6 +4,7 @@ import { FactionKey } from '../../constants/faction.enum';
 import { StackKey } from '../../constants/Stack.enum';
 
 export interface BoostEntity extends BaseEntity {
+    faction: FactionKey;
     channelId: string;
     messageId: string;
     boostRoleId: string;

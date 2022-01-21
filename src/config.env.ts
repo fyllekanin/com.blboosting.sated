@@ -1,5 +1,14 @@
 require('dotenv').config();
 
+export interface FactionBoostingRole {
+    roleId: string;
+    tankRoleId: string;
+    healerRoleId: string;
+    dpsRoleId: string;
+    maxUntimed: number,
+    maxTimed: number
+}
+
 interface EnvConfig {
     BOT_TOKEN: string;
     BOT_INTENTS: string;
@@ -33,14 +42,9 @@ interface EnvConfig {
     DISCORD_ROLE_PALADIN: string;
     DISCORD_ROLE_DEATH_KNIGHT: string;
 
-    BOOSTING_ROLES: Array<{
-        roleId: string;
-        tankRoleId: string;
-        healerRoleId: string;
-        dpsRoleId: string;
-        maxUntimed: number,
-        maxTimed: number
-    }>;
+    BOOSTING_HORDE_ROLES: Array<FactionBoostingRole>;
+
+    BOOSTING_ALLIANCE_ROLES: Array<FactionBoostingRole>;
 }
 
 export class ConfigEnv {

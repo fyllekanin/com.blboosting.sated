@@ -6,6 +6,7 @@ import { DiscordEvent } from '../constants/discord-event.enum';
 import { EmojiReaction } from '../constants/emoji.enum';
 import { ConfigEnv } from '../config.env';
 import { DungeonBoosterUtils } from '../utils/dungeon-booster.utils';
+import { Faction } from '../constants/faction.enum';
 
 export class SignDungeonBoostEvent implements IEvent {
     private static readonly VALID_REACTIONS = [EmojiReaction.TANK, EmojiReaction.HEALER, EmojiReaction.DPS, EmojiReaction.KEYSTONE];
@@ -31,7 +32,8 @@ export class SignDungeonBoostEvent implements IEvent {
             return;
         }
 
-        const boostingRole = ConfigEnv.getConfig().BOOSTING_ROLES.find(boostingRole => boostingRole.roleId === entity.boostRoleId);
+        const boostingRole = (entity.faction === Faction.HORDE.value ? ConfigEnv.getConfig().BOOSTING_HORDE_ROLES : ConfigEnv.getConfig().BOOSTING_ALLIANCE_ROLES)
+            .find(boostingRole => boostingRole.roleId === entity.boostRoleId);
         switch (reaction.emoji.name) {
             case EmojiReaction.TANK:
                 const tankRole = await guild.roles.fetch(boostingRole.tankRoleId);

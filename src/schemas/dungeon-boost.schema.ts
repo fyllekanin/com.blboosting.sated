@@ -6,6 +6,7 @@ import { Faction, FactionKey } from '../constants/faction.enum';
 import { Stack, StackKey } from '../constants/Stack.enum';
 
 export interface IDungeonBoost {
+    faction: FactionKey,
     source: SourceKey;
     payments: Array<{ amount: number, realm: string, faction: FactionKey, collectorId: string, isBalance: boolean }>;
     discount: number;
@@ -40,6 +41,10 @@ export const DungeonBoostSchema: Schema = {
                 realm: { type: 'realm' }
             },
             required: ['name', 'realm']
+        },
+        faction: {
+            type: 'string',
+            enum: Object.keys(Faction)
         },
         source: {
             type: 'string',
@@ -110,6 +115,7 @@ export const DungeonBoostSchema: Schema = {
         'payments',
         'discount',
         'key',
-        'stack'
+        'stack',
+        'faction'
     ]
 };
