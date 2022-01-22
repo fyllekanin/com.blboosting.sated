@@ -14,6 +14,8 @@ import { RemoveDungeonBoosterCommand } from './commands/remove-dungeon-booster.c
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import { RemoveDungeonBoosterEvent } from './events/remove-dungeon-booster.event';
+import { AddDungeonBoosterCommand } from './commands/add-dungeon-booster.command';
+import { AddDungeonBoosterEvent } from './events/add-dungeon-booster.event';
 
 require('dotenv').config();
 
@@ -53,7 +55,8 @@ class Main {
                 new CancelDungeonBoostEvent(),
                 new CollectedDungeonBoostEvent(eventBus),
                 new CompleteDungeonBoostEvent(),
-                new RemoveDungeonBoosterEvent()
+                new RemoveDungeonBoosterEvent(eventBus),
+                new AddDungeonBoosterEvent(eventBus)
             ];
 
             for (const eventItem of events) {
@@ -61,7 +64,8 @@ class Main {
             }
 
             const commands = [
-                new RemoveDungeonBoosterCommand().getCommand()
+                new RemoveDungeonBoosterCommand().getCommand(),
+                new AddDungeonBoosterCommand().getCommand()
             ];
             await this.rest.put(Routes.applicationGuildCommands(ConfigEnv.getConfig().BOT_CLIENT_ID, ConfigEnv.getConfig().DISCORD_GUILD), { body: commands });
             console.log('Everything ready');

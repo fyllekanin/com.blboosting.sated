@@ -73,6 +73,7 @@ export class StartDungeonBoostEvent implements InternalEventInterface {
             item.boosters.healer = boosters.includes(item.boosters.healer) ? null : item.boosters.healer;
             item.boosters.dpsOne = boosters.includes(item.boosters.dpsOne) ? null : item.boosters.dpsOne;
             item.boosters.dpsTwo = boosters.includes(item.boosters.dpsTwo) ? null : item.boosters.dpsTwo;
+            item.boosters.keyholder = boosters.includes(item.boosters.keyholder) ? null : item.boosters.keyholder;
             await this.boostsRepository.update({ channelId: item.channelId }, item);
             this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE);
         }

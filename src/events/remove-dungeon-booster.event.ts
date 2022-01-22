@@ -5,10 +5,16 @@ import { ConfigEnv } from '../config.env';
 import { BoostsRepository } from '../persistance/repositories/boosts.repository';
 import { COMMAND_NAMES } from '../commands/command.interface';
 import { EmojiReaction } from '../constants/emoji.enum';
+import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
 
 export class RemoveDungeonBoosterEvent implements IEvent {
     private static readonly EMOJIS_TO_CLEAN = [EmojiReaction.TANK, EmojiReaction.HEALER, EmojiReaction.DPS, EmojiReaction.KEYSTONE];
     private readonly boostRepository = new BoostsRepository();
+    private eventBus: EventBus;
+
+    constructor(eventBus: EventBus) {
+        this.eventBus = eventBus;
+    }
 
     async run(client: Client, interaction: Interaction): Promise<void> {
         const guild = await client.guilds.fetch(ConfigEnv.getConfig().DISCORD_GUILD);
@@ -34,10 +40,12 @@ You can replace a booster if it's started, but if you only wanna remove you need
         entity.boosters.healer = entity.boosters.healer === user.id ? null : entity.boosters.healer;
         entity.boosters.dpsOne = entity.boosters.dpsOne === user.id ? null : entity.boosters.dpsOne;
         entity.boosters.dpsTwo = entity.boosters.dpsTwo === user.id ? null : entity.boosters.dpsTwo;
+        entity.boosters.keyholder = entity.boosters.keyholder === user.id ? null : entity.boosters.keyholder;
         entity.signups.tanks = entity.signups.tanks.filter(item => item.boosterId !== user.id);
         entity.signups.healers = entity.signups.tanks.filter(item => item.boosterId !== user.id);
         entity.signups.dpses = entity.signups.tanks.filter(item => item.boosterId !== user.id);
         await this.boostRepository.update({ channelId: channel.id }, entity);
+        this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE);
 
         for (const emoji of RemoveDungeonBoosterEvent.EMOJIS_TO_CLEAN) {
             const reaction = message.reactions.resolve(emoji);
