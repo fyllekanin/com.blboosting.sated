@@ -1,3 +1,5 @@
+import { PermissionString } from 'discord.js';
+
 require('dotenv').config();
 
 export interface FactionBoostingRole {
@@ -16,6 +18,7 @@ interface EnvConfig {
     DISCORD_GUILD: string;
     CREATE_DUNGEON_BOOST_CHANNEL: string;
     DUNGEON_BOOST_CATEGORY: string;
+    DUNGEON_BOOST_MANAGE_PERMISSION: PermissionString;
     MONGODB_HOST: string;
     MONGODB_DATABASE: string;
     MONGODB_USERNAME: string;

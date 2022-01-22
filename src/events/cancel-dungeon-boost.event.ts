@@ -30,7 +30,7 @@ export class CancelDungeonBoostEvent implements IEvent {
 
         const permissions = channel.permissionsFor(user.id);
         return !user.bot &&
-            permissions.has('SEND_MESSAGES') &&
+            permissions.has(ConfigEnv.getConfig().DUNGEON_BOOST_MANAGE_PERMISSION) &&
             messageReaction.emoji.name === EmojiReaction.CANCEL;
     }
 }

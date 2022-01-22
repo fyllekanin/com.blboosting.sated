@@ -30,7 +30,7 @@ export class CompleteDungeonBoostEvent implements IEvent {
 
         const permissions = channel.permissionsFor(user.id);
         return !user.bot &&
-            permissions.has('SEND_MESSAGES') &&
+            permissions.has(ConfigEnv.getConfig().DUNGEON_BOOST_MANAGE_PERMISSION) &&
             [EmojiReaction.COMPLETE_DUNGEON, EmojiReaction.DEPLETE_DUNGEON].includes(messageReaction.emoji.name as EmojiReaction);
     }
 }
