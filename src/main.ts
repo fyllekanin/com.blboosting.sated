@@ -9,6 +9,7 @@ import { ConfigEnv } from './config.env';
 import { DowngradeDungeonBoostEvent } from './events/downgrade-dungeon-boost.event';
 import { CancelDungeonBoostEvent } from './events/cancel-dungeon-boost.event';
 import { CollectedDungeonBoostEvent } from './events/collected-dungeon-boost.event';
+import { CompleteDungeonBoostEvent } from './events/complete-dungeon-boost.event';
 
 require('dotenv').config();
 
@@ -43,7 +44,8 @@ class Main {
                 new UnSignDungeonBoostEvent(eventBus),
                 new DowngradeDungeonBoostEvent(),
                 new CancelDungeonBoostEvent(),
-                new CollectedDungeonBoostEvent(eventBus)
+                new CollectedDungeonBoostEvent(eventBus),
+                new CompleteDungeonBoostEvent()
             ];
 
             for (const eventItem of events) {

@@ -31,7 +31,7 @@ export class StartDungeonBoostEvent implements InternalEventInterface {
                 const channel = await this.client.channels.fetch(entity.channelId) as TextChannel;
                 const message = await channel.messages.fetch(entity.messageId);
                 if (message.reactions.resolve(EmojiReaction.COMPLETE_DUNGEON) == null && this.isBoostReadyToStart(entity)) {
-                    await this.updateBoost(entity, message, entities);
+                    await this.updateBoost(entity, message, channel, entities);
                 }
 
                 await this.boostsRepository.update({ channelId: entity.channelId }, entity);
@@ -40,11 +40,17 @@ export class StartDungeonBoostEvent implements InternalEventInterface {
         }, 200);
     }
 
-    private async updateBoost(entity: BoostEntity, message: Message, entities: Array<BoostEntity>): Promise<void> {
+    private async updateBoost(entity: BoostEntity, message: Message, entityChannel: TextChannel, entities: Array<BoostEntity>): Promise<void> {
         await message.reactions.removeAll();
         await message.react(EmojiReaction.COMPLETE_DUNGEON);
         await message.react(EmojiReaction.DEPLETE_DUNGEON);
         entity.status.isStarted = true;
+        entityChannel.send(`Boost started!
+        ${EmojiReaction.TANK} <@${entity.boosters.tank}>
+        ${EmojiReaction.HEALER} <@${entity.boosters.healer}>
+        ${EmojiReaction.DPS} <@${entity.boosters.dpsOne}>
+        ${EmojiReaction.TANK} <@${entity.boosters.dpsTwo}>
+        `);
         const boosters = [entity.boosters.tank, entity.boosters.healer, entity.boosters.dpsOne, entity.boosters.dpsTwo];
 
         for (const item of entities) {
