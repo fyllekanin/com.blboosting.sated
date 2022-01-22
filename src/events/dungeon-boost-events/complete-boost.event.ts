@@ -1,14 +1,14 @@
-import { IEvent } from './event.interface';
+import { IEvent } from '../event.interface';
 import { Client, MessageReaction, TextChannel, User } from 'discord.js';
-import { DiscordEvent } from '../constants/discord-event.enum';
-import { EmojiReaction } from '../constants/emoji.enum';
-import { ConfigEnv } from '../config.env';
-import { BoostsRepository } from '../persistance/repositories/boosts.repository';
-import { BoostEntity } from '../persistance/entities/boost.entity';
-import { LoggerService } from '../logging/logger.service';
-import { LogAction } from '../logging/log.actions';
+import { DiscordEvent } from '../../constants/discord-event.enum';
+import { EmojiReaction } from '../../constants/emoji.enum';
+import { ConfigEnv } from '../../config.env';
+import { BoostsRepository } from '../../persistance/repositories/boosts.repository';
+import { BoostEntity } from '../../persistance/entities/boost.entity';
+import { LoggerService } from '../../logging/logger.service';
+import { LogAction } from '../../logging/log.actions';
 
-export class CompleteDungeonBoostEvent implements IEvent {
+export class CompleteBoostEvent implements IEvent {
     private readonly boostRepository = new BoostsRepository();
 
     async run(client: Client, messageReaction: MessageReaction, user: User): Promise<void> {

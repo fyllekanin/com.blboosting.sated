@@ -1,16 +1,16 @@
-import { IEvent } from './event.interface';
+import { IEvent } from '../event.interface';
 import { Client, MessageReaction, User } from 'discord.js';
-import { BoostsRepository } from '../persistance/repositories/boosts.repository';
-import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
-import { DiscordEvent } from '../constants/discord-event.enum';
-import { EmojiReaction } from '../constants/emoji.enum';
-import { ConfigEnv } from '../config.env';
-import { DungeonBoosterUtils } from '../utils/dungeon-booster.utils';
-import { Faction } from '../constants/faction.enum';
-import { LoggerService } from '../logging/logger.service';
-import { LogAction } from '../logging/log.actions';
+import { BoostsRepository } from '../../persistance/repositories/boosts.repository';
+import { EventBus, INTERNAL_EVENT } from '../../internal-events/event.bus';
+import { DiscordEvent } from '../../constants/discord-event.enum';
+import { EmojiReaction } from '../../constants/emoji.enum';
+import { ConfigEnv } from '../../config.env';
+import { DungeonBoosterUtils } from '../../utils/dungeon-booster.utils';
+import { Faction } from '../../constants/faction.enum';
+import { LoggerService } from '../../logging/logger.service';
+import { LogAction } from '../../logging/log.actions';
 
-export class SignDungeonBoostEvent implements IEvent {
+export class SignBoostEvent implements IEvent {
     private static readonly VALID_REACTIONS = [EmojiReaction.TANK, EmojiReaction.HEALER, EmojiReaction.DPS, EmojiReaction.KEYSTONE];
     private readonly boostsRepository = new BoostsRepository();
     private readonly eventBus: EventBus;
@@ -113,7 +113,7 @@ export class SignDungeonBoostEvent implements IEvent {
 
     private async isApplicable(messageReaction: MessageReaction, user: User): Promise<boolean> {
         return !user.bot &&
-            SignDungeonBoostEvent.VALID_REACTIONS.includes(messageReaction.emoji.name as EmojiReaction) &&
+            SignBoostEvent.VALID_REACTIONS.includes(messageReaction.emoji.name as EmojiReaction) &&
             await this.boostsRepository.isBoostChannel(messageReaction.message.channelId);
     }
 }

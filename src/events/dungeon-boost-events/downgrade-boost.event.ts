@@ -1,14 +1,14 @@
-import { IEvent } from './event.interface';
+import { IEvent } from '../event.interface';
 import { Client, MessageReaction, TextChannel, User } from 'discord.js';
-import { BoostsRepository } from '../persistance/repositories/boosts.repository';
-import { DiscordEvent } from '../constants/discord-event.enum';
-import { EmojiReaction } from '../constants/emoji.enum';
-import { DungeonBoosterUtils } from '../utils/dungeon-booster.utils';
-import { ConfigEnv } from '../config.env';
-import { LoggerService } from '../logging/logger.service';
-import { LogAction } from '../logging/log.actions';
+import { BoostsRepository } from '../../persistance/repositories/boosts.repository';
+import { DiscordEvent } from '../../constants/discord-event.enum';
+import { EmojiReaction } from '../../constants/emoji.enum';
+import { DungeonBoosterUtils } from '../../utils/dungeon-booster.utils';
+import { ConfigEnv } from '../../config.env';
+import { LoggerService } from '../../logging/logger.service';
+import { LogAction } from '../../logging/log.actions';
 
-export class DowngradeDungeonBoostEvent implements IEvent {
+export class DowngradeBoostEvent implements IEvent {
     private static readonly VALID_REACTIONS = [EmojiReaction.ARROW_DOWN];
     private readonly boostsRepository = new BoostsRepository();
 
@@ -47,7 +47,7 @@ export class DowngradeDungeonBoostEvent implements IEvent {
         const permissions = channel.permissionsFor(user.id);
         return !user.bot &&
             permissions.has(ConfigEnv.getConfig().DUNGEON_BOOST_MANAGE_PERMISSION) &&
-            DowngradeDungeonBoostEvent.VALID_REACTIONS.includes(messageReaction.emoji.name as EmojiReaction) &&
+            DowngradeBoostEvent.VALID_REACTIONS.includes(messageReaction.emoji.name as EmojiReaction) &&
             await this.boostsRepository.isBoostChannel(messageReaction.message.channelId);
     }
 }

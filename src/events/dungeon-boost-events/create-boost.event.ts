@@ -1,20 +1,20 @@
-import { IEvent } from './event.interface';
+import { IEvent } from '../event.interface';
 import { CategoryChannel, Client, Message, TextChannel } from 'discord.js';
 import { Validator } from 'jsonschema';
-import { DungeonBoostSchema, IDungeonBoost } from '../schemas/dungeon-boost.schema';
-import { MythicPlusEmbed } from '../embeds/mythic-plus.embed';
-import { BoostsRepository } from '../persistance/repositories/boosts.repository';
-import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
-import { DiscordEvent } from '../constants/discord-event.enum';
-import { BoosterRole } from '../constants/role.constant';
-import { EmojiReaction } from '../constants/emoji.enum';
-import { ConfigEnv } from '../config.env';
-import { DungeonBoosterUtils } from '../utils/dungeon-booster.utils';
-import { LoggerService } from '../logging/logger.service';
-import { LogAction } from '../logging/log.actions';
+import { DungeonBoostSchema, IDungeonBoost } from '../../schemas/dungeon-boost.schema';
+import { MythicPlusEmbed } from '../../embeds/mythic-plus.embed';
+import { BoostsRepository } from '../../persistance/repositories/boosts.repository';
+import { EventBus, INTERNAL_EVENT } from '../../internal-events/event.bus';
+import { DiscordEvent } from '../../constants/discord-event.enum';
+import { BoosterRole } from '../../constants/role.constant';
+import { EmojiReaction } from '../../constants/emoji.enum';
+import { ConfigEnv } from '../../config.env';
+import { DungeonBoosterUtils } from '../../utils/dungeon-booster.utils';
+import { LoggerService } from '../../logging/logger.service';
+import { LogAction } from '../../logging/log.actions';
 
 
-export class CreateDungeonBoostEvent implements IEvent {
+export class CreateBoostEvent implements IEvent {
     private static readonly STARTS_WITH = 'dungeonBoost';
     private static readonly BUILDING_REACTIONS = [
         EmojiReaction.TANK,
@@ -94,7 +94,7 @@ export class CreateDungeonBoostEvent implements IEvent {
         await repository.update({ channelId: channel.id }, entity);
         this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, entity.channelId);
 
-        for (const reaction of CreateDungeonBoostEvent.BUILDING_REACTIONS) {
+        for (const reaction of CreateBoostEvent.BUILDING_REACTIONS) {
             await embedMessage.react(reaction);
         }
 
@@ -113,13 +113,13 @@ export class CreateDungeonBoostEvent implements IEvent {
     }
 
     private async isApplicable(message: Message): Promise<boolean> {
-        const startsWith = `${ConfigEnv.getConfig().DEFAULT_PREFIX}${CreateDungeonBoostEvent.STARTS_WITH}`;
+        const startsWith = `${ConfigEnv.getConfig().DEFAULT_PREFIX}${CreateBoostEvent.STARTS_WITH}`;
         return message.channelId === ConfigEnv.getConfig().CREATE_DUNGEON_BOOST_CHANNEL &&
             message.content.startsWith(startsWith);
     }
 
     private getPayload(message: Message): IDungeonBoost {
-        const content = message.content.replace(`${ConfigEnv.getConfig().DEFAULT_PREFIX}${CreateDungeonBoostEvent.STARTS_WITH} `, '');
+        const content = message.content.replace(`${ConfigEnv.getConfig().DEFAULT_PREFIX}${CreateBoostEvent.STARTS_WITH} `, '');
         try {
             return JSON.parse(content);
         } catch (_) {

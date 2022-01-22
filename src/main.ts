@@ -1,21 +1,21 @@
 import { Client, Intents } from 'discord.js';
-import { CreateDungeonBoostEvent } from './events/create-dungeon-boost.event';
+import { CreateBoostEvent } from './events/dungeon-boost-events/create-boost.event';
 import { DatabaseService } from './persistance/database.service';
-import { SignDungeonBoostEvent } from './events/sign-dungeon-boost.event';
+import { SignBoostEvent } from './events/dungeon-boost-events/sign-boost.event';
 import { EventBus } from './internal-events/event.bus';
-import { UnSignDungeonBoostEvent } from './events/un-sign-dungeon-boost.event';
+import { UnSignBoostEvent } from './events/dungeon-boost-events/un-sign-boost.event';
 import { UpdateDungeonSignupsStartup } from './startup/update-dungeon-signups.startup';
 import { ConfigEnv } from './config.env';
-import { DowngradeDungeonBoostEvent } from './events/downgrade-dungeon-boost.event';
-import { CancelDungeonBoostEvent } from './events/cancel-dungeon-boost.event';
-import { CollectedDungeonBoostEvent } from './events/collected-dungeon-boost.event';
-import { CompleteDungeonBoostEvent } from './events/complete-dungeon-boost.event';
+import { DowngradeBoostEvent } from './events/dungeon-boost-events/downgrade-boost.event';
+import { CancelBoostEvent } from './events/dungeon-boost-events/cancel-boost.event';
+import { CollectedBoostEvent } from './events/dungeon-boost-events/collected-boost.event';
+import { CompleteBoostEvent } from './events/dungeon-boost-events/complete-boost.event';
 import { RemoveDungeonBoosterCommand } from './commands/remove-dungeon-booster.command';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
-import { RemoveDungeonBoosterEvent } from './events/remove-dungeon-booster.event';
+import { RemoveBoostEvent } from './events/dungeon-boost-events/remove-boost.event';
 import { AddDungeonBoosterCommand } from './commands/add-dungeon-booster.command';
-import { AddDungeonBoosterEvent } from './events/add-dungeon-booster.event';
+import { AddBoosterEvent } from './events/dungeon-boost-events/add-booster.event';
 
 require('dotenv').config();
 
@@ -48,15 +48,15 @@ class Main {
             await (new UpdateDungeonSignupsStartup()).run(this.client, eventBus);
 
             const events = [
-                new CreateDungeonBoostEvent(eventBus),
-                new SignDungeonBoostEvent(eventBus),
-                new UnSignDungeonBoostEvent(eventBus),
-                new DowngradeDungeonBoostEvent(),
-                new CancelDungeonBoostEvent(),
-                new CollectedDungeonBoostEvent(eventBus),
-                new CompleteDungeonBoostEvent(),
-                new RemoveDungeonBoosterEvent(eventBus),
-                new AddDungeonBoosterEvent(eventBus)
+                new CreateBoostEvent(eventBus),
+                new SignBoostEvent(eventBus),
+                new UnSignBoostEvent(eventBus),
+                new DowngradeBoostEvent(),
+                new CancelBoostEvent(),
+                new CollectedBoostEvent(eventBus),
+                new CompleteBoostEvent(),
+                new RemoveBoostEvent(eventBus),
+                new AddBoosterEvent(eventBus)
             ];
 
             for (const eventItem of events) {

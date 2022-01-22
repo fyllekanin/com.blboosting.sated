@@ -1,15 +1,15 @@
-import { IEvent } from './event.interface';
+import { IEvent } from '../event.interface';
 import { Client, CommandInteraction, Interaction, TextChannel } from 'discord.js';
-import { DiscordEvent } from '../constants/discord-event.enum';
-import { ConfigEnv } from '../config.env';
-import { BoostsRepository } from '../persistance/repositories/boosts.repository';
-import { COMMAND_NAMES } from '../commands/command.interface';
-import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
-import { BoosterRole } from '../constants/role.constant';
-import { LoggerService } from '../logging/logger.service';
-import { LogAction } from '../logging/log.actions';
+import { DiscordEvent } from '../../constants/discord-event.enum';
+import { ConfigEnv } from '../../config.env';
+import { BoostsRepository } from '../../persistance/repositories/boosts.repository';
+import { COMMAND_NAMES } from '../../commands/command.interface';
+import { EventBus, INTERNAL_EVENT } from '../../internal-events/event.bus';
+import { BoosterRole } from '../../constants/role.constant';
+import { LoggerService } from '../../logging/logger.service';
+import { LogAction } from '../../logging/log.actions';
 
-export class AddDungeonBoosterEvent implements IEvent {
+export class AddBoosterEvent implements IEvent {
     private readonly boostRepository = new BoostsRepository();
     private eventBus: EventBus;
 

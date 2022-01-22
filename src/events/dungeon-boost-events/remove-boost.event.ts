@@ -1,15 +1,15 @@
-import { IEvent } from './event.interface';
+import { IEvent } from '../event.interface';
 import { Client, CommandInteraction, Interaction, TextChannel } from 'discord.js';
-import { DiscordEvent } from '../constants/discord-event.enum';
-import { ConfigEnv } from '../config.env';
-import { BoostsRepository } from '../persistance/repositories/boosts.repository';
-import { COMMAND_NAMES } from '../commands/command.interface';
-import { EmojiReaction } from '../constants/emoji.enum';
-import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
-import { LoggerService } from '../logging/logger.service';
-import { LogAction } from '../logging/log.actions';
+import { DiscordEvent } from '../../constants/discord-event.enum';
+import { ConfigEnv } from '../../config.env';
+import { BoostsRepository } from '../../persistance/repositories/boosts.repository';
+import { COMMAND_NAMES } from '../../commands/command.interface';
+import { EmojiReaction } from '../../constants/emoji.enum';
+import { EventBus, INTERNAL_EVENT } from '../../internal-events/event.bus';
+import { LoggerService } from '../../logging/logger.service';
+import { LogAction } from '../../logging/log.actions';
 
-export class RemoveDungeonBoosterEvent implements IEvent {
+export class RemoveBoostEvent implements IEvent {
     private static readonly EMOJIS_TO_CLEAN = [EmojiReaction.TANK, EmojiReaction.HEALER, EmojiReaction.DPS, EmojiReaction.KEYSTONE];
     private readonly boostRepository = new BoostsRepository();
     private eventBus: EventBus;
@@ -48,7 +48,7 @@ You can replace a booster if it's started, but if you only wanna remove you need
         await this.boostRepository.update({ channelId: channel.id }, entity);
         this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE);
 
-        for (const emoji of RemoveDungeonBoosterEvent.EMOJIS_TO_CLEAN) {
+        for (const emoji of RemoveBoostEvent.EMOJIS_TO_CLEAN) {
             const reaction = message.reactions.resolve(emoji);
             reaction.users.remove(user.id);
         }

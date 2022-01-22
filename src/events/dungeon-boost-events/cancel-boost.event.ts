@@ -1,20 +1,14 @@
-import { IEvent } from './event.interface';
+import { IEvent } from '../event.interface';
 import { Client, MessageReaction, TextChannel, User } from 'discord.js';
-import { DiscordEvent } from '../constants/discord-event.enum';
-import { EmojiReaction } from '../constants/emoji.enum';
-import { ConfigEnv } from '../config.env';
-import { BoostsRepository } from '../persistance/repositories/boosts.repository';
-import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
-import { LoggerService } from '../logging/logger.service';
-import { LogAction } from '../logging/log.actions';
+import { DiscordEvent } from '../../constants/discord-event.enum';
+import { EmojiReaction } from '../../constants/emoji.enum';
+import { ConfigEnv } from '../../config.env';
+import { BoostsRepository } from '../../persistance/repositories/boosts.repository';
+import { LoggerService } from '../../logging/logger.service';
+import { LogAction } from '../../logging/log.actions';
 
-export class CollectedDungeonBoostEvent implements IEvent {
+export class CancelBoostEvent implements IEvent {
     private readonly boostRepository = new BoostsRepository();
-    private readonly eventBus: EventBus;
-
-    constructor(eventBus: EventBus) {
-        this.eventBus = eventBus;
-    }
 
     async run(client: Client, messageReaction: MessageReaction, user: User): Promise<void> {
         const guild = await client.guilds.fetch(ConfigEnv.getConfig().DISCORD_GUILD);
@@ -22,17 +16,17 @@ export class CollectedDungeonBoostEvent implements IEvent {
         if (!await this.isApplicable(channel, messageReaction, user)) {
             return;
         }
-
-        const entity = await this.boostRepository.getBoostForChannel(messageReaction.message.channelId);
-        entity.status.isCollected = true;
-        await this.boostRepository.update({ channelId: entity.channelId }, entity);
-
-        this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, entity.channelId);
+        try {
+            await this.boostRepository.deleteBoostWithChannel(channel.id);
+            await channel.delete();
+        } catch (_) {
+            // Empty
+        }
 
         LoggerService.logDungeonBoost({
-            action: LogAction.COLLECTED_DUNGEON_BOOST,
+            action: LogAction.CANCELLED_DUNGEON_BOOST,
             discordId: user.id,
-            description: `<@${user.id}> collected the boost`,
+            description: `<@${user.id}> cancelled the boost`,
             contentId: channel.id,
             printOnDiscord: true,
             client: client
@@ -51,6 +45,6 @@ export class CollectedDungeonBoostEvent implements IEvent {
         const permissions = channel.permissionsFor(user.id);
         return !user.bot &&
             permissions.has(ConfigEnv.getConfig().DUNGEON_BOOST_MANAGE_PERMISSION) &&
-            messageReaction.emoji.name === EmojiReaction.MONEY_BAG;
+            messageReaction.emoji.name === EmojiReaction.CANCEL;
     }
 }
