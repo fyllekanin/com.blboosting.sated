@@ -19,10 +19,11 @@ export class RemoveDungeonBoosterEvent implements IEvent {
         const command = interaction as CommandInteraction;
         const entity = await this.boostRepository.getBoostForChannel(channel.id);
         const message = await channel.messages.fetch(entity.messageId);
-        if (entity.status.isStarted) {
+        if (entity.status.isStarted || entity.status.isCompleted || entity.status.isDepleted) {
             await command.reply({
                 ephemeral: true,
-                content: `Boost have already started!
+                content: `Boost have already started or completed!
+If completed you can't do anything, but if not completed:
 You can replace a booster if it's started, but if you only wanna remove you need to stop it with /${COMMAND_NAMES.STOP_DUNGEON_BOOSTER}`
             });
             return;

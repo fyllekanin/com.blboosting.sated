@@ -9,6 +9,7 @@ export class RemoveDungeonBoosterCommand implements ICommand {
             .setName(COMMAND_NAMES.REMOVE_DUNGEON_BOOSTER)
             .setDescription('Removes a booster from the boost')
             .addUserOption(option => option.setName('user').setDescription('The booster to remove').setRequired(true))
+            .setDefaultPermission(false)
             .toJSON();
     }
 }
