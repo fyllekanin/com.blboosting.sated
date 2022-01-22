@@ -80,7 +80,11 @@ export class MythicPlusEmbed implements EmbedInterface {
             .setTitle(this.title)
             .addFields([
                 { name: 'Boosters', value: this.getBoosters() },
-                { name: 'Armor Stack', value: this.stacks.map(stack => Stack[stack].label).join(', '), inline: true },
+                {
+                    name: 'Armor Stack',
+                    value: this.stacks.length > 0 ? this.stacks.map(stack => Stack[stack].label).join(', ') : 'Any',
+                    inline: true
+                },
                 { name: 'Key', value: `${Dungeon[this.key.dungeon].label} +${this.key.level}`, inline: true },
                 { name: 'Timed', value: this.isTimed ? 'Yes' : 'No', inline: true },
                 {

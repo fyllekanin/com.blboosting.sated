@@ -27,7 +27,8 @@ export class SignDungeonBoostEvent implements IEvent {
         const entity = await this.boostsRepository.getBoostForChannel(messageReaction.message.channelId);
 
         const role = DungeonBoosterUtils.getRoleFromEmoji(reaction.emoji.name as EmojiReaction);
-        if (!await DungeonBoosterUtils.isAllowedToSignWithStack(guild, DungeonBoosterUtils.getStackRoleIds(entity.stack), user.id, role)) {
+        const isInActiveBoost = await this.boostsRepository.isInActiveBoost(user.id);
+        if (!await DungeonBoosterUtils.isAllowedToSignWithStack(guild, DungeonBoosterUtils.getStackRoleIds(entity.stack), user.id, role) || isInActiveBoost) {
             await messageReaction.users.remove(user.id);
             return;
         }

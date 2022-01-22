@@ -1,3 +1,3 @@
 export interface InternalEventInterface {
-    run(data: any): Promise<void>;
+    run(data?: number | string): Promise<void>;
 }

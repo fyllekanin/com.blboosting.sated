@@ -43,9 +43,9 @@ export interface BoostEntity extends BaseEntity {
         dpses: Array<{ boosterId: string, haveKey: boolean, createdAt: number }>;
     },
     status: {
-        isCollected?: boolean;
-        isStarted?: boolean;
-        isCompleted?: boolean;
-        isDepleted?: boolean;
+        isCollected: boolean;
+        isStarted: boolean;
+        isCompleted: boolean;
+        isDepleted: boolean;
     }
 }

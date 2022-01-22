@@ -26,18 +26,6 @@ export class CollectedDungeonBoostEvent implements IEvent {
         await this.boostRepository.update({ channelId: entity.channelId }, entity);
 
         this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, entity.channelId);
-
-        const date = new Date();
-        const totalAmount = entity.payments.reduce((prev, curr) => prev + curr.amount, 0);
-        await user.send(`
-        RunID: ${entity._id}-${entity.contact.realm}
-        Date: ${date.toLocaleDateString('en-US')} ${date.toLocaleTimeString('en-GB')}
-        Activity: MPLUS
-        Advertiser: ${entity.contact.name}-${entity.contact.realm}
-        Realm: ${entity.contact.realm}
-        Faction: Something
-        Pot: ${totalAmount}
-        `);
     }
 
     getEventName(): DiscordEvent {

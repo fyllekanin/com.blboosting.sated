@@ -1,35 +1,48 @@
 import { InternalEventInterface } from '../internal-event.interface';
 import { BoostsRepository } from '../../persistance/repositories/boosts.repository';
 import { BoostEntity } from '../../persistance/entities/boost.entity';
-import { Client, TextChannel } from 'discord.js';
+import { CategoryChannel, Client, TextChannel } from 'discord.js';
 import { MythicPlusEmbed } from '../../embeds/mythic-plus.embed';
 import { BoosterRole, RoleKey } from '../../constants/role.constant';
+import { ConfigEnv } from '../../config.env';
+import { EmojiReaction } from '../../constants/emoji.enum';
+import { EventBus, INTERNAL_EVENT } from '../event.bus';
 
 export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
     private readonly boostsRepository = new BoostsRepository();
     private readonly client: Client;
+    private readonly eventBus: EventBus;
     private throttleTimeout: any;
 
-    constructor(client: Client) {
+    constructor(client: Client, eventBus: EventBus) {
         this.client = client;
+        this.eventBus = eventBus;
     }
 
-    async run(channelId: string): Promise<void> {
+    async run(): Promise<void> {
         if (this.throttleTimeout) {
             clearTimeout(this.throttleTimeout);
         }
-        this.throttleTimeout = setTimeout(this.updateBoost.bind(this, channelId), 200);
+        this.throttleTimeout = setTimeout(async () => {
+            const category = await this.client.channels.fetch(ConfigEnv.getConfig().DUNGEON_BOOST_CATEGORY) as CategoryChannel;
+            category.children.forEach(async (channel: TextChannel) => {
+                const entity = await this.boostsRepository.getBoostForChannel(channel.id);
+                const message = await channel.messages.fetch(entity.messageId);
+                if (message.reactions.resolve(EmojiReaction.COMPLETE_DUNGEON) == null) {
+                    this.updateBoost(entity);
+                }
+            });
+        }, 200);
     }
 
-    private async updateBoost(channelId: string): Promise<void> {
-        const entity = await this.boostsRepository.getBoostForChannel(channelId);
+    private async updateBoost(entity: BoostEntity): Promise<void> {
         if (!entity.boosters.keyholder) this.findKeyHolder(entity);
         if (!entity.boosters.tank) this.findTank(entity);
         if (!entity.boosters.healer) this.findHealer(entity);
         if (!entity.boosters.dpsOne) this.findDps(entity, entity.boosters.dpsTwo, 1);
         if (!entity.boosters.dpsTwo) this.findDps(entity, entity.boosters.dpsOne, 2);
 
-        const channel = await this.client.channels.fetch(channelId) as TextChannel;
+        const channel = await this.client.channels.fetch(entity.channelId) as TextChannel;
         const message = await channel.messages.fetch(entity.messageId);
 
         const title = `Mythic Dungeon Boost - ${entity.key.runs}x-${entity.key.dungeon}-${entity.key.isTimed ? 'timed' : 'untimed'}`;
@@ -50,7 +63,11 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
                     .withAdvertiserId(entity.advertiserId)
                     .generate()
             ]
-        })
+        });
+
+        if (entity.boosters.tank && entity.boosters.healer && entity.boosters.dpsOne && entity.boosters.dpsTwo && entity.status.isCollected) {
+            this.eventBus.emit(INTERNAL_EVENT.START_DUNGEON_BOOST);
+        }
     }
 
     private getBoosters(entity: BoostEntity): Array<{ boosterId: string, isTank: boolean, isHealer: boolean, isDps: boolean }> {

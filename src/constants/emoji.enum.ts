@@ -6,5 +6,7 @@ export enum EmojiReaction {
     MONEY_BAG = '💰',
     ARROW_DOWN = '⬇',
     TEAM = '👥',
-    CANCEL = '❌'
+    CANCEL = '❌',
+    COMPLETE_DUNGEON = '✔',
+    DEPLETE_DUNGEON = '❌'
 }

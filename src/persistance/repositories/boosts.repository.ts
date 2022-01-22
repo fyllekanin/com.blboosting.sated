@@ -15,6 +15,28 @@ export class BoostsRepository extends BaseRepository<BoostEntity> {
         return await this.getCollection().findOne({ channelId: channelId });
     }
 
+    async getBoostsForChannels(channelIds: Array<string>): Promise<Array<BoostEntity>> {
+        return await this.getCollection().find({ channelId: { $in: channelIds } }).toArray();
+    }
+
+    async isInActiveBoost(userId: string): Promise<boolean> {
+        return (await this.getCollection().find({
+            $and: [
+                {
+                    $or: [
+                        { 'boosters.tank': userId },
+                        { 'boosters.healer': userId },
+                        { 'boosters.dpsOne': userId },
+                        { 'boosters.dpsTwo': userId }
+                    ]
+                },
+                { 'status.isStarted': true },
+                { 'status.isCompleted': false },
+                { 'status.isDepleted': false }
+            ]
+        }).count()) > 0;
+    }
+
     protected getCollection(): Collection<BoostEntity> {
         if (this.repository) {
             return this.repository;

@@ -74,7 +74,12 @@ export class CreateDungeonBoostEvent implements IEvent {
                 dpsTwo: payload.boosters.filter(item => item.role === BoosterRole.DPS.value)[1]?.boosterId,
                 keyholder: payload.boosters.find(item => item.isKeyHolder)?.boosterId
             },
-            status: {},
+            status: {
+                isStarted: false,
+                isCollected: false,
+                isCompleted: false,
+                isDepleted: false
+            },
             signups: {
                 tanks: [],
                 healers: [],
@@ -111,11 +116,11 @@ export class CreateDungeonBoostEvent implements IEvent {
         }
     }
 
-    private async createEmbed(channel: TextChannel, title: string, payload: IDungeonBoost, boostingRoleId: string): Promise<Message> {
+    private async createEmbed(channel: TextChannel, title: string, payload: IDungeonBoost, _boostingRoleId: string): Promise<Message> {
         const totalPot = payload.payments.reduce((prev, curr) => prev + curr.amount, 0);
 
         const message = await channel.send({
-            content: `<@&${boostingRoleId}> ${DungeonBoosterUtils.getStackRoleIds(payload.stack).map(id => `<@&${id}>`).join(' ')}`,
+            //content: `<@&${boostingRoleId}> ${DungeonBoosterUtils.getStackRoleIds(payload.stack).map(id => `<@&${id}>`).join(' ')}`,
             embeds: [
                 new MythicPlusEmbed()
                     .withTitle(title)
