@@ -103,7 +103,7 @@ export class CreateDungeonBoostEvent implements IEvent {
             discordId: message.author.id,
             description: `<@${message.author.id}> created a new boost`,
             contentId: channel.id,
-            sendToDiscord: true,
+            printOnDiscord: true,
             client: client
         });
     }

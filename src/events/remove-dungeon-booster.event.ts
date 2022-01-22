@@ -62,7 +62,7 @@ Booster <@${user.id}> is now removed!`
             discordId: user.id,
             description: `<@${interaction.user.id}> removed <@${user.id}> from the boost`,
             contentId: channel.id,
-            sendToDiscord: true,
+            printOnDiscord: true,
             client: client
         });
     }

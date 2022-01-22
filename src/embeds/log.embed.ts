@@ -1,31 +1,23 @@
 import { EmbedInterface } from './embed.interface';
-import { MessageEmbed } from 'discord.js';
+import { EmbedFieldData, MessageEmbed } from 'discord.js';
 
 export class LogEmbed implements EmbedInterface {
     private title: string;
-    private userId: string;
-    private description: string;
-    private createdAt: number;
     private contentId: string;
+    private entries: Array<{ discordId: string, description: string, createdAt: number }> = [];
 
     withTitle(title: string): LogEmbed {
         this.title = title;
         return this;
     }
 
-    withUserId(userId: string): LogEmbed {
-        this.userId = userId;
+    addEntry(entry: { discordId: string, description: string, createdAt: number }): LogEmbed {
+        this.entries.push(entry);
         return this;
     }
 
-    withDescription(description: string): LogEmbed {
-        this.description = description;
-        return this;
-    }
-
-    withCreatedAt(createdAt: number): LogEmbed {
-        this.createdAt = createdAt;
-        return this;
+    getEntryCount(): number {
+        return this.entries.length;
     }
 
     withContentId(contentId: string): LogEmbed {
@@ -34,14 +26,22 @@ export class LogEmbed implements EmbedInterface {
     }
 
     generate(): MessageEmbed {
-        const date = new Date(this.createdAt);
+        const fields: Array<EmbedFieldData> = [];
+        let isFirstEntry = true;
+        for (const entry of this.entries) {
+            const date = new Date(entry.createdAt);
+            fields.push({ name: isFirstEntry ? 'User' : '\u200b', value: `<@${entry.discordId}>`, inline: true });
+            fields.push({ name: isFirstEntry ? 'Description' : '\u200b', value: `${entry.description}`, inline: true });
+            fields.push({
+                name: isFirstEntry ? 'Timestamp' : '\u200b',
+                value: `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`,
+                inline: true
+            });
+            isFirstEntry = false;
+        }
+        fields.push({ name: 'ID', value: this.contentId });
         return new MessageEmbed()
             .setTitle(this.title)
-            .addFields([
-                { name: 'User', value: `<@${this.userId}>`, inline: true },
-                { name: 'Description', value: this.description, inline: true },
-                { name: 'Timestamp', value: `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`, inline: true },
-                { name: 'ID', value: this.contentId }
-            ])
+            .addFields(fields)
     }
 }

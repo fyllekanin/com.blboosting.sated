@@ -16,7 +16,7 @@ export class UnSignDungeonBoostEvent implements IEvent {
         this.eventBus = eventBus;
     }
 
-    async run(_: Client, messageReaction: MessageReaction, user: User): Promise<void> {
+    async run(client: Client, messageReaction: MessageReaction, user: User): Promise<void> {
         if (!await this.isApplicable(messageReaction, user)) {
             return;
         }
@@ -61,7 +61,9 @@ export class UnSignDungeonBoostEvent implements IEvent {
             action: LogAction.UN_SIGNED_TO_DUNGEON_BOOST,
             discordId: user.id,
             description: `<@${user.id}> un-signed as ${messageReaction.emoji.name} to the boost`,
-            contentId: entity.channelId
+            contentId: entity.channelId,
+            client: client,
+            printOnDiscord: false
         });
     }
 

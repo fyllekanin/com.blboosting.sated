@@ -110,7 +110,7 @@ Booster <@${user.id}> is now added!`
             discordId: interaction.user.id,
             description: `Added <@${user.id}> to boost`,
             contentId: entity.channelId,
-            sendToDiscord: true,
+            printOnDiscord: true,
             client: client
         });
     }

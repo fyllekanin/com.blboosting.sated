@@ -7,6 +7,10 @@ export class LogsRepository extends BaseRepository<LogEntity> {
     private static readonly COLLECTION = 'logs';
     protected repository: Collection<LogEntity>;
 
+    async getLogForContentId(contentId: string): Promise<Array<LogEntity>> {
+        return await this.getCollection().find({ contentId: contentId }).toArray();
+    }
+
     protected getCollection(): Collection<LogEntity> {
         if (this.repository) {
             return this.repository;

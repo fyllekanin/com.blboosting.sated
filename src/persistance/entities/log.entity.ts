@@ -8,4 +8,6 @@ export interface LogEntity extends BaseEntity {
     description: string;
     type: LogType;
     contentId: string;
+    messageId: string;
+    printOnDiscord: boolean;
 }

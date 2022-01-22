@@ -28,7 +28,7 @@ export class CancelDungeonBoostEvent implements IEvent {
             discordId: user.id,
             description: `<@${user.id}> cancelled the boost`,
             contentId: channel.id,
-            sendToDiscord: true,
+            printOnDiscord: true,
             client: client
         });
     }

@@ -34,7 +34,7 @@ export class CollectedDungeonBoostEvent implements IEvent {
             discordId: user.id,
             description: `<@${user.id}> collected the boost`,
             contentId: channel.id,
-            sendToDiscord: true,
+            printOnDiscord: true,
             client: client
         });
     }

@@ -31,7 +31,7 @@ export class CompleteDungeonBoostEvent implements IEvent {
             discordId: user.id,
             description: `<@${user.id}> marked the boost as ${isDeplete ? 'depleted' : 'completed'}`,
             contentId: channel.id,
-            sendToDiscord: true,
+            printOnDiscord: true,
             client: client
         });
     }

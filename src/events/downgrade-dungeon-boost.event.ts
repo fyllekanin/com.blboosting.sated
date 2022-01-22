@@ -34,7 +34,7 @@ export class DowngradeDungeonBoostEvent implements IEvent {
             discordId: user.id,
             description: `<@${user.id}> downgraded the boost`,
             contentId: channel.id,
-            sendToDiscord: true,
+            printOnDiscord: true,
             client: client
         });
     }

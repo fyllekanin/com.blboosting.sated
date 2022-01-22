@@ -95,7 +95,9 @@ export class SignDungeonBoostEvent implements IEvent {
             action: LogAction.SIGNED_TO_DUNGEON_BOOST,
             discordId: user.id,
             description: `<@${user.id}> signed as ${messageReaction.emoji.name} to the boost`,
-            contentId: entity.channelId
+            contentId: entity.channelId,
+            client: client,
+            printOnDiscord: false
         });
     }
 
