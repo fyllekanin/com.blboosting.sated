@@ -3,8 +3,10 @@ import { Client, MessageReaction, TextChannel, User } from 'discord.js';
 import { DiscordEvent } from '../constants/discord-event.enum';
 import { EmojiReaction } from '../constants/emoji.enum';
 import { ConfigEnv } from '../config.env';
+import { BoostsRepository } from '../persistance/repositories/boosts.repository';
 
 export class CancelDungeonBoostEvent implements IEvent {
+    private readonly boostRepository = new BoostsRepository();
 
     async run(client: Client, messageReaction: MessageReaction, user: User): Promise<void> {
         const guild = await client.guilds.fetch(ConfigEnv.getConfig().DISCORD_GUILD);
@@ -13,6 +15,7 @@ export class CancelDungeonBoostEvent implements IEvent {
             return;
         }
         try {
+            await this.boostRepository.deleteBoostWithChannel(channel.id);
             await channel.delete();
         } catch (_) {
             // Empty

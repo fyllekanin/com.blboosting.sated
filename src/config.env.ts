@@ -14,6 +14,7 @@ export interface FactionBoostingRole {
 interface EnvConfig {
     BOT_TOKEN: string;
     BOT_INTENTS: string;
+    BOT_CLIENT_ID: string;
     DEFAULT_PREFIX: string;
     DISCORD_GUILD: string;
     CREATE_DUNGEON_BOOST_CHANNEL: string;

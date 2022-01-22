@@ -3,13 +3,17 @@ import { Client, MessageReaction, TextChannel, User } from 'discord.js';
 import { DiscordEvent } from '../constants/discord-event.enum';
 import { EmojiReaction } from '../constants/emoji.enum';
 import { ConfigEnv } from '../config.env';
+import { BoostsRepository } from '../persistance/repositories/boosts.repository';
+import { BoostEntity } from '../persistance/entities/boost.entity';
 
 export class CompleteDungeonBoostEvent implements IEvent {
+    private readonly boostRepository = new BoostsRepository();
 
     async run(client: Client, messageReaction: MessageReaction, user: User): Promise<void> {
         const guild = await client.guilds.fetch(ConfigEnv.getConfig().DISCORD_GUILD);
         const channel = await guild.channels.fetch(messageReaction.message.channelId) as TextChannel;
-        if (!await this.isApplicable(channel, messageReaction, user)) {
+        const entity = await this.boostRepository.getBoostForChannel(channel.id);
+        if (!await this.isApplicable(channel, messageReaction, user, entity)) {
             return;
         }
         /** Todo */
@@ -24,8 +28,8 @@ export class CompleteDungeonBoostEvent implements IEvent {
         return DiscordEvent.MessageReactionAdd;
     }
 
-    private async isApplicable(channel: TextChannel, messageReaction: MessageReaction, user: User): Promise<boolean> {
-        if (channel.parent.id !== ConfigEnv.getConfig().DUNGEON_BOOST_CATEGORY) {
+    private async isApplicable(channel: TextChannel, messageReaction: MessageReaction, user: User, entity: BoostEntity): Promise<boolean> {
+        if (channel.parent.id !== ConfigEnv.getConfig().DUNGEON_BOOST_CATEGORY || !entity.status.isStarted) {
             return false;
         }
 

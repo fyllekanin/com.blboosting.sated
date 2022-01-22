@@ -19,6 +19,10 @@ export class BoostsRepository extends BaseRepository<BoostEntity> {
         return await this.getCollection().find({ channelId: { $in: channelIds } }).toArray();
     }
 
+    async deleteBoostWithChannel(channelId: string): Promise<void> {
+        await this.getCollection().deleteOne({ channelId: channelId });
+    }
+
     async isInActiveBoost(userId: string): Promise<boolean> {
         return (await this.getCollection().find({
             $and: [
