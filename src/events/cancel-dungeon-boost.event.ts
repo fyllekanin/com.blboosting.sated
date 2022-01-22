@@ -4,6 +4,8 @@ import { DiscordEvent } from '../constants/discord-event.enum';
 import { EmojiReaction } from '../constants/emoji.enum';
 import { ConfigEnv } from '../config.env';
 import { BoostsRepository } from '../persistance/repositories/boosts.repository';
+import { LoggerService } from '../logging/logger.service';
+import { LogAction } from '../logging/log.actions';
 
 export class CancelDungeonBoostEvent implements IEvent {
     private readonly boostRepository = new BoostsRepository();
@@ -20,6 +22,15 @@ export class CancelDungeonBoostEvent implements IEvent {
         } catch (_) {
             // Empty
         }
+
+        LoggerService.logDungeonBoost({
+            action: LogAction.CANCELLED_DUNGEON_BOOST,
+            discordId: user.id,
+            description: `<@${user.id}> cancelled the boost`,
+            contentId: channel.id,
+            sendToDiscord: true,
+            client: client
+        });
     }
 
     getEventName(): DiscordEvent {

@@ -4,6 +4,8 @@ import { BoostsRepository } from '../persistance/repositories/boosts.repository'
 import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
 import { DiscordEvent } from '../constants/discord-event.enum';
 import { EmojiReaction } from '../constants/emoji.enum';
+import { LoggerService } from '../logging/logger.service';
+import { LogAction } from '../logging/log.actions';
 
 export class UnSignDungeonBoostEvent implements IEvent {
     private static readonly VALID_REACTIONS = [EmojiReaction.TANK, EmojiReaction.HEALER, EmojiReaction.DPS, EmojiReaction.KEYSTONE];
@@ -55,6 +57,12 @@ export class UnSignDungeonBoostEvent implements IEvent {
 
         await this.boostsRepository.update({ channelId: message.channelId }, entity);
         this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, message.channelId);
+        LoggerService.logDungeonBoost({
+            action: LogAction.UN_SIGNED_TO_DUNGEON_BOOST,
+            discordId: user.id,
+            description: `<@${user.id}> un-signed as ${messageReaction.emoji.name} to the boost`,
+            contentId: entity.channelId
+        });
     }
 
     getEventName(): DiscordEvent {

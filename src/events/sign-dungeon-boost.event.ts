@@ -7,6 +7,8 @@ import { EmojiReaction } from '../constants/emoji.enum';
 import { ConfigEnv } from '../config.env';
 import { DungeonBoosterUtils } from '../utils/dungeon-booster.utils';
 import { Faction } from '../constants/faction.enum';
+import { LoggerService } from '../logging/logger.service';
+import { LogAction } from '../logging/log.actions';
 
 export class SignDungeonBoostEvent implements IEvent {
     private static readonly VALID_REACTIONS = [EmojiReaction.TANK, EmojiReaction.HEALER, EmojiReaction.DPS, EmojiReaction.KEYSTONE];
@@ -89,6 +91,12 @@ export class SignDungeonBoostEvent implements IEvent {
 
         await this.boostsRepository.update({ channelId: message.channelId }, entity);
         this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, message.channelId);
+        LoggerService.logDungeonBoost({
+            action: LogAction.SIGNED_TO_DUNGEON_BOOST,
+            discordId: user.id,
+            description: `<@${user.id}> signed as ${messageReaction.emoji.name} to the boost`,
+            contentId: entity.channelId
+        });
     }
 
     getEventName(): DiscordEvent {

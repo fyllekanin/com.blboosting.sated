@@ -6,6 +6,8 @@ import { BoostsRepository } from '../persistance/repositories/boosts.repository'
 import { COMMAND_NAMES } from '../commands/command.interface';
 import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
 import { BoosterRole } from '../constants/role.constant';
+import { LoggerService } from '../logging/logger.service';
+import { LogAction } from '../logging/log.actions';
 
 export class AddDungeonBoosterEvent implements IEvent {
     private readonly boostRepository = new BoostsRepository();
@@ -101,6 +103,15 @@ You can replace a booster if it's started, but if you only wanna remove you need
             ephemeral: true,
             content: `Booster added
 Booster <@${user.id}> is now added!`
+        });
+
+        LoggerService.logDungeonBoost({
+            action: LogAction.ADDED_USER_TO_DUNGEON_BOOST,
+            discordId: interaction.user.id,
+            description: `Added <@${user.id}> to boost`,
+            contentId: entity.channelId,
+            sendToDiscord: true,
+            client: client
         });
     }
 

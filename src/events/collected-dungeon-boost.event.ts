@@ -5,6 +5,8 @@ import { EmojiReaction } from '../constants/emoji.enum';
 import { ConfigEnv } from '../config.env';
 import { BoostsRepository } from '../persistance/repositories/boosts.repository';
 import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
+import { LoggerService } from '../logging/logger.service';
+import { LogAction } from '../logging/log.actions';
 
 export class CollectedDungeonBoostEvent implements IEvent {
     private readonly boostRepository = new BoostsRepository();
@@ -26,6 +28,15 @@ export class CollectedDungeonBoostEvent implements IEvent {
         await this.boostRepository.update({ channelId: entity.channelId }, entity);
 
         this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, entity.channelId);
+
+        LoggerService.logDungeonBoost({
+            action: LogAction.COLLECTED_DUNGEON_BOOST,
+            discordId: user.id,
+            description: `<@${user.id}> collected the boost`,
+            contentId: channel.id,
+            sendToDiscord: true,
+            client: client
+        });
     }
 
     getEventName(): DiscordEvent {

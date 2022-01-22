@@ -17,6 +17,7 @@ interface EnvConfig {
     BOT_CLIENT_ID: string;
     DEFAULT_PREFIX: string;
     DISCORD_GUILD: string;
+    DISCORD_DUNGEON_LOGS: string;
     CREATE_DUNGEON_BOOST_CHANNEL: string;
     DUNGEON_BOOST_CATEGORY: string;
     DUNGEON_BOOST_MANAGE_PERMISSION: PermissionString;

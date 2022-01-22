@@ -5,6 +5,8 @@ import { EmojiReaction } from '../constants/emoji.enum';
 import { ConfigEnv } from '../config.env';
 import { BoostsRepository } from '../persistance/repositories/boosts.repository';
 import { BoostEntity } from '../persistance/entities/boost.entity';
+import { LoggerService } from '../logging/logger.service';
+import { LogAction } from '../logging/log.actions';
 
 export class CompleteDungeonBoostEvent implements IEvent {
     private readonly boostRepository = new BoostsRepository();
@@ -22,6 +24,16 @@ export class CompleteDungeonBoostEvent implements IEvent {
         } catch (_) {
             // Empty
         }
+
+        const isDeplete = messageReaction.emoji.name === EmojiReaction.DEPLETE_DUNGEON;
+        LoggerService.logDungeonBoost({
+            action: isDeplete ? LogAction.COMPLETED_DUNGEON_BOOST : LogAction.DEPLETED_DUNGEON_BOOST,
+            discordId: user.id,
+            description: `<@${user.id}> marked the boost as ${isDeplete ? 'depleted' : 'completed'}`,
+            contentId: channel.id,
+            sendToDiscord: true,
+            client: client
+        });
     }
 
     getEventName(): DiscordEvent {

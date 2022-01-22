@@ -10,6 +10,8 @@ import { BoosterRole } from '../constants/role.constant';
 import { EmojiReaction } from '../constants/emoji.enum';
 import { ConfigEnv } from '../config.env';
 import { DungeonBoosterUtils } from '../utils/dungeon-booster.utils';
+import { LoggerService } from '../logging/logger.service';
+import { LogAction } from '../logging/log.actions';
 
 
 export class CreateDungeonBoostEvent implements IEvent {
@@ -95,6 +97,15 @@ export class CreateDungeonBoostEvent implements IEvent {
         for (const reaction of CreateDungeonBoostEvent.BUILDING_REACTIONS) {
             await embedMessage.react(reaction);
         }
+
+        LoggerService.logDungeonBoost({
+            action: LogAction.CREATED_DUNGEON_BOOST,
+            discordId: message.author.id,
+            description: `<@${message.author.id}> created a new boost`,
+            contentId: channel.id,
+            sendToDiscord: true,
+            client: client
+        });
     }
 
     getEventName(): DiscordEvent {

@@ -6,6 +6,8 @@ import { BoostsRepository } from '../persistance/repositories/boosts.repository'
 import { COMMAND_NAMES } from '../commands/command.interface';
 import { EmojiReaction } from '../constants/emoji.enum';
 import { EventBus, INTERNAL_EVENT } from '../internal-events/event.bus';
+import { LoggerService } from '../logging/logger.service';
+import { LogAction } from '../logging/log.actions';
 
 export class RemoveDungeonBoosterEvent implements IEvent {
     private static readonly EMOJIS_TO_CLEAN = [EmojiReaction.TANK, EmojiReaction.HEALER, EmojiReaction.DPS, EmojiReaction.KEYSTONE];
@@ -17,8 +19,7 @@ export class RemoveDungeonBoosterEvent implements IEvent {
     }
 
     async run(client: Client, interaction: Interaction): Promise<void> {
-        const guild = await client.guilds.fetch(ConfigEnv.getConfig().DISCORD_GUILD);
-        const channel = await guild.channels.fetch(interaction.channelId) as TextChannel;
+        const channel = await client.channels.fetch(interaction.channelId) as TextChannel;
         if (!await this.isApplicable(channel, interaction)) {
             return;
         }
@@ -55,6 +56,14 @@ You can replace a booster if it's started, but if you only wanna remove you need
             ephemeral: true,
             content: `Booster removed
 Booster <@${user.id}> is now removed!`
+        });
+        LoggerService.logDungeonBoost({
+            action: LogAction.REMOVED_USER_FROM_DUNGEON_BOOST,
+            discordId: user.id,
+            description: `<@${interaction.user.id}> removed <@${user.id}> from the boost`,
+            contentId: channel.id,
+            sendToDiscord: true,
+            client: client
         });
     }
 

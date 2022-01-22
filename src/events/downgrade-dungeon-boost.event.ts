@@ -5,6 +5,8 @@ import { DiscordEvent } from '../constants/discord-event.enum';
 import { EmojiReaction } from '../constants/emoji.enum';
 import { DungeonBoosterUtils } from '../utils/dungeon-booster.utils';
 import { ConfigEnv } from '../config.env';
+import { LoggerService } from '../logging/logger.service';
+import { LogAction } from '../logging/log.actions';
 
 export class DowngradeDungeonBoostEvent implements IEvent {
     private static readonly VALID_REACTIONS = [EmojiReaction.ARROW_DOWN];
@@ -27,6 +29,14 @@ export class DowngradeDungeonBoostEvent implements IEvent {
             VIEW_CHANNEL: true
         });
         await message.edit(`<@&${entity.boostRoleId}> ${DungeonBoosterUtils.getStackRoleIds(entity.stack).map(id => `<@&${id}>`).join(' ')}`);
+        LoggerService.logDungeonBoost({
+            action: LogAction.DOWNGRADED_DUNGEON_BOOST,
+            discordId: user.id,
+            description: `<@${user.id}> downgraded the boost`,
+            contentId: channel.id,
+            sendToDiscord: true,
+            client: client
+        });
     }
 
     getEventName(): DiscordEvent {
