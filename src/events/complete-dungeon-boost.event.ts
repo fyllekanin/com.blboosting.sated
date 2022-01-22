@@ -12,6 +12,7 @@ export class CompleteDungeonBoostEvent implements IEvent {
         if (!await this.isApplicable(channel, messageReaction, user)) {
             return;
         }
+        /** Todo */
         try {
             await channel.delete();
         } catch (_) {
