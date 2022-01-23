@@ -66,7 +66,7 @@ Good luck!`)
                     inline: true
                 },
                 { name: 'Boost ID', value: this.boostId, inline: true },
-                { name: 'Your Cut', value: `${EmojiReaction.MONEY_BAG} ${this.cut}`, inline: true }
+                { name: 'Your Cut', value: `${EmojiReaction.MONEY_BAG} ${this.cut.toLocaleString()}`, inline: true }
             ])
     }
 }

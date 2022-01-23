@@ -102,7 +102,7 @@ export class MythicPlusEmbed implements EmbedInterface {
                 { name: 'Source', value: `${Source[this.source].label}`, inline: true },
                 { name: 'Server Payment(s)', value: payments, inline: true },
                 { name: 'Advertiser', value: `<@${this.advertiserId}>`, inline: true },
-                { name: 'Note', value: this.notes }
+                { name: 'Note', value: this.notes || '\u200b' }
             ])
     }
 

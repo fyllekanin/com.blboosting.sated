@@ -113,7 +113,7 @@ ${EmojiReaction.ADVERTISER} <@${this.advertiserId}>`)
                     value: `${EmojiReaction.MONEY_BAG} ${DungeonBoosterUtils.getBoosterPot(this.totalPot)}`,
                     inline: true
                 },
-                { name: 'Notes', value: this.notes }
+                { name: 'Notes', value: this.notes || '\u200b' }
             ])
             .setFooter({ text: `Boost ID: ${this.boostId}` });
     }
