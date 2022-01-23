@@ -42,3 +42,11 @@ export const Dungeon: { [key: string]: { value: DungeonKey, label: string } } = 
         value: 'TAZ'
     }
 }
+
+export const DungeonLevelConvert = function (dungeon: DungeonKey, level: string): { level: number, timed: boolean } {
+    switch (dungeon) {
+        case Dungeon.TAZ.value:
+            return level === 'HM' ? { level: 15, timed: true } : { level: 15, timed: false };
+    }
+    return null;
+};

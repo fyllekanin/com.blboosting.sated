@@ -7,6 +7,7 @@ import { DungeonBoosterUtils } from '../../utils/dungeon-booster.utils';
 import { ConfigEnv } from '../../config.env';
 import { LoggerService } from '../../logging/logger.service';
 import { LogAction } from '../../logging/log.actions';
+import { DungeonLevelConvert } from '../../constants/dungeon.enum';
 
 export class DowngradeBoostEvent implements IEvent {
     private static readonly VALID_REACTIONS = [EmojiReaction.ARROW_DOWN];
@@ -22,7 +23,11 @@ export class DowngradeBoostEvent implements IEvent {
         const reaction = messageReaction.partial ? await messageReaction.fetch() : messageReaction;
         const message = reaction.message.partial ? await reaction.message.fetch() : reaction.message;
 
-        entity.boostRoleId = DungeonBoosterUtils.getDowngradedBoostingRoleId(entity.boostRoleId, entity.key.isTimed, entity.faction);
+        const converted = typeof entity.key.level === 'string' ? DungeonLevelConvert(entity.key.dungeon, entity.key.level) : {
+            level: entity.key.level,
+            timed: entity.key.isTimed
+        };
+        entity.boostRoleId = DungeonBoosterUtils.getDowngradedBoostingRoleId(entity.boostRoleId, converted.timed, entity.faction);
         await this.boostsRepository.update({ channelId: entity.channelId }, entity);
 
         await channel.permissionOverwrites.create(entity.boostRoleId, {

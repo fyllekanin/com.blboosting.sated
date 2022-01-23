@@ -12,6 +12,7 @@ import { ConfigEnv } from '../../config.env';
 import { DungeonBoosterUtils } from '../../utils/dungeon-booster.utils';
 import { LoggerService } from '../../logging/logger.service';
 import { LogAction } from '../../logging/log.actions';
+import { DungeonLevelConvert } from '../../constants/dungeon.enum';
 
 
 export class CreateBoostEvent implements IEvent {
@@ -47,7 +48,11 @@ export class CreateBoostEvent implements IEvent {
         const title = `Mythic Dungeon Boost - ${payload.key.runs}x-${payload.key.dungeon}-${payload.key.isTimed ? 'timed' : 'untimed'}`;
         const category = await client.channels.fetch(ConfigEnv.getConfig().DUNGEON_BOOST_CATEGORY) as CategoryChannel;
 
-        const boostingRoleId = DungeonBoosterUtils.getAllowedBoostingRoleId(payload.key.level, payload.key.isTimed, payload.faction);
+        const converted = typeof payload.key.level === 'string' ? DungeonLevelConvert(payload.key.dungeon, payload.key.level) : {
+            level: payload.key.level,
+            timed: payload.key.isTimed
+        };
+        const boostingRoleId = DungeonBoosterUtils.getAllowedBoostingRoleId(converted.level, converted.timed, payload.faction);
         const channel = await category.createChannel(title);
         await channel.lockPermissions();
         await channel.permissionOverwrites.create(boostingRoleId, {
