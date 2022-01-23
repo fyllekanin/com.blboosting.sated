@@ -44,6 +44,10 @@ export class DungeonBoosterUtils {
             .map(key => process.env[`DISCORD_ROLE_${key}`]);
     }
 
+    static getBoosterPot(totalPot: number): number {
+        return (totalPot * (Number(ConfigEnv.getConfig().DUNGEON_BOOST_POT_PERCENTAGE) / 100)) / 4;
+    }
+
     static getDowngradedBoostingRoleId(currentId: string, isTimed: boolean, faction: FactionKey): string {
         const roles = faction === Faction.HORDE.value ? ConfigEnv.getConfig().BOOSTING_HORDE_ROLES : ConfigEnv.getConfig().BOOSTING_ALLIANCE_ROLES;
         const current = roles.find(item => item.roleId === currentId);

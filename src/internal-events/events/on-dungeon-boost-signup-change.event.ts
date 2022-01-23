@@ -7,6 +7,7 @@ import { BoosterRole, RoleKey } from '../../constants/role.constant';
 import { ConfigEnv } from '../../config.env';
 import { EmojiReaction } from '../../constants/emoji.enum';
 import { EventBus, INTERNAL_EVENT } from '../event.bus';
+import { DungeonBoosterUtils } from '../../utils/dungeon-booster.utils';
 
 export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
     private readonly boostsRepository = new BoostsRepository();
@@ -56,7 +57,7 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
                     .withStacks(entity.stack)
                     .withKey({ dungeon: entity.key.dungeon, level: entity.key.level })
                     .withIsTimed(entity.key.isTimed)
-                    .withBoosterPot((totalPot * 0.70) / 4)
+                    .withBoosterPot(DungeonBoosterUtils.getBoosterPot(totalPot))
                     .withTotalPot(totalPot)
                     .withSource(entity.source)
                     .withPayments(entity.payments.map(payment => ({ realm: payment.realm, faction: payment.faction })))

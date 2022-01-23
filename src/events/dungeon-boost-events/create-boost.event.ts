@@ -127,11 +127,11 @@ export class CreateBoostEvent implements IEvent {
         }
     }
 
-    private async createEmbed(channel: TextChannel, title: string, payload: IDungeonBoost, _boostingRoleId: string): Promise<Message> {
+    private async createEmbed(channel: TextChannel, title: string, payload: IDungeonBoost, boostingRoleId: string): Promise<Message> {
         const totalPot = payload.payments.reduce((prev, curr) => prev + curr.amount, 0);
 
-        const message = await channel.send({
-            //content: `<@&${boostingRoleId}> ${DungeonBoosterUtils.getStackRoleIds(payload.stack).map(id => `<@&${id}>`).join(' ')}`,
+        return await channel.send({
+            content: `<@&${boostingRoleId}> ${DungeonBoosterUtils.getStackRoleIds(payload.stack).map(id => `<@&${id}>`).join(' ')}`,
             embeds: [
                 new MythicPlusEmbed()
                     .withTitle(title)
@@ -139,7 +139,7 @@ export class CreateBoostEvent implements IEvent {
                     .withStacks(payload.stack)
                     .withKey({ dungeon: payload.key.dungeon, level: payload.key.level })
                     .withIsTimed(payload.key.isTimed)
-                    .withBoosterPot((totalPot * 0.70) / 4)
+                    .withBoosterPot(DungeonBoosterUtils.getBoosterPot(totalPot))
                     .withTotalPot(totalPot)
                     .withSource(payload.source)
                     .withPayments(payload.payments.map(payment => ({ realm: payment.realm, faction: payment.faction })))
@@ -147,8 +147,6 @@ export class CreateBoostEvent implements IEvent {
                     .generate()
             ]
         });
-
-        return message;
     }
 
     private getValidationResult(payload: Object): Array<string> {

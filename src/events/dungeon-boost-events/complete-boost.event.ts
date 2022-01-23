@@ -18,14 +18,16 @@ export class CompleteBoostEvent implements IEvent {
         if (!await this.isApplicable(channel, messageReaction, user, entity)) {
             return;
         }
-        /** Todo */
+        const isDeplete = messageReaction.emoji.name === EmojiReaction.DEPLETE_DUNGEON;
+
         try {
+            entity.status.isCompleted = !isDeplete;
+            entity.status.isDepleted = isDeplete;
             await channel.delete();
         } catch (_) {
             // Empty
         }
 
-        const isDeplete = messageReaction.emoji.name === EmojiReaction.DEPLETE_DUNGEON;
         LoggerService.logDungeonBoost({
             action: isDeplete ? LogAction.COMPLETED_DUNGEON_BOOST : LogAction.DEPLETED_DUNGEON_BOOST,
             discordId: user.id,

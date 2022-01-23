@@ -2,10 +2,12 @@ import { OnDungeonBoostSignupChangeEvent } from './events/on-dungeon-boost-signu
 import { InternalEventInterface } from './internal-event.interface';
 import { Client } from 'discord.js';
 import { StartDungeonBoostEvent } from './events/start-dungeon-boost.event';
+import { SendBoostersInformationEvent } from './events/send-boosters-information.event';
 
 export enum INTERNAL_EVENT {
     DUNGEON_BOOST_SIGNUP_CHANGE = 'DUNGEON_BOOST_SIGNUP_CHANGE',
-    START_DUNGEON_BOOST = 'START_DUNGEON_BOOST'
+    START_DUNGEON_BOOST = 'START_DUNGEON_BOOST',
+    SEND_BOOSTERS_INFORMATION = 'SEND_BOOSTERS_INFORMATION'
 }
 
 export class EventBus {
@@ -14,7 +16,8 @@ export class EventBus {
     constructor(client: Client) {
         this.INTERNAL_EVENT_MAPPER = {
             DUNGEON_BOOST_SIGNUP_CHANGE: new OnDungeonBoostSignupChangeEvent(client, this),
-            START_DUNGEON_BOOST: new StartDungeonBoostEvent(client, this)
+            START_DUNGEON_BOOST: new StartDungeonBoostEvent(client, this),
+            SEND_BOOSTERS_INFORMATION: new SendBoostersInformationEvent(client)
         }
     }
 
