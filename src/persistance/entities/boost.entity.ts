@@ -2,6 +2,7 @@ import { BaseEntity } from './base.entity';
 import { SourceKey } from '../../constants/source.enum';
 import { FactionKey } from '../../constants/faction.enum';
 import { StackKey } from '../../constants/Stack.enum';
+import { DungeonKey } from '../../constants/dungeon.enum';
 
 export interface BoostEntity extends BaseEntity {
     faction: FactionKey;
@@ -25,7 +26,7 @@ export interface BoostEntity extends BaseEntity {
     advertiserId: string;
     notes: string;
     key: {
-        dungeon: string;
+        dungeon: DungeonKey;
         level: string | number;
         isTimed: boolean;
         runs: number;

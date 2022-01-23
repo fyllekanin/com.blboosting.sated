@@ -62,6 +62,7 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
                     .withSource(entity.source)
                     .withPayments(entity.payments.map(payment => ({ realm: payment.realm, faction: payment.faction })))
                     .withAdvertiserId(entity.advertiserId)
+                    .withNotes(entity.notes)
                     .generate()
             ]
         });

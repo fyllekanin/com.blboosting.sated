@@ -7,6 +7,7 @@ import { BoostsRepository } from '../../persistance/repositories/boosts.reposito
 import { BoostEntity } from '../../persistance/entities/boost.entity';
 import { LoggerService } from '../../logging/logger.service';
 import { LogAction } from '../../logging/log.actions';
+import { DungeonBoostAttendanceEmbed } from '../../embeds/dungeon-boost-attendance.embed';
 
 export class CompleteBoostEvent implements IEvent {
     private readonly boostRepository = new BoostsRepository();
@@ -27,6 +28,29 @@ export class CompleteBoostEvent implements IEvent {
         } catch (_) {
             // Empty
         }
+
+        const attendanceChannel = await client.channels.fetch(ConfigEnv.getConfig().DUNGEON_BOOST_ATTENDANCE) as TextChannel;
+        attendanceChannel.send({
+            content: `Boost ID: ${entity.channelId}`,
+            embeds: [
+                new DungeonBoostAttendanceEmbed()
+                    .withBoostId(entity.channelId)
+                    .withTankId(entity.boosters.tank)
+                    .withHealerId(entity.boosters.healer)
+                    .withDpsOneId(entity.boosters.dpsOne)
+                    .withDpsTwoId(entity.boosters.dpsTwo)
+                    .withAdvertiserId(entity.advertiserId)
+                    .withLevel(entity.key.level)
+                    .withRuns(entity.key.runs)
+                    .withDungeon(entity.key.dungeon)
+                    .withIsTimed(entity.key.isTimed)
+                    .withStacks(entity.stack)
+                    .withSource(entity.source)
+                    .withTotalPot(entity.payments.reduce((prev, curr) => prev + curr.amount, 0))
+                    .withNotes(entity.notes)
+                    .generate()
+            ]
+        })
 
         LoggerService.logDungeonBoost({
             action: isDeplete ? LogAction.COMPLETED_DUNGEON_BOOST : LogAction.DEPLETED_DUNGEON_BOOST,

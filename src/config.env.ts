@@ -22,6 +22,7 @@ interface EnvConfig {
     DUNGEON_BOOST_CATEGORY: string;
     DUNGEON_BOOST_MANAGE_PERMISSION: PermissionString;
     DUNGEON_BOOST_POT_PERCENTAGE: string;
+    DUNGEON_BOOST_ATTENDANCE: string;
     MONGODB_HOST: string;
     MONGODB_DATABASE: string;
     MONGODB_USERNAME: string;

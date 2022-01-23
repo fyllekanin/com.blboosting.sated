@@ -23,6 +23,7 @@ export class MythicPlusEmbed implements EmbedInterface {
     private source: string;
     private payments: Array<{ realm: string, faction: string }> = [];
     private advertiserId: string;
+    private notes: string;
 
     withTitle(title: string): MythicPlusEmbed {
         this.title = title;
@@ -74,6 +75,11 @@ export class MythicPlusEmbed implements EmbedInterface {
         return this;
     }
 
+    withNotes(note: string): MythicPlusEmbed {
+        this.notes = note;
+        return this;
+    }
+
     generate(): MessageEmbed {
         const payments = this.payments.map(payment => `${payment.realm} [${Faction[payment.faction].label}]`).join('\n');
         return new MessageEmbed()
@@ -95,7 +101,8 @@ export class MythicPlusEmbed implements EmbedInterface {
                 { name: 'Total pot', value: `💰 ${this.totalPot.toLocaleString()}`, inline: true },
                 { name: 'Source', value: `${Source[this.source].label}`, inline: true },
                 { name: 'Server Payment(s)', value: payments, inline: true },
-                { name: 'Advertiser', value: `<@${this.advertiserId}>`, inline: true }
+                { name: 'Advertiser', value: `<@${this.advertiserId}>`, inline: true },
+                { name: 'Note', value: this.notes }
             ])
     }
 

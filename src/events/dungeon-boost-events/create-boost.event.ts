@@ -144,6 +144,7 @@ export class CreateBoostEvent implements IEvent {
                     .withSource(payload.source)
                     .withPayments(payload.payments.map(payment => ({ realm: payment.realm, faction: payment.faction })))
                     .withAdvertiserId(payload.advertiserId)
+                    .withNotes(payload.notes)
                     .generate()
             ]
         });

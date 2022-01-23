@@ -8,5 +8,6 @@ export enum EmojiReaction {
     TEAM = '👥',
     CANCEL = '❌',
     COMPLETE_DUNGEON = '✔',
-    DEPLETE_DUNGEON = '🔥'
+    DEPLETE_DUNGEON = '🔥',
+    ADVERTISER = '💰'
 }
