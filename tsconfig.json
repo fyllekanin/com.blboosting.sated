@@ -6,6 +6,7 @@
         "moduleResolution": "Node",
         "forceConsistentCasingInFileNames": true,
         "strict": false,
+        "outDir": "dist",
         "skipLibCheck": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
