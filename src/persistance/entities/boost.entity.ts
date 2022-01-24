@@ -8,13 +8,14 @@ export interface BoostEntity extends BaseEntity {
     faction: FactionKey;
     channelId: string;
     messageId: string;
+    voiceChannelId: string;
+    collectorMessageId: string;
     boostRoleId: string;
     contact: {
         name: string;
         realm: string;
     },
     source: SourceKey;
-    collectorMessageId: string;
     payments: Array<{
         amount: number;
         realm: string;

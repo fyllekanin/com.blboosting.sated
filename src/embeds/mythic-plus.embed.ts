@@ -23,6 +23,7 @@ export class MythicPlusEmbed implements EmbedInterface {
     private source: string;
     private payments: Array<{ realm: string, faction: string }> = [];
     private advertiserId: string;
+    private voiceChannelId: string;
     private notes: string;
 
     withTitle(title: string): MythicPlusEmbed {
@@ -75,6 +76,11 @@ export class MythicPlusEmbed implements EmbedInterface {
         return this;
     }
 
+    withVoiceChannelId(voiceChannelId: string): MythicPlusEmbed {
+        this.voiceChannelId = voiceChannelId;
+        return this;
+    }
+
     withNotes(note: string): MythicPlusEmbed {
         this.notes = note;
         return this;
@@ -102,6 +108,11 @@ export class MythicPlusEmbed implements EmbedInterface {
                 { name: 'Source', value: `${Source[this.source].label}`, inline: true },
                 { name: 'Server Payment(s)', value: payments, inline: true },
                 { name: 'Advertiser', value: `<@${this.advertiserId}>`, inline: true },
+                {
+                    name: 'Voice Channel',
+                    value: this.voiceChannelId ? `<#${this.voiceChannelId}>` : '\u200b',
+                    inline: true
+                },
                 { name: 'Note', value: this.notes || '\u200b' }
             ])
     }

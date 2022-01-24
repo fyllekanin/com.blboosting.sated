@@ -36,6 +36,7 @@ export class SendBoostersInformationEvent implements InternalEventInterface {
                         .withContactCharacter(entity.contact.name)
                         .withContactRealm(entity.contact.realm)
                         .withCut(DungeonBoosterUtils.getBoosterPot(totalPot))
+                        .withVoiceChannelId(entity.voiceChannelId)
                         .generate()
                 ]
             })

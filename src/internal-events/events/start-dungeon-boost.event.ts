@@ -5,6 +5,9 @@ import { ConfigEnv } from '../../config.env';
 import { EmojiReaction } from '../../constants/emoji.enum';
 import { BoostEntity } from '../../persistance/entities/boost.entity';
 import { EventBus, INTERNAL_EVENT } from '../event.bus';
+import { MythicPlusEmbed } from '../../embeds/mythic-plus.embed';
+import { DungeonBoosterUtils } from '../../utils/dungeon-booster.utils';
+import { ChannelTypes } from 'discord.js/typings/enums';
 
 export class StartDungeonBoostEvent implements InternalEventInterface {
     private static readonly EMOJIS_TO_CLEAN = [EmojiReaction.TANK, EmojiReaction.HEALER, EmojiReaction.DPS, EmojiReaction.KEYSTONE];
@@ -32,8 +35,33 @@ export class StartDungeonBoostEvent implements InternalEventInterface {
                 const message = await channel.messages.fetch(entity.messageId);
                 if (message.reactions.resolve(EmojiReaction.COMPLETE_DUNGEON) == null && this.isBoostReadyToStart(entity)) {
                     await this.updateBoost(entity, message, channel, entities);
+                    entity.voiceChannelId = await this.getVoiceChannel(entity);
                     await this.boostsRepository.update({ channelId: entity.channelId }, entity);
                     this.eventBus.emit(INTERNAL_EVENT.SEND_BOOSTERS_INFORMATION, entity.channelId);
+
+                    const title = `Mythic Dungeon Boost - ${entity.key.runs}x-${entity.key.dungeon}-${entity.key.isTimed ? 'timed' : 'untimed'}`;
+                    const totalPot = entity.payments.reduce((prev, curr) => prev + curr.amount, 0);
+                    message.edit({
+                        embeds: [
+                            new MythicPlusEmbed()
+                                .withTitle(title)
+                                .withBoosters(DungeonBoosterUtils.getBoosters(entity))
+                                .withStacks(entity.stack)
+                                .withKey({ dungeon: entity.key.dungeon, level: entity.key.level })
+                                .withIsTimed(entity.key.isTimed)
+                                .withBoosterPot(DungeonBoosterUtils.getBoosterPot(totalPot))
+                                .withTotalPot(totalPot)
+                                .withSource(entity.source)
+                                .withPayments(entity.payments.map(payment => ({
+                                    realm: payment.realm,
+                                    faction: payment.faction
+                                })))
+                                .withAdvertiserId(entity.advertiserId)
+                                .withVoiceChannelId(entity.voiceChannelId)
+                                .withNotes(entity.notes)
+                                .generate()
+                        ]
+                    });
                 } else {
                     await this.boostsRepository.update({ channelId: entity.channelId }, entity);
                 }
@@ -42,11 +70,29 @@ export class StartDungeonBoostEvent implements InternalEventInterface {
         }, 200);
     }
 
+    private async getVoiceChannel(entity: BoostEntity): Promise<string> {
+        const category = await this.client.channels.fetch(ConfigEnv.getConfig().DUNGEON_BOOST_VOICE_CATEGORY) as CategoryChannel;
+        const channel = await category.createChannel(`${entity.key.runs}x-${entity.key.dungeon}-${entity.key.isTimed ? 'timed' : 'untimed'}`, {
+            type: ChannelTypes.GUILD_VOICE
+        });
+        await channel.lockPermissions();
+        const boosterIds = [entity.boosters.tank, entity.boosters.healer, entity.boosters.dpsOne, entity.boosters.dpsTwo];
+        for (const boosterId of boosterIds) {
+            channel.permissionOverwrites.create(boosterId, {
+                VIEW_CHANNEL: true,
+                CONNECT: true,
+                SPEAK: true
+            });
+        }
+        return channel.id;
+    }
+
     private async updateBoost(entity: BoostEntity, message: Message, _entityChannel: TextChannel, entities: Array<BoostEntity>): Promise<void> {
         await message.reactions.removeAll();
         await message.react(EmojiReaction.COMPLETE_DUNGEON);
         await message.react(EmojiReaction.DEPLETE_DUNGEON);
         entity.status.isStarted = true;
+        /** TODO */
         /*entityChannel.send(`Boost started!
 ${EmojiReaction.TANK} <@${entity.boosters.tank}>
 ${EmojiReaction.HEALER} <@${entity.boosters.healer}>

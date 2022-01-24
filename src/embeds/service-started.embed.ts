@@ -10,6 +10,7 @@ export class ServiceStartedEmbed implements EmbedInterface {
     private contactRealm: string;
     private boostId: string;
     private cut: number;
+    private voiceChannelId: string;
 
     withTitle(title: string): ServiceStartedEmbed {
         this.title = title;
@@ -46,6 +47,11 @@ export class ServiceStartedEmbed implements EmbedInterface {
         return this;
     }
 
+    withVoiceChannelId(voiceChannelId: string): ServiceStartedEmbed {
+        this.voiceChannelId = voiceChannelId;
+        return this;
+    }
+
     generate(): MessageEmbed {
         return new MessageEmbed()
             .setTitle(this.title)
@@ -66,7 +72,8 @@ Good luck!`)
                     inline: true
                 },
                 { name: 'Boost ID', value: this.boostId, inline: true },
-                { name: 'Your Cut', value: `${EmojiReaction.MONEY_BAG} ${this.cut.toLocaleString()}`, inline: true }
+                { name: 'Your Cut', value: `${EmojiReaction.MONEY_BAG} ${this.cut.toLocaleString()}`, inline: true },
+                { name: 'Voice Channel', value: `<#${this.voiceChannelId}>` }
             ])
     }
 }

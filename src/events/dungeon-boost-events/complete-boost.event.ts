@@ -19,11 +19,13 @@ export class CompleteBoostEvent implements IEvent {
             return;
         }
         const isDeplete = messageReaction.emoji.name === EmojiReaction.DEPLETE_DUNGEON;
+        const voiceChannel = await client.channels.fetch(entity.voiceChannelId).catch(() => null);
 
         try {
             entity.status.isCompleted = !isDeplete;
             entity.status.isDepleted = isDeplete;
             await channel.delete();
+            await voiceChannel?.delete();
         } catch (_) {
             // Empty
         }

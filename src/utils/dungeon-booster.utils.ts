@@ -4,6 +4,7 @@ import { BoosterRole, RoleKey } from '../constants/role.constant';
 import { Guild } from 'discord.js';
 import { EmojiReaction } from '../constants/emoji.enum';
 import { Faction, FactionKey } from '../constants/faction.enum';
+import { BoostEntity } from '../persistance/entities/boost.entity';
 
 export class DungeonBoosterUtils {
 
@@ -17,6 +18,25 @@ export class DungeonBoosterUtils {
                 return BoosterRole.DPS.value;
         }
         return null;
+    }
+
+    static getBoosters(entity: BoostEntity): Array<{ boosterId: string, isTank: boolean, isHealer: boolean, isDps: boolean }> {
+        const boosters: Array<{ boosterId: string, isTank: boolean, isHealer: boolean, isDps: boolean }> = [];
+
+        if (entity.boosters.tank) {
+            boosters.push({ boosterId: entity.boosters?.tank, isTank: true, isHealer: false, isDps: false });
+        }
+        if (entity.boosters.healer) {
+            boosters.push({ boosterId: entity.boosters?.healer, isTank: false, isHealer: true, isDps: false });
+        }
+        if (entity.boosters.dpsOne) {
+            boosters.push({ boosterId: entity.boosters?.dpsOne, isTank: false, isHealer: false, isDps: true });
+        }
+        if (entity.boosters.dpsTwo) {
+            boosters.push({ boosterId: entity.boosters?.dpsTwo, isTank: false, isHealer: false, isDps: true });
+        }
+
+        return boosters;
     }
 
     static async isAllowedToSignWithStack(guild: Guild, stackRoleIds: Array<string>, userId: string, role: RoleKey): Promise<boolean> {

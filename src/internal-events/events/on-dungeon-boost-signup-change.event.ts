@@ -53,7 +53,7 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
             embeds: [
                 new MythicPlusEmbed()
                     .withTitle(title)
-                    .withBoosters(this.getBoosters(entity))
+                    .withBoosters(DungeonBoosterUtils.getBoosters(entity))
                     .withStacks(entity.stack)
                     .withKey({ dungeon: entity.key.dungeon, level: entity.key.level })
                     .withIsTimed(entity.key.isTimed)
@@ -70,25 +70,6 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
         if (entity.boosters.tank && entity.boosters.healer && entity.boosters.dpsOne && entity.boosters.dpsTwo && entity.status.isCollected) {
             this.eventBus.emit(INTERNAL_EVENT.START_DUNGEON_BOOST);
         }
-    }
-
-    private getBoosters(entity: BoostEntity): Array<{ boosterId: string, isTank: boolean, isHealer: boolean, isDps: boolean }> {
-        const boosters: Array<{ boosterId: string, isTank: boolean, isHealer: boolean, isDps: boolean }> = [];
-
-        if (entity.boosters.tank) {
-            boosters.push({ boosterId: entity.boosters?.tank, isTank: true, isHealer: false, isDps: false });
-        }
-        if (entity.boosters.healer) {
-            boosters.push({ boosterId: entity.boosters?.healer, isTank: false, isHealer: true, isDps: false });
-        }
-        if (entity.boosters.dpsOne) {
-            boosters.push({ boosterId: entity.boosters?.dpsOne, isTank: false, isHealer: false, isDps: true });
-        }
-        if (entity.boosters.dpsTwo) {
-            boosters.push({ boosterId: entity.boosters?.dpsTwo, isTank: false, isHealer: false, isDps: true });
-        }
-
-        return boosters;
     }
 
     private findTank(entity: BoostEntity): void {
