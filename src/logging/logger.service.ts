@@ -49,7 +49,7 @@ export class LoggerService {
                 embeds.push(embed.generate());
             }
 
-            await message.edit({
+            message.edit({
                 content: `Logs for ${info.contentId}`,
                 embeds: embeds
             })

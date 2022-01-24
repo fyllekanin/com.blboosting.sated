@@ -30,10 +30,10 @@ export class DowngradeBoostEvent implements IEvent {
         entity.boostRoleId = DungeonBoosterUtils.getDowngradedBoostingRoleId(entity.boostRoleId, converted.timed, entity.faction);
         await this.boostsRepository.update({ channelId: entity.channelId }, entity);
 
-        await channel.permissionOverwrites.create(entity.boostRoleId, {
+        channel.permissionOverwrites.create(entity.boostRoleId, {
             VIEW_CHANNEL: true
         });
-        await message.edit(`<@&${entity.boostRoleId}> ${DungeonBoosterUtils.getStackRoleIds(entity.stack).map(id => `<@&${id}>`).join(' ')}`);
+        message.edit(`<@&${entity.boostRoleId}> ${DungeonBoosterUtils.getStackRoleIds(entity.stack).map(id => `<@&${id}>`).join(' ')}`);
         LoggerService.logDungeonBoost({
             action: LogAction.DOWNGRADED_DUNGEON_BOOST,
             discordId: user.id,

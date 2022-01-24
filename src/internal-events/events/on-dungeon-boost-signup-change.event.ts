@@ -49,7 +49,7 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
         const title = `Mythic Dungeon Boost - ${entity.key.runs}x-${entity.key.dungeon}-${entity.key.isTimed ? 'timed' : 'untimed'}`;
         const totalPot = entity.payments.reduce((prev, curr) => prev + curr.amount, 0);
         await this.boostsRepository.update({ channelId: entity.channelId }, entity);
-        await message.edit({
+        message.edit({
             embeds: [
                 new MythicPlusEmbed()
                     .withTitle(title)
