@@ -38,7 +38,7 @@ export class CollectedBoostEvent implements IEvent {
             content: `<@&${ConfigEnv.getConfig().COLLECTOR_ROLE_ID}>`,
             embeds: [
                 new CollectorEmbed()
-                    .withBoostId(channel.id)
+                    .withBoostId(entity.channelId)
                     .withAdvertiserId(entity.advertiserId)
                     .withPayments(entity.payments.filter(item => !item.isBalance).map(item => ({
                         realm: item.realm,
@@ -53,7 +53,7 @@ export class CollectedBoostEvent implements IEvent {
             action: LogAction.COLLECTED_DUNGEON_BOOST,
             discordId: user.id,
             description: `<@${user.id}> collected the boost`,
-            contentId: channel.id,
+            contentId: entity.channelId,
             printOnDiscord: true,
             client: client
         });
