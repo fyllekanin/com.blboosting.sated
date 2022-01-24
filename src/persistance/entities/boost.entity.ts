@@ -14,6 +14,7 @@ export interface BoostEntity extends BaseEntity {
         realm: string;
     },
     source: SourceKey;
+    collectorMessageId: string;
     payments: Array<{
         amount: number;
         realm: string;

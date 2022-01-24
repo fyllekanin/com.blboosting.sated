@@ -11,9 +11,8 @@ export class CancelBoostEvent implements IEvent {
     private readonly boostRepository = new BoostsRepository();
 
     async run(client: Client, messageReaction: MessageReaction, user: User): Promise<void> {
-        const guild = await client.guilds.fetch(ConfigEnv.getConfig().DISCORD_GUILD);
-        const channel = await guild.channels.fetch(messageReaction.message.channelId) as TextChannel;
-        if (!await this.isApplicable(channel, messageReaction, user)) {
+        const channel = await client.channels.fetch(messageReaction.message.channelId).catch(() => null) as TextChannel;
+        if (!channel || !await this.isApplicable(channel, messageReaction, user)) {
             return;
         }
         try {

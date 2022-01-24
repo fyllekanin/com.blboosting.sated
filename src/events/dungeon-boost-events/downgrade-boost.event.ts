@@ -15,9 +15,9 @@ export class DowngradeBoostEvent implements IEvent {
 
     async run(client: Client, messageReaction: MessageReaction, user: User): Promise<void> {
         const entity = await this.boostsRepository.getBoostForChannel(messageReaction.message.channelId);
-        const channel = await client.channels.fetch(entity.channelId) as TextChannel;
+        const channel = await client.channels.fetch(entity?.channelId).catch(() => null) as TextChannel;
 
-        if (!await this.isApplicable(channel, messageReaction, user)) {
+        if (!channel || !await this.isApplicable(channel, messageReaction, user)) {
             return;
         }
         const reaction = messageReaction.partial ? await messageReaction.fetch() : messageReaction;

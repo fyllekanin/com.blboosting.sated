@@ -18,9 +18,8 @@ export class AddBoosterEvent implements IEvent {
     }
 
     async run(client: Client, interaction: Interaction): Promise<void> {
-        const guild = await client.guilds.fetch(ConfigEnv.getConfig().DISCORD_GUILD);
-        const channel = await guild.channels.fetch(interaction.channelId) as TextChannel;
-        if (!await this.isApplicable(channel, interaction)) {
+        const channel = await client.channels.fetch(interaction.channelId).catch(() => null) as TextChannel;
+        if (!channel || !await this.isApplicable(channel, interaction)) {
             return;
         }
         const command = interaction as CommandInteraction;

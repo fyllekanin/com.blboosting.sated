@@ -15,6 +15,10 @@ export class BoostsRepository extends BaseRepository<BoostEntity> {
         return await this.getCollection().findOne({ channelId: channelId });
     }
 
+    async getBoostForCollectorMessage(collectorMessageId: string): Promise<BoostEntity> {
+        return await this.getCollection().findOne({ collectorMessageId: collectorMessageId });
+    }
+
     async getBoostsForChannels(channelIds: Array<string>): Promise<Array<BoostEntity>> {
         return await this.getCollection().find({ channelId: { $in: channelIds } }).toArray();
     }

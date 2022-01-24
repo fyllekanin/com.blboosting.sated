@@ -13,10 +13,9 @@ export class CompleteBoostEvent implements IEvent {
     private readonly boostRepository = new BoostsRepository();
 
     async run(client: Client, messageReaction: MessageReaction, user: User): Promise<void> {
-        const guild = await client.guilds.fetch(ConfigEnv.getConfig().DISCORD_GUILD);
-        const channel = await guild.channels.fetch(messageReaction.message.channelId) as TextChannel;
-        const entity = await this.boostRepository.getBoostForChannel(channel.id);
-        if (!await this.isApplicable(channel, messageReaction, user, entity)) {
+        const channel = await client.channels.fetch(messageReaction.message.channelId).catch(() => null) as TextChannel;
+        const entity = channel ? await this.boostRepository.getBoostForChannel(channel.id) : null;
+        if (!entity || !await this.isApplicable(channel, messageReaction, user, entity)) {
             return;
         }
         const isDeplete = messageReaction.emoji.name === EmojiReaction.DEPLETE_DUNGEON;

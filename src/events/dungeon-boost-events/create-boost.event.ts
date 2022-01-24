@@ -13,6 +13,7 @@ import { DungeonBoosterUtils } from '../../utils/dungeon-booster.utils';
 import { LoggerService } from '../../logging/logger.service';
 import { LogAction } from '../../logging/log.actions';
 import { DungeonLevelConvert } from '../../constants/dungeon.enum';
+import { CollectorEmbed } from '../../embeds/collector.embed';
 
 
 export class CreateBoostEvent implements IEvent {
@@ -68,6 +69,7 @@ export class CreateBoostEvent implements IEvent {
             boostRoleId: boostingRoleId,
             contact: payload.contact,
             source: payload.source,
+            collectorMessageId: null,
             payments: payload.payments,
             discount: payload.discount,
             stack: payload.stack,
@@ -96,6 +98,29 @@ export class CreateBoostEvent implements IEvent {
 
         const embedMessage = await this.createEmbed(channel, title, payload, boostingRoleId);
         entity.messageId = embedMessage.id;
+
+        const permissions = channel.permissionsFor(message.author.id);
+        if (permissions.has(ConfigEnv.getConfig().DUNGEON_BOOST_COLLECT_PERMISSION)) {
+            const collectorChannel = await client.channels.fetch(ConfigEnv.getConfig().DUNGEON_COLLECTOR_CHANNEL) as TextChannel;
+            const collectorMessage = await collectorChannel.send({
+                content: `<@&${ConfigEnv.getConfig().COLLECTOR_ROLE_ID}>`,
+                embeds: [
+                    new CollectorEmbed()
+                        .withBoostId(channel.id)
+                        .withAdvertiserId(payload.advertiserId)
+                        .withPayments(payload.payments.filter(item => !item.isBalance).map(item => ({
+                            realm: item.realm,
+                            faction: item.faction,
+                            amount: item.amount
+                        })))
+                        .generate()
+                ]
+            });
+            await collectorMessage.react(EmojiReaction.MONEY_BAG);
+            await collectorMessage.react(EmojiReaction.WAVING_HAND);
+            entity.collectorMessageId = collectorMessage.id;
+        }
+
         await repository.update({ channelId: channel.id }, entity);
         this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, entity.channelId);
 

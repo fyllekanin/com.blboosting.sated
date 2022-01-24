@@ -9,5 +9,6 @@ export enum EmojiReaction {
     CANCEL = '❌',
     COMPLETE_DUNGEON = '✔',
     DEPLETE_DUNGEON = '🔥',
-    ADVERTISER = '💰'
+    ADVERTISER = '💰',
+    WAVING_HAND = '👋'
 }

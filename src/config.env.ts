@@ -25,6 +25,7 @@ interface EnvConfig {
     DUNGEON_BOOST_POT_PERCENTAGE: string;
     DUNGEON_BOOST_ATTENDANCE: string;
     DUNGEON_COLLECTOR_CHANNEL: string;
+    COLLECTOR_ROLE_ID: string;
     MONGODB_HOST: string;
     MONGODB_DATABASE: string;
     MONGODB_USERNAME: string;

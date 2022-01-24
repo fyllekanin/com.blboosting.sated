@@ -19,8 +19,8 @@ export class RemoveBoostEvent implements IEvent {
     }
 
     async run(client: Client, interaction: Interaction): Promise<void> {
-        const channel = await client.channels.fetch(interaction.channelId) as TextChannel;
-        if (!await this.isApplicable(channel, interaction)) {
+        const channel = await client.channels.fetch(interaction.channelId).catch(() => null) as TextChannel;
+        if (!channel || !await this.isApplicable(channel, interaction)) {
             return;
         }
         const command = interaction as CommandInteraction;
