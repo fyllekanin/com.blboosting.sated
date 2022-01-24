@@ -28,6 +28,11 @@ export class CollectedBoostEvent implements IEvent {
             await this.boostRepository.getBoostForCollectorMessage(messageReaction.message.id) :
             await this.boostRepository.getBoostForChannel(messageReaction.message.channelId);
 
+        if (!entity.boosters.tank || !entity.boosters.healer || !entity.boosters.dpsOne || !entity.boosters.dpsTwo || !entity.boosters.keyholder) {
+            await messageReaction.remove();
+            return;
+        }
+
         entity.status.isCollected = true;
         entity.payments.forEach(item => item.collectorId = user.id);
         await this.boostRepository.update({ channelId: entity.channelId }, entity);
