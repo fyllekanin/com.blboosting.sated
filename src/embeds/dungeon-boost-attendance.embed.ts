@@ -2,7 +2,7 @@ import { EmbedInterface } from './embed.interface';
 import { MessageEmbed } from 'discord.js';
 import { Dungeon, DungeonKey } from '../constants/dungeon.enum';
 import { Source, SourceKey } from '../constants/source.enum';
-import { Stack, StackKey } from '../constants/Stack.enum';
+import { Stack, StackKey } from '../constants/stack.enum';
 import { EmojiReaction } from '../constants/emoji.enum';
 import { DungeonBoosterUtils } from '../utils/dungeon-booster.utils';
 

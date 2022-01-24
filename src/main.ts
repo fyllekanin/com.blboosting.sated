@@ -16,6 +16,7 @@ import { Routes } from 'discord-api-types/v9';
 import { RemoveBoostEvent } from './events/dungeon-boost-events/remove-boost.event';
 import { AddDungeonBoosterCommand } from './commands/add-dungeon-booster.command';
 import { AddBoosterEvent } from './events/dungeon-boost-events/add-booster.event';
+import { ActivityTypes } from 'discord.js/typings/enums';
 
 require('dotenv').config();
 
@@ -27,6 +28,7 @@ class Main {
         ConfigEnv.load();
         this.rest = new REST({ version: '9' }).setToken(ConfigEnv.getConfig().BOT_TOKEN);
         this.client = new Client({
+            restTimeOffset: 0,
             intents: new Intents([
                 Intents.FLAGS.GUILDS,
                 Intents.FLAGS.GUILD_MEMBERS,
@@ -45,6 +47,10 @@ class Main {
 
         this.client.on('ready', async () => {
             console.log('Logged in');
+            this.client.user.setActivity({
+                name: 'Loading...',
+                type: ActivityTypes.STREAMING
+            });
             await (new UpdateDungeonSignupsStartup()).run(this.client, eventBus);
 
             const events = [
@@ -69,6 +75,10 @@ class Main {
             ];
             await this.rest.put(Routes.applicationGuildCommands(ConfigEnv.getConfig().BOT_CLIENT_ID, ConfigEnv.getConfig().DISCORD_GUILD), { body: commands });
             console.log('Everything ready');
+            this.client.user.setActivity({
+                name: 'Let go!',
+                type: ActivityTypes.PLAYING
+            });
         });
         this.client.login(ConfigEnv.getConfig().BOT_TOKEN).catch(err => {
             console.error(`Shit went wrong, ${err}`);

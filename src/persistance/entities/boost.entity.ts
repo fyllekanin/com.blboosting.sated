@@ -1,7 +1,7 @@
 import { BaseEntity } from './base.entity';
 import { SourceKey } from '../../constants/source.enum';
 import { FactionKey } from '../../constants/faction.enum';
-import { StackKey } from '../../constants/Stack.enum';
+import { StackKey } from '../../constants/stack.enum';
 import { DungeonKey } from '../../constants/dungeon.enum';
 
 export interface BoostEntity extends BaseEntity {

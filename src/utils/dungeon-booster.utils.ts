@@ -1,5 +1,5 @@
 import { ConfigEnv } from '../config.env';
-import { StackKey } from '../constants/Stack.enum';
+import { StackKey } from '../constants/stack.enum';
 import { BoosterRole, RoleKey } from '../constants/role.constant';
 import { Guild } from 'discord.js';
 import { EmojiReaction } from '../constants/emoji.enum';

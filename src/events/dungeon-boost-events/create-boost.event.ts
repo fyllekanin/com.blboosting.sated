@@ -98,6 +98,8 @@ export class CreateBoostEvent implements IEvent {
 
         const embedMessage = await this.createEmbed(channel, title, payload, boostingRoleId);
         entity.messageId = embedMessage.id;
+        await repository.update({ channelId: channel.id }, entity);
+        this.reactToMessage(embedMessage);
 
         const permissions = channel.permissionsFor(message.author.id);
         if (permissions.has(ConfigEnv.getConfig().DUNGEON_BOOST_COLLECT_PERMISSION)) {
@@ -119,15 +121,10 @@ export class CreateBoostEvent implements IEvent {
             await collectorMessage.react(EmojiReaction.MONEY_BAG);
             await collectorMessage.react(EmojiReaction.WAVING_HAND);
             entity.collectorMessageId = collectorMessage.id;
+            await repository.update({ channelId: channel.id }, entity);
         }
 
-        await repository.update({ channelId: channel.id }, entity);
         this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, entity.channelId);
-
-        for (const reaction of CreateBoostEvent.BUILDING_REACTIONS) {
-            await embedMessage.react(reaction);
-        }
-
         LoggerService.logDungeonBoost({
             action: LogAction.CREATED_DUNGEON_BOOST,
             discordId: message.author.id,
@@ -140,6 +137,12 @@ export class CreateBoostEvent implements IEvent {
 
     getEventName(): DiscordEvent {
         return DiscordEvent.MessageCreate;
+    }
+
+    private async reactToMessage(message: Message): Promise<void> {
+        for (const reaction of CreateBoostEvent.BUILDING_REACTIONS) {
+            await message.react(reaction);
+        }
     }
 
     private async isApplicable(message: Message): Promise<boolean> {

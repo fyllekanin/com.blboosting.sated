@@ -3,7 +3,7 @@ import { MessageEmbed } from 'discord.js';
 import { Dungeon } from '../constants/dungeon.enum';
 import { Source } from '../constants/source.enum';
 import { Faction } from '../constants/faction.enum';
-import { Stack } from '../constants/Stack.enum';
+import { Stack } from '../constants/stack.enum';
 
 interface Booster {
     boosterId: string;

@@ -22,6 +22,10 @@ export class UpdateDungeonSignupsStartup implements StartupInterface {
 
     private async updateEntity(client: Client, eventBus: EventBus, channel: TextChannel): Promise<void> {
         const entity = await this.boostsRepository.getBoostForChannel(channel.id);
+        if (!entity) {
+            channel.delete();
+            return;
+        }
         if (entity.status.isStarted) {
             return;
         }

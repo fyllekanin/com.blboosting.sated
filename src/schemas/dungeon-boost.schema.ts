@@ -3,7 +3,7 @@ import { Dungeon, DungeonKey } from '../constants/dungeon.enum';
 import { BoosterRole, RoleKey } from '../constants/role.constant';
 import { Source, SourceKey } from '../constants/source.enum';
 import { Faction, FactionKey } from '../constants/faction.enum';
-import { Stack, StackKey } from '../constants/Stack.enum';
+import { Stack, StackKey } from '../constants/stack.enum';
 
 export interface IDungeonBoost {
     faction: FactionKey,

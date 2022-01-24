@@ -34,20 +34,22 @@ export class CollectedBoostEvent implements IEvent {
 
         this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE, entity.channelId);
 
-        messageReaction.message.edit({
-            content: `<@&${ConfigEnv.getConfig().COLLECTOR_ROLE_ID}>`,
-            embeds: [
-                new CollectorEmbed()
-                    .withBoostId(entity.channelId)
-                    .withAdvertiserId(entity.advertiserId)
-                    .withPayments(entity.payments.filter(item => !item.isBalance).map(item => ({
-                        realm: item.realm,
-                        faction: item.faction,
-                        amount: item.amount
-                    })))
-                    .generate()
-            ]
-        })
+        if (isCollectorMessage) {
+            messageReaction.message.edit({
+                content: `<@&${ConfigEnv.getConfig().COLLECTOR_ROLE_ID}>`,
+                embeds: [
+                    new CollectorEmbed()
+                        .withBoostId(entity.channelId)
+                        .withAdvertiserId(entity.advertiserId)
+                        .withPayments(entity.payments.filter(item => !item.isBalance).map(item => ({
+                            realm: item.realm,
+                            faction: item.faction,
+                            amount: item.amount
+                        })))
+                        .generate()
+                ]
+            });
+        }
 
         LoggerService.logDungeonBoost({
             action: LogAction.COLLECTED_DUNGEON_BOOST,
