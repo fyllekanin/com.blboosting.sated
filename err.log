@@ -1,0 +1,526 @@
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+TypeError: Cannot read properties of undefined (reading 'resolve')
+    at OnDungeonBoostSignupChangeEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\internal-events\events\on-dungeon-boost-signup-change.event.js:78:71)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\internal-events\events\on-dungeon-boost-signup-change.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\internal-events\events\on-dungeon-boost-signup-change.event.js:14:53)
+    at fulfilled (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\internal-events\events\on-dungeon-boost-signup-change.event.js:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+TypeError: Cannot read properties of undefined (reading 'resolve')
+    at OnDungeonBoostSignupChangeEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\internal-events\events\on-dungeon-boost-signup-change.event.js:78:71)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\internal-events\events\on-dungeon-boost-signup-change.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\internal-events\events\on-dungeon-boost-signup-change.event.js:14:53)
+    at fulfilled (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\internal-events\events\on-dungeon-boost-signup-change.event.js:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+TypeError: Cannot read properties of undefined (reading 'resolve')
+    at OnDungeonBoostSignupChangeEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\internal-events\events\on-dungeon-boost-signup-change.event.js:78:71)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\internal-events\events\on-dungeon-boost-signup-change.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\internal-events\events\on-dungeon-boost-signup-change.event.js:14:53)
+    at fulfilled (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\internal-events\events\on-dungeon-boost-signup-change.event.js:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+TypeError: Cannot read properties of null (reading 'users')
+    at UpdateDungeonSignupsStartup.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\startup\update-dungeon-signups.startup.js:95:58)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\startup\update-dungeon-signups.startup.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\startup\update-dungeon-signups.startup.js:14:53)
+    at fulfilled (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\startup\update-dungeon-signups.startup.js:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CompleteBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:141:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:4:12)
+    at CompleteBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:133:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CompleteBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:141:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:4:12)
+    at CompleteBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:133:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CompleteBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:141:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:4:12)
+    at CompleteBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:133:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CompleteBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:141:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:4:12)
+    at CompleteBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:133:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CancelBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:107:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:4:12)
+    at CancelBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\cancel-boost.event.js:99:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at DowngradeBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:129:41)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:4:12)
+    at DowngradeBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\downgrade-boost.event.js:122:16)
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+RangeError [BITFIELD_INVALID]: Invalid bitfield flag or number: SEND_MESSAGE.
+    at Function.resolve (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:152:11)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\BitField.js:44:28)
+    at Permissions.has (C:\Users\46768\Desktop\repos\com.blboosting.sated\node_modules\discord.js\src\util\Permissions.js:54:85)
+    at CompleteBoostEvent.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:141:37)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:14:53)
+    at C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:8:71
+    at new Promise (<anonymous>)
+    at __awaiter (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:4:12)
+    at CompleteBoostEvent.isApplicable (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\events\dungeon-boost-events\complete-boost.event.js:133:16)
+TypeError: Cannot read properties of undefined (reading 'resolve')
+    at UpdateDungeonSignupsStartup.<anonymous> (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\startup\update-dungeon-signups.startup.js:83:64)
+    at step (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\startup\update-dungeon-signups.startup.js:33:23)
+    at Object.next (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\startup\update-dungeon-signups.startup.js:14:53)
+    at fulfilled (C:\Users\46768\Desktop\repos\com.blboosting.sated\dist\startup\update-dungeon-signups.startup.js:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)

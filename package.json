@@ -6,7 +6,7 @@
     "module": "ES2020",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "tsc": "node node_modules/typescript/bin/tsc",
+        "build": "node node_modules/typescript/bin/tsc",
         "start": "ts-node src/main.ts",
         "server": "nodemon index.js"
     },
