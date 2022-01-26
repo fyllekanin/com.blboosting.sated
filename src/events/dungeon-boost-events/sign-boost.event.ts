@@ -37,9 +37,14 @@ export class SignBoostEvent implements IEvent {
 
         const boostingRole = (entity.faction === Faction.HORDE.value ? ConfigEnv.getConfig().BOOSTING_HORDE_ROLES : ConfigEnv.getConfig().BOOSTING_ALLIANCE_ROLES)
             .find(boostingRole => boostingRole.roleId === entity.boostRoleId);
+        const tankRole = await guild.roles.fetch(boostingRole.tankRoleId);
+        const healerRole = await guild.roles.fetch(boostingRole.healerRoleId);
+        const dpsRole = await guild.roles.fetch(boostingRole.dpsRoleId);
+        const completeList = [...entity.signups.tanks, ...entity.signups.dpses, ...entity.signups.healers];
+        const items = completeList.filter(item => item.boosterId === user.id);
+
         switch (reaction.emoji.name) {
             case EmojiReaction.TANK:
-                const tankRole = await guild.roles.fetch(boostingRole.tankRoleId);
                 if (!tankRole.members.find(member => member.id === user.id)) {
                     await messageReaction.users.remove(user.id);
                     return;
@@ -53,7 +58,6 @@ export class SignBoostEvent implements IEvent {
                 }
                 break;
             case EmojiReaction.HEALER:
-                const healerRole = await guild.roles.fetch(boostingRole.healerRoleId);
                 if (!healerRole.members.find(member => member.id === user.id)) {
                     await messageReaction.users.remove(user.id);
                     return;
@@ -67,7 +71,6 @@ export class SignBoostEvent implements IEvent {
                 }
                 break;
             case EmojiReaction.DPS:
-                const dpsRole = await guild.roles.fetch(boostingRole.dpsRoleId);
                 if (!dpsRole.members.find(member => member.id === user.id)) {
                     await messageReaction.users.remove(user.id);
                     return;
@@ -81,8 +84,6 @@ export class SignBoostEvent implements IEvent {
                 }
                 break;
             case EmojiReaction.KEYSTONE:
-                const completeList = [...entity.signups.tanks, ...entity.signups.dpses, ...entity.signups.healers];
-                const items = completeList.filter(item => item.boosterId === user.id);
                 for (const item of items) {
                     item.haveKey = true;
                 }

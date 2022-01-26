@@ -14,7 +14,7 @@ export class StartDungeonBoostEvent implements InternalEventInterface {
     private readonly boostsRepository = new BoostsRepository();
     private readonly client: Client;
     private readonly eventBus: EventBus;
-    private throttleTimeout: any;
+    private throttleTimeout: ReturnType<typeof setTimeout>;
 
     constructor(client: Client, eventBus: EventBus) {
         this.client = client;

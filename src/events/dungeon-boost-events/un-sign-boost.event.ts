@@ -23,6 +23,8 @@ export class UnSignBoostEvent implements IEvent {
         const reaction = messageReaction.partial ? await messageReaction.fetch() : messageReaction;
         const message = reaction.message.partial ? await reaction.message.fetch() : reaction.message;
         const entity = await this.boostsRepository.getBoostForChannel(messageReaction.message.channelId);
+        const completeList = [...entity.signups.tanks, ...entity.signups.dpses, ...entity.signups.healers];
+        const booster = completeList.find(item => item.boosterId === user.id);
 
         switch (reaction.emoji.name) {
             case EmojiReaction.TANK:
@@ -47,10 +49,8 @@ export class UnSignBoostEvent implements IEvent {
                 entity.signups.dpses = entity.signups.dpses.filter(item => item.boosterId !== user.id);
                 break;
             case EmojiReaction.KEYSTONE:
-                const completeList = [...entity.signups.tanks, ...entity.signups.dpses, ...entity.signups.healers];
-                const item = completeList.find(item => item.boosterId === user.id);
-                if (item) {
-                    item.haveKey = false;
+                if (booster) {
+                    booster.haveKey = false;
                 }
                 break;
         }

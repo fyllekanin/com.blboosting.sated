@@ -17,6 +17,7 @@ import { RemoveBoostEvent } from './events/dungeon-boost-events/remove-boost.eve
 import { AddDungeonBoosterCommand } from './commands/add-dungeon-booster.command';
 import { AddBoosterEvent } from './events/dungeon-boost-events/add-booster.event';
 import { ActivityTypes } from 'discord.js/typings/enums';
+import { GoogleSheetService } from './google-sheet.service';
 
 require('dotenv').config();
 
@@ -43,6 +44,7 @@ class Main {
 
     async start(): Promise<void> {
         await DatabaseService.startup();
+        await GoogleSheetService.startup();
 
         const eventBus = new EventBus(this.client);
 

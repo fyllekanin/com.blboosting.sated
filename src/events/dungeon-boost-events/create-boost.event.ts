@@ -184,7 +184,7 @@ export class CreateBoostEvent implements IEvent {
         });
     }
 
-    private getValidationResult(payload: Object): Array<string> {
+    private getValidationResult(payload: IDungeonBoost): Array<string> {
         const validator = new Validator();
         const result = validator.validate(payload, DungeonBoostSchema);
         const errorMessage: Array<string> = [];
