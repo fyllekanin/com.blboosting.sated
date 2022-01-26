@@ -11,7 +11,7 @@ export interface FactionBoostingRole {
     maxTimed: number
 }
 
-interface EnvConfig {
+export interface EnvConfig {
     BOT_TOKEN: string;
     BOT_INTENTS: string;
     BOT_CLIENT_ID: string;

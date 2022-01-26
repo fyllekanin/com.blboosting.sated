@@ -19,9 +19,13 @@
             "es2015.promise",
             "es2015.collection"
         ],
-        "types": []
+        "types": ["jest", "node"]
     },
     "include": [
         "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
     ]
 }
