@@ -3,6 +3,8 @@ import { ConfigEnv, EnvConfig } from '../config.env';
 global.beforeEach(async () => {
     ConfigEnv.getConfig = function () {
         return <EnvConfig><unknown>{
+            DUNGEON_BOOST_POT_PERCENTAGE: '70',
+
             DISCORD_ROLE_EVERYONE: '1',
             DISCORD_ROLE_CLOTH: '2',
             DISCORD_ROLE_LEATHER: '3',
@@ -23,7 +25,19 @@ global.beforeEach(async () => {
 
             DISCORD_ROLE_WARRIOR: '15',
             DISCORD_ROLE_PALADIN: '16',
-            DISCORD_ROLE_DEATH_KNIGHT: '17'
+            DISCORD_ROLE_DEATH_KNIGHT: '17',
+
+            BOOSTING_HORDE_ROLES: [{
+                'roleId': '1',
+                'maxUntimed': 9,
+                'maxTimed': 9
+            }],
+
+            BOOSTING_ALLIANCE_ROLES: [{
+                'roleId': '2',
+                'maxUntimed': 9,
+                'maxTimed': 9
+            }]
         };
     };
 });

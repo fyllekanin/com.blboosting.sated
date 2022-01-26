@@ -34,6 +34,7 @@ export interface BoostEntity extends BaseEntity {
         runs: number;
     },
     boosters: {
+        teamId?: string;
         tank?: string;
         healer?: string;
         dpsOne?: string;

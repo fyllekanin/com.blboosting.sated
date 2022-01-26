@@ -6,6 +6,7 @@ import { BoosterRole } from '../../constants/role.constant';
 import { BoostEntity } from '../../persistance/entities/boost.entity';
 import { Guild } from 'discord.js';
 import { ConfigEnv } from '../../config.env';
+import { Faction } from '../../constants/faction.enum';
 
 describe('DungeonBoosterUtils', () => {
 
@@ -175,6 +176,34 @@ describe('DungeonBoosterUtils', () => {
 
             // Then
             expect(result).toBeFalsy();
+        });
+    });
+
+    it('getBoosterPot should return 1/4 of 70 (config value) on the total', () => {
+        // Given
+        const total = 130;
+
+        // When
+        const result = DungeonBoosterUtils.getBoosterPot(total);
+
+        // Then
+        expect(result).toEqual(22.75);
+    });
+
+    describe('getAllowedBoostingRoleId', () => {
+        it('should return correct boosting role for HORDE', () => {
+            // When
+            const result = DungeonBoosterUtils.getAllowedBoostingRoleId(15, false, Faction.HORDE.value);
+
+            // Then
+            expect(result).toEqual('1');
+        });
+        it('should return correct boosting role for ALLIANCE', () => {
+            // When
+            const result = DungeonBoosterUtils.getAllowedBoostingRoleId(15, false, Faction.ALLIANCE.value);
+
+            // Then
+            expect(result).toEqual('2');
         });
     });
 });
