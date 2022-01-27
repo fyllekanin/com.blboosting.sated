@@ -14,6 +14,10 @@ import { Faction } from '../constants/faction.enum';
 export class UpdateDungeonSignupsStartup implements StartupInterface {
     private readonly boostsRepository = new BoostsRepository();
 
+    constructor(boostRepository?: BoostsRepository) {
+        this.boostsRepository = boostRepository ?? this.boostsRepository;
+    }
+
     async run(client: Client, eventBus: EventBus): Promise<Array<void>> {
         const category = await client.channels.fetch(ConfigEnv.getConfig().DUNGEON_BOOST_CATEGORY) as CategoryChannel;
         const promises = category.children.map(channel => this.updateEntity(client, eventBus, channel as TextChannel));

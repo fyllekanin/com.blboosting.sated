@@ -5,7 +5,7 @@
     "main": "index.js",
     "module": "ES2020",
     "scripts": {
-        "test": "jest",
+        "test": "jest --maxWorkers=1",
         "build": "node node_modules/typescript/bin/tsc",
         "start": "ts-node src/main.ts",
         "server": "nodemon index.js",
