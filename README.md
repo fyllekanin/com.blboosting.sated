@@ -26,3 +26,4 @@ All of these permissions are configurable in the environment variables
 
 - Collector that want to be able to collect directly on the boost or in the collector channel
     - They need the **Attach File** permission
+
