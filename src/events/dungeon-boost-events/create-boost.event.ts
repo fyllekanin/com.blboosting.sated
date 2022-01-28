@@ -60,7 +60,6 @@ export class CreateBoostEvent implements IEvent {
             VIEW_CHANNEL: true
         });
 
-
         const repository = new BoostsRepository();
         const entity = await repository.insert({
             faction: payload.faction,
@@ -103,7 +102,7 @@ export class CreateBoostEvent implements IEvent {
         this.reactToMessage(embedMessage);
 
         const permissions = channel.permissionsFor(message.author.id);
-        if (permissions.has(ConfigEnv.getConfig().DUNGEON_BOOST_COLLECT_PERMISSION)) {
+        if (!permissions.has(ConfigEnv.getConfig().DUNGEON_BOOST_COLLECT_PERMISSION)) {
             const collectorChannel = await client.channels.fetch(ConfigEnv.getConfig().DUNGEON_COLLECTOR_CHANNEL) as TextChannel;
             const collectorMessage = await collectorChannel.send({
                 content: `<@&${ConfigEnv.getConfig().COLLECTOR_ROLE_ID}>`,

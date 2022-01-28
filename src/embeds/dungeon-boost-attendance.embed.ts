@@ -105,7 +105,11 @@ ${EmojiReaction.ADVERTISER} <@${this.advertiserId}>`)
                 { name: 'Key Level', value: `${EmojiReaction.KEYSTONE} ${this.runs}x+${this.level}`, inline: true },
                 { name: 'Dungeon', value: Dungeon[this.dungeon].label, inline: true },
                 { name: 'Timed', value: this.isTimed ? 'Yes' : 'No', inline: true },
-                { name: 'Armor Stack', value: this.stacks.map(item => Stack[item].label).join(', '), inline: true },
+                {
+                    name: 'Armor Stack',
+                    value: this.stacks ? this.stacks.map(item => Stack[item].label).join(', ') : 'Any',
+                    inline: true
+                },
                 { name: 'Source', value: Source[this.source].label, inline: true },
                 { name: 'Total Pot', value: `${EmojiReaction.MONEY_BAG} ${this.totalPot}`, inline: true },
                 {

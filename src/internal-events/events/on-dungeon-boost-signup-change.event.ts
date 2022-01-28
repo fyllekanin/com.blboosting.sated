@@ -22,6 +22,7 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
 
     async run(): Promise<void> {
         if (this.throttleTimeout) {
+            console.log('was throttled');
             clearTimeout(this.throttleTimeout);
         }
         this.throttleTimeout = setTimeout(async () => {
@@ -39,13 +40,25 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
     private async updateBoost(entity: BoostEntity): Promise<void> {
         const channel = await this.client.channels.fetch(entity.channelId) as TextChannel;
         const message = await channel.messages.fetch(entity.messageId);
-
         await this.checkIfTeamClaim(entity, message);
+
+        if (!entity.boosters.teamId && (entity.createdAt + 15000) > new Date().getTime()) {
+            const sleepFor = ((entity.createdAt + 15000) - new Date().getTime());
+            console.log(`Sleeping for ${sleepFor}`);
+            setTimeout(async () => {
+                const updatedEntity = await this.boostsRepository.getBoostForChannel(entity.channelId);
+                if (!updatedEntity.status.isStarted) {
+                    this.run();
+                }
+            }, sleepFor);
+            return;
+        }
+
         if (!entity.boosters.keyholder) this.findKeyHolder(entity);
         if (!entity.boosters.tank) this.findTank(entity);
         if (!entity.boosters.healer) this.findHealer(entity);
-        if (!entity.boosters.dpsOne) this.findDps(entity, entity.boosters.dpsTwo, 1);
-        if (!entity.boosters.dpsTwo) this.findDps(entity, entity.boosters.dpsOne, 2);
+        if (!entity.boosters.dpsOne) this.findDps(entity, 1);
+        if (!entity.boosters.dpsTwo) this.findDps(entity, 2);
 
         const title = `Mythic Dungeon Boost - ${entity.key.runs}x-${entity.key.dungeon}-${entity.key.isTimed ? 'timed' : 'untimed'}`;
         const totalPot = entity.payments.reduce((prev, curr) => prev + curr.amount, 0);
@@ -78,11 +91,14 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
         const users = await this.getGuildUsersFromTeamReaction(message);
         for (const user of users) {
             const teamRole = user.roles.cache.find(item => item.name.startsWith('Team'));
+            if (!teamRole) {
+                continue;
+            }
             const value = teams[teamRole.id] ?? { tank: [], healer: [], dps: [], keyholder: [] };
-            if ((await message.reactions.resolve(EmojiReaction.TANK).users.fetch()).some(item => item.id === user.id)) value.tank.push(user.id);
-            if ((await message.reactions.resolve(EmojiReaction.HEALER).users.fetch()).some(item => item.id === user.id)) value.healer.push(user.id);
-            if ((await message.reactions.resolve(EmojiReaction.DPS).users.fetch()).some(item => item.id === user.id)) value.dps.push(user.id);
-            if ((await message.reactions.resolve(EmojiReaction.KEYSTONE).users.fetch()).some(item => item.id === user.id)) value.keyholder.push(user.id);
+            if ((await message.reactions.resolve(EmojiReaction.TANK)?.users.fetch()).some(item => item.id === user.id)) value.tank.push(user.id);
+            if ((await message.reactions.resolve(EmojiReaction.HEALER)?.users.fetch()).some(item => item.id === user.id)) value.healer.push(user.id);
+            if ((await message.reactions.resolve(EmojiReaction.DPS)?.users.fetch()).some(item => item.id === user.id)) value.dps.push(user.id);
+            if ((await message.reactions.resolve(EmojiReaction.KEYSTONE)?.users.fetch()).some(item => item.id === user.id)) value.keyholder.push(user.id);
 
             teams[teamRole.id] = value;
         }
@@ -110,6 +126,9 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
 
     private async getGuildUsersFromTeamReaction(message: Message): Promise<Array<GuildMember>> {
         const teamReactions = message.reactions.resolve(EmojiReaction.TEAM);
+        if (!teamReactions) {
+            return [];
+        }
         return Promise.all((await teamReactions.users.fetch()).map(user => message.guild.members.fetch(user)));
     }
 
@@ -141,14 +160,14 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
         entity.boosters.healer = healer ? healer.boosterId : null;
     }
 
-    private findDps(entity: BoostEntity, ignoreId: string, slot: number): void {
+    private findDps(entity: BoostEntity, slot: number): void {
         let dps: { boosterId: string, createdAt: number };
         const alreadyChosen = this.getAlreadyChosenPlayers(entity);
         for (const item of entity.signups.dpses) {
-            if (item.boosterId === ignoreId || alreadyChosen.includes(item.boosterId)) {
+            if (alreadyChosen.includes(item.boosterId)) {
                 continue;
             }
-            if (!dps || dps?.createdAt > item.createdAt) {
+            if (!dps || dps.createdAt > item.createdAt) {
                 dps = item;
             }
         }
