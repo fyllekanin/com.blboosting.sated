@@ -42,9 +42,9 @@ export interface BoostEntity extends BaseEntity {
         keyholder?: string;
     },
     signups: {
-        tanks: Array<{ boosterId: string, haveKey: boolean, createdAt: number }>;
-        healers: Array<{ boosterId: string, haveKey: boolean, createdAt: number }>;
-        dpses: Array<{ boosterId: string, haveKey: boolean, createdAt: number }>;
+        tanks: Array<{ boosterId: string, haveKey: boolean, createdAt: number, teamId?: string }>;
+        healers: Array<{ boosterId: string, haveKey: boolean, createdAt: number, teamId?: string }>;
+        dpses: Array<{ boosterId: string, haveKey: boolean, createdAt: number, teamId?: string }>;
     },
     status: {
         isCollected: boolean;
