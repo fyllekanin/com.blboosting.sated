@@ -1,7 +1,7 @@
 import { InternalEventInterface } from '../internal-event.interface';
 import { BoostsRepository } from '../../persistance/repositories/boosts.repository';
 import { BoostEntity } from '../../persistance/entities/boost.entity';
-import { CategoryChannel, Client, GuildMember, Message, TextChannel } from 'discord.js';
+import { CategoryChannel, Client, TextChannel } from 'discord.js';
 import { MythicPlusEmbed } from '../../embeds/mythic-plus.embed';
 import { BoosterRole, RoleKey } from '../../constants/role.constant';
 import { ConfigEnv } from '../../config.env';
@@ -40,7 +40,7 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
     private async updateBoost(entity: BoostEntity): Promise<void> {
         const channel = await this.client.channels.fetch(entity.channelId) as TextChannel;
         const message = await channel.messages.fetch(entity.messageId);
-        await this.checkIfTeamClaim(entity, message);
+        await this.checkIfTeamClaim(entity);
 
         if (!entity.boosters.teamId && (entity.createdAt + 15000) > new Date().getTime()) {
             const sleepFor = ((entity.createdAt + 15000) - new Date().getTime());
@@ -86,30 +86,42 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
         }
     }
 
-    private async checkIfTeamClaim(entity: BoostEntity, message: Message): Promise<void> {
-        const teams: { [key: string]: { tank: Array<string>, healer: Array<string>, dps: Array<string>, keyholder: Array<string> } } = {};
-        const users = await this.getGuildUsersFromTeamReaction(message);
-        for (const user of users) {
-            const teamRole = user.roles.cache.find(item => item.name.startsWith('Team'));
-            if (!teamRole) {
-                continue;
+    private async checkIfTeamClaim(entity: BoostEntity): Promise<void> {
+        const teams: { [key: string]: { tanks: Array<string>, healers: Array<string>, dpses: Array<string>, keyholder: Array<string> } } = {};
+        const getTeamOrNew = teamId => {
+            if (teams[teamId]) {
+                return teams[teamId];
+            } else {
+                teams[teamId] = { tanks: [], healers: [], dpses: [], keyholder: [] };
+                return teams[teamId];
             }
-            const value = teams[teamRole.id] ?? { tank: [], healer: [], dps: [], keyholder: [] };
-            if ((await message.reactions.resolve(EmojiReaction.TANK)?.users.fetch()).some(item => item.id === user.id)) value.tank.push(user.id);
-            if ((await message.reactions.resolve(EmojiReaction.HEALER)?.users.fetch()).some(item => item.id === user.id)) value.healer.push(user.id);
-            if ((await message.reactions.resolve(EmojiReaction.DPS)?.users.fetch()).some(item => item.id === user.id)) value.dps.push(user.id);
-            if ((await message.reactions.resolve(EmojiReaction.KEYSTONE)?.users.fetch()).some(item => item.id === user.id)) value.keyholder.push(user.id);
-
-            teams[teamRole.id] = value;
         }
+        entity.signups.tanks.filter(item => item.teamId).forEach(item => {
+            const team = getTeamOrNew(item.teamId);
+            team.tanks.push(item.boosterId);
+        });
+        entity.signups.healers.filter(item => item.teamId).forEach(item => {
+            const team = getTeamOrNew(item.teamId);
+            team.healers.push(item.boosterId);
+            if (item.haveKey) {
+                team.keyholder.push(item.boosterId);
+            }
+        });
+        entity.signups.dpses.filter(item => item.teamId).forEach(item => {
+            const team = getTeamOrNew(item.teamId);
+            team.dpses.push(item.boosterId);
+            if (item.haveKey) {
+                team.keyholder.push(item.boosterId);
+            }
+        });
 
-        for (const teamId of Object.keys(teams)) {
+        for (const teamId in teams) {
             const team = teams[teamId];
             const group: { tank?: string, healer?: string, dpsOne?: string, dpsTwo?: string, keyholder?: string } = {};
-            group.tank = team.tank[0];
-            group.healer = team.healer.filter(item => item !== group.tank)[0];
-            group.dpsOne = team.dps.filter(item => item !== group.tank && item !== group.healer)[0];
-            group.dpsTwo = team.dps.filter(item => item !== group.tank && item !== group.healer && item !== group.dpsOne)[0];
+            group.tank = team.tanks[0];
+            group.healer = team.healers.filter(item => item !== group.tank)[0];
+            group.dpsOne = team.dpses.filter(item => item !== group.tank && item !== group.healer)[0];
+            group.dpsTwo = team.dpses.filter(item => item !== group.tank && item !== group.healer && item !== group.dpsOne)[0];
             group.keyholder = team.keyholder[0];
 
             if (group.tank && group.healer && group.dpsOne && group.dpsTwo && group.keyholder) {
@@ -122,14 +134,6 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
                 break;
             }
         }
-    }
-
-    private async getGuildUsersFromTeamReaction(message: Message): Promise<Array<GuildMember>> {
-        const teamReactions = message.reactions.resolve(EmojiReaction.TEAM);
-        if (!teamReactions) {
-            return [];
-        }
-        return Promise.all((await teamReactions.users.fetch()).map(user => message.guild.members.fetch(user)));
     }
 
     private findTank(entity: BoostEntity): void {

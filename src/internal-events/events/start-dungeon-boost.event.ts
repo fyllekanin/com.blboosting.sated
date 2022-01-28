@@ -42,7 +42,7 @@ export class StartDungeonBoostEvent implements InternalEventInterface {
                     const title = `Mythic Dungeon Boost - ${entity.key.runs}x-${entity.key.dungeon}-${entity.key.isTimed ? 'timed' : 'untimed'}`;
                     const totalPot = entity.payments.reduce((prev, curr) => prev + curr.amount, 0);
                     message.edit({
-                        content: `<&${entity.boosters.teamId ?? entity.boostRoleId}> ${DungeonBoosterUtils.getStackRoleIds(entity.stack).map(id => `<@&${id}>`).join(' ')}`,
+                        content: `<@&${entity.boosters.teamId ?? entity.boostRoleId}> ${DungeonBoosterUtils.getStackRoleIds(entity.stack).map(id => `<@&${id}>`).join(' ')}`,
                         embeds: [
                             new MythicPlusEmbed()
                                 .withTitle(title)
