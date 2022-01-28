@@ -93,7 +93,7 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
             group.tank = team.tank[0];
             group.healer = team.healer.filter(item => item !== group.tank)[0];
             group.dpsOne = team.dps.filter(item => item !== group.tank && item !== group.healer)[0];
-            group.dpsOne = team.dps.filter(item => item !== group.tank && item !== group.healer && item !== group.dpsOne)[0];
+            group.dpsTwo = team.dps.filter(item => item !== group.tank && item !== group.healer && item !== group.dpsOne)[0];
             group.keyholder = team.keyholder[0];
 
             if (group.tank && group.healer && group.dpsOne && group.dpsTwo && group.keyholder) {
