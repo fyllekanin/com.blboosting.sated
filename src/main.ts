@@ -18,6 +18,7 @@ import { AddDungeonBoosterCommand } from './commands/add-dungeon-booster.command
 import { AddBoosterEvent } from './events/dungeon-boost-events/add-booster.event';
 import { ActivityTypes } from 'discord.js/typings/enums';
 import { GoogleSheetService } from './google-sheet.service';
+import { TeamTakeBoostEvent } from './events/dungeon-boost-events/team-take-boost.event';
 
 require('dotenv').config();
 
@@ -65,7 +66,8 @@ class Main {
                 new CollectedBoostEvent(eventBus),
                 new CompleteBoostEvent(),
                 new RemoveBoostEvent(eventBus),
-                new AddBoosterEvent(eventBus)
+                new AddBoosterEvent(eventBus),
+                new TeamTakeBoostEvent(eventBus)
             ];
 
             for (const eventItem of events) {
