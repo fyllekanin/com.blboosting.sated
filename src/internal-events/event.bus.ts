@@ -12,6 +12,7 @@ export enum INTERNAL_EVENT {
 
 export class EventBus {
     private readonly INTERNAL_EVENT_MAPPER: { [key: string]: InternalEventInterface } = {};
+    private readonly INTERNAL_EVENT_QUE: Map<InternalEventInterface, Array<string | number>> = new Map();
 
     constructor(client: Client) {
         this.INTERNAL_EVENT_MAPPER = {
@@ -22,8 +23,29 @@ export class EventBus {
     }
 
     emit(event: INTERNAL_EVENT, data?: number | string): void {
-        if (this.INTERNAL_EVENT_MAPPER[event]) {
-            this.INTERNAL_EVENT_MAPPER[event].run(data);
+        const action = this.INTERNAL_EVENT_MAPPER[event];
+        if (!action) return;
+
+        if (action.isIsolated()) {
+            if (!this.INTERNAL_EVENT_QUE.has(action)) {
+                this.INTERNAL_EVENT_QUE.set(action, []);
+            }
+            const arr = this.INTERNAL_EVENT_QUE.get(action);
+            arr.push(data);
+            this.runQueue(action);
+        } else {
+            action.run(data)
         }
+    }
+
+    private async runQueue(action: InternalEventInterface): Promise<void> {
+        const queue = this.INTERNAL_EVENT_QUE.get(action);
+        if (queue.length > 1) return;
+
+        for (const item of queue) {
+            await action.run(item);
+        }
+
+        this.INTERNAL_EVENT_QUE.set(action, []);
     }
 }

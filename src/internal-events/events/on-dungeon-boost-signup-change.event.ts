@@ -13,7 +13,6 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
     private readonly boostsRepository = new BoostsRepository();
     private readonly client: Client;
     private readonly eventBus: EventBus;
-    private throttleTimeout: ReturnType<typeof setTimeout>;
 
     constructor(client: Client, eventBus: EventBus) {
         this.client = client;
@@ -21,20 +20,19 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
     }
 
     async run(): Promise<void> {
-        if (this.throttleTimeout) {
-            console.log('was throttled');
-            clearTimeout(this.throttleTimeout);
+        const category = await this.client.channels.fetch(ConfigEnv.getConfig().DUNGEON_BOOST_CATEGORY) as CategoryChannel;
+        const channels = category.children.map(item => item) as Array<TextChannel>;
+        for (const channel of channels) {
+            const entity = await this.boostsRepository.getBoostForChannel(channel.id);
+            const message = await channel.messages.fetch(entity.messageId);
+            if (message.reactions.resolve(EmojiReaction.COMPLETE_DUNGEON) == null) {
+                await this.updateBoost(entity);
+            }
         }
-        this.throttleTimeout = setTimeout(async () => {
-            const category = await this.client.channels.fetch(ConfigEnv.getConfig().DUNGEON_BOOST_CATEGORY) as CategoryChannel;
-            category.children.forEach(async (channel: TextChannel) => {
-                const entity = await this.boostsRepository.getBoostForChannel(channel.id);
-                const message = await channel.messages.fetch(entity.messageId);
-                if (message.reactions.resolve(EmojiReaction.COMPLETE_DUNGEON) == null) {
-                    this.updateBoost(entity);
-                }
-            });
-        }, 200);
+    }
+
+    isIsolated(): boolean {
+        return true;
     }
 
     private async updateBoost(entity: BoostEntity): Promise<void> {
@@ -42,13 +40,13 @@ export class OnDungeonBoostSignupChangeEvent implements InternalEventInterface {
         const message = await channel.messages.fetch(entity.messageId);
         await this.checkIfTeamClaim(entity);
 
-        if (!entity.boosters.teamId && (entity.createdAt + 15000) > new Date().getTime()) {
-            const sleepFor = ((entity.createdAt + 15000) - new Date().getTime());
-            console.log(`Sleeping for ${sleepFor}`);
+        const sleepFor = ((entity.createdAt + 15000) - new Date().getTime());
+        if (!entity.boosters.teamId && sleepFor > 0) {
+            console.log('gg?');
             setTimeout(async () => {
                 const updatedEntity = await this.boostsRepository.getBoostForChannel(entity.channelId);
                 if (!updatedEntity.status.isStarted) {
-                    this.run();
+                    this.eventBus.emit(INTERNAL_EVENT.DUNGEON_BOOST_SIGNUP_CHANGE);
                 }
             }, sleepFor);
             return;
