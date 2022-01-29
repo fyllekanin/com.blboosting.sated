@@ -13,6 +13,10 @@ export class SendBoostersInformationEvent implements InternalEventInterface {
         this.client = client;
     }
 
+    isIsolated(): boolean {
+        return true;
+    }
+
     async run(channelId: string): Promise<void> {
         const entity = await this.boostsRepository.getBoostForChannel(channelId);
         if (!this.isApplicable(entity)) {

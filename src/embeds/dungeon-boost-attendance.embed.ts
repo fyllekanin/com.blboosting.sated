@@ -107,7 +107,7 @@ ${EmojiReaction.ADVERTISER} <@${this.advertiserId}>`)
                 { name: 'Timed', value: this.isTimed ? 'Yes' : 'No', inline: true },
                 {
                     name: 'Armor Stack',
-                    value: this.stacks ? this.stacks.map(item => Stack[item].label).join(', ') : 'Any',
+                    value: this.stacks.length > 0 ? this.stacks.map(item => Stack[item].label).join(', ') : 'Any',
                     inline: true
                 },
                 { name: 'Source', value: Source[this.source].label, inline: true },

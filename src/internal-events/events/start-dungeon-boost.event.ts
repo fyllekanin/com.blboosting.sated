@@ -21,6 +21,10 @@ export class StartDungeonBoostEvent implements InternalEventInterface {
         this.eventBus = eventBus;
     }
 
+    isIsolated(): boolean {
+        return true;
+    }
+
     async run(): Promise<void> {
         if (this.throttleTimeout) {
             clearTimeout(this.throttleTimeout);
